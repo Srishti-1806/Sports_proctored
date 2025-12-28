@@ -1,0 +1,21 @@
+# ---------------- Core Libraries ----------------
+opencv-python
+mediapipe
+PyQt6
+PyQt6-Qt6
+PyQt6-sip
+numpy
+pillow
+pyttsx3
+pyaudio
+pygame 
+matplotlib
+typing_extensions
+pandas
+ultralytics
+PyQt6-WebEngine
+yolov8
+fastapi 
+uvicorn 
+motor 
+pydantic
