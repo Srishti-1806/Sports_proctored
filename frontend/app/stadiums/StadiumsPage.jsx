@@ -1,280 +1,415 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { MapPin, Search, Star, Clock, Phone, Globe, Navigation, ChevronRight, X, Heart, Share2, Dumbbell, Waves, Target, Footprints, Trophy, CheckCircle, Compass, Layers, ZoomIn, ZoomOut, LocateFixed } from 'lucide-react'
+import { MapPin, Search, Star, Clock, Phone, Globe, Navigation, ChevronRight, X, Heart, Share2, Dumbbell, Waves, Target, Footprints, Trophy, CheckCircle, Compass, Layers, ZoomIn, ZoomOut, LocateFixed, Home, Activity, MapPinned } from 'lucide-react'
+import StadiumMap from '@/components/stadiums/StadiumMap'
 
 export default function StadiumsPage() {
+  const accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedVenue, setSelectedVenue] = useState(null)
   const [viewMode, setViewMode] = useState('list')
   const [activeFilter, setActiveFilter] = useState('all')
+  const [venues, setVenues] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [userLocation, setUserLocation] = useState(null)
+
+  // Get user's location with improved fallback
+  useEffect(() => {
+    // Function to get location from IP address
+    const getLocationFromIP = async () => {
+      try {
+        console.log('Attempting to get location from IP address...');
+        const response = await fetch('https://ipapi.co/json/');
+        const data = await response.json();
+        if (data.latitude && data.longitude) {
+          console.log('✓ Location from IP:', data.city, data.country_name);
+          setUserLocation({
+            longitude: data.longitude,
+            latitude: data.latitude
+          });
+          return true;
+        }
+        return false;
+      } catch (error) {
+        console.error('Error getting location from IP:', error);
+        return false;
+      }
+    };
+
+    if (navigator.geolocation) {
+      // First attempt: Try high accuracy with shorter timeout
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          console.log('✓ GPS location obtained');
+          setUserLocation({
+            longitude: position.coords.longitude,
+            latitude: position.coords.latitude
+          });
+        },
+        (error) => {
+          console.log('⚠ High accuracy GPS failed:', error.message, '- Trying low accuracy...');
+          
+          // Second attempt: Try with low accuracy (faster, more reliable)
+          navigator.geolocation.getCurrentPosition(
+            (position) => {
+              console.log('✓ Low accuracy location obtained');
+              setUserLocation({
+                longitude: position.coords.longitude,
+                latitude: position.coords.latitude
+              });
+            },
+            async (error) => {
+              console.log('⚠ Low accuracy GPS also failed:', error.message, '- Trying IP location...');
+              // Try to get location from IP address
+              const ipLocationSuccess = await getLocationFromIP();
+              if (!ipLocationSuccess) {
+                console.log('ℹ Using default location (New Delhi)');
+                setUserLocation({ longitude: 77.2090, latitude: 28.6139 });
+              }
+            },
+            {
+              enableHighAccuracy: false,
+              timeout: 10000,
+              maximumAge: 300000 // Accept cached position up to 5 minutes old
+            }
+          );
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 8000,
+          maximumAge: 0
+        }
+      );
+    } else {
+      // No geolocation support, try IP-based location
+      console.log('Geolocation not supported, trying IP-based location');
+      getLocationFromIP().then((success) => {
+        if (!success) {
+          console.log('Falling back to default location (New Delhi)');
+          setUserLocation({ longitude: 77.2090, latitude: 28.6139 });
+        }
+      });
+    }
+  }, []);
+
+  // Fetch real venues from OpenStreetMap via Overpass API
+  useEffect(() => {
+    if (!userLocation) return;
+
+    const fetchVenues = async () => {
+      setLoading(true);
+      try {
+        // Call our backend API endpoint
+        const response = await fetch(
+          `/api/nearby-sports?lat=${userLocation.latitude}&lon=${userLocation.longitude}&radius=20000`
+        );
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch sports facilities');
+        }
+
+        const data = await response.json();
+
+        // Transform facilities to match our venue structure
+        const transformedVenues = await Promise.all(
+          data.facilities.map(async (facility, index) => {
+            const distance = calculateDistance(
+              userLocation.latitude,
+              userLocation.longitude,
+              facility.latitude,
+              facility.longitude
+            );
+
+            // Get human-readable address
+            const address = await reverseGeocode(facility.longitude, facility.latitude);
+
+            return {
+              id: facility.id,
+              name: facility.name || `${mapFacilityType(facility.type)}${facility.sport ? ` (${facility.sport})` : ''}`,
+              type: mapFacilityType(facility.type),
+              typeIcon: getIconForType(facility.type),
+              rating: null,
+              reviews: null,
+              distance: formatDistance(distance),
+              distanceValue: distance,
+              address: address,
+              coordinates: [facility.longitude, facility.latitude],
+              phone: 'Contact information not available',
+              website: 'N/A',
+              hours: 'Check local hours',
+              isOpen: true,
+              price: 'N/A',
+              amenities: getAmenitiesForType(facility.type, facility.tags),
+              sports: getSportsForType(facility.type, facility.sport),
+              images: 1,
+              isFavorite: false,
+              featured: false,
+              description: `${facility.name || 'Sports facility'} - ${mapFacilityType(facility.type)}${facility.sport ? ` for ${facility.sport}` : ''}`
+            };
+          })
+        );
+
+        // Sort by distance (nearest first)
+        transformedVenues.sort((a, b) => a.distanceValue - b.distanceValue);
+
+        setVenues(transformedVenues);
+      } catch (error) {
+        console.error('Error fetching venues:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchVenues();
+  }, [userLocation]);
 
   const filters = [
     { id: 'all', label: 'All Venues', icon: Layers },
     { id: 'stadium', label: 'Stadiums', icon: Trophy },
-    { id: 'gym', label: 'Gyms', icon: Dumbbell },
+    { id: 'sports_centre', label: 'Sports Centres', icon: Activity },
+    { id: 'sports_hall', label: 'Sports Halls', icon: Home },
+    { id: 'gym', label: 'Gyms & Fitness', icon: Dumbbell },
     { id: 'pool', label: 'Pools', icon: Waves },
-    { id: 'court', label: 'Courts', icon: Target },
-    { id: 'track', label: 'Tracks', icon: Footprints }
+    { id: 'pitch', label: 'Playing Fields', icon: Target },
+    { id: 'track', label: 'Tracks', icon: Footprints },
+    { id: 'golf', label: 'Golf Courses', icon: Target },
+    { id: 'recreation', label: 'Recreation', icon: MapPinned }
   ]
 
-  const venues = [
-    {
-      id: 1,
-      name: 'Miami Sports Arena',
-      type: 'Stadium',
-      typeIcon: Trophy,
-      rating: 4.8,
-      reviews: 342,
-      distance: '0.8 mi',
-      address: '1234 Sports Boulevard, Miami, FL 33101',
-      phone: '+1 (305) 555-0123',
-      website: 'www.miamisportsarena.com',
-      hours: 'Open 6:00 AM - 11:00 PM',
-      isOpen: true,
-      price: '$$$',
-      amenities: ['Parking', 'Lockers', 'Showers', 'Pro Shop', 'Café'],
-      sports: ['Basketball', 'Volleyball', 'Wrestling'],
-      images: 3,
-      isFavorite: true,
-      featured: true,
-      description: 'State-of-the-art multi-sport arena featuring Olympic-standard facilities and seating for 15,000 spectators.'
-    },
-    {
-      id: 2,
-      name: 'Elite Performance Center',
-      type: 'Gym',
-      typeIcon: Dumbbell,
-      rating: 4.9,
-      reviews: 567,
-      distance: '1.2 mi',
-      address: '567 Fitness Lane, Miami, FL 33102',
-      phone: '+1 (305) 555-0456',
-      website: 'www.eliteperformance.com',
-      hours: 'Open 24 Hours',
-      isOpen: true,
-      price: '$$',
-      amenities: ['Free Weights', 'Cardio Zone', 'Personal Training', 'Sauna', 'Juice Bar'],
-      sports: ['Weightlifting', 'CrossFit', 'Boxing'],
-      images: 5,
-      isFavorite: false,
-      featured: true,
-      description: 'Premier fitness facility with cutting-edge equipment and world-class trainers.'
-    },
-    {
-      id: 3,
-      name: 'Aquatic Sports Complex',
-      type: 'Pool',
-      typeIcon: Waves,
-      rating: 4.7,
-      reviews: 189,
-      distance: '2.1 mi',
-      address: '890 Ocean Drive, Miami Beach, FL 33139',
-      phone: '+1 (305) 555-0789',
-      website: 'www.miamiaquatics.com',
-      hours: 'Open 5:30 AM - 9:00 PM',
-      isOpen: true,
-      price: '$$',
-      amenities: ['Olympic Pool', 'Diving Boards', 'Hot Tub', 'Lessons', 'Team Training'],
-      sports: ['Swimming', 'Diving', 'Water Polo'],
-      images: 4,
-      isFavorite: true,
-      featured: false,
-      description: 'Olympic-sized swimming facility with professional coaching and competitive training programs.'
-    },
-    {
-      id: 4,
-      name: 'Riverside Tennis Club',
-      type: 'Court',
-      typeIcon: Target,
-      rating: 4.6,
-      reviews: 234,
-      distance: '3.5 mi',
-      address: '456 Court Lane, Coral Gables, FL 33146',
-      phone: '+1 (305) 555-0321',
-      website: 'www.riversidetennisclub.com',
-      hours: 'Open 7:00 AM - 10:00 PM',
-      isOpen: true,
-      price: '$$$',
-      amenities: ['12 Courts', 'Pro Shop', 'Ball Machine', 'Coaching', 'Restaurant'],
-      sports: ['Tennis', 'Pickleball'],
-      images: 6,
-      isFavorite: false,
-      featured: false,
-      description: 'Exclusive tennis club with pristine hard and clay courts, professional instruction available.'
-    },
-    {
-      id: 5,
-      name: 'Community Athletics Track',
-      type: 'Track',
-      typeIcon: Footprints,
-      rating: 4.4,
-      reviews: 156,
-      distance: '1.8 mi',
-      address: '321 Runner Way, Miami, FL 33125',
-      phone: '+1 (305) 555-0654',
-      website: 'www.miamitrack.org',
-      hours: 'Open 5:00 AM - 9:00 PM',
-      isOpen: true,
-      price: '$',
-      amenities: ['400m Track', 'Field Events', 'Bleachers', 'Restrooms', 'Water Stations'],
-      sports: ['Track & Field', 'Running', 'Walking'],
-      images: 2,
-      isFavorite: false,
-      featured: false,
-      description: 'Public athletics track with professional-grade surface, perfect for training and competitions.'
-    },
-    {
-      id: 6,
-      name: 'Downtown Basketball Courts',
-      type: 'Court',
-      typeIcon: Target,
-      rating: 4.3,
-      reviews: 412,
-      distance: '0.5 mi',
-      address: '100 Main Street, Miami, FL 33130',
-      phone: '+1 (305) 555-0987',
-      website: 'www.miamiparks.gov/basketball',
-      hours: 'Open 6:00 AM - 10:00 PM',
-      isOpen: true,
-      price: 'Free',
-      amenities: ['4 Courts', 'Lights', 'Water Fountain', 'Benches'],
-      sports: ['Basketball', '3x3 Basketball'],
-      images: 3,
-      isFavorite: true,
-      featured: false,
-      description: 'Popular outdoor basketball courts in the heart of downtown. Daily pickup games and leagues.'
+  // Helper functions
+  async function reverseGeocode(longitude, latitude) {
+    try {
+      const response = await fetch(
+        `https://api.mapbox.com/geocoding/v5/mapbox.places/${longitude},${latitude}.json?access_token=${accessToken}`
+      );
+      const data = await response.json();
+      if (data.features && data.features.length > 0) {
+        return data.features[0].place_name;
+      }
+      return `${latitude.toFixed(4)}°, ${longitude.toFixed(4)}°`;
+    } catch (error) {
+      console.error('Reverse geocoding error:', error);
+      return `${latitude.toFixed(4)}°, ${longitude.toFixed(4)}°`;
     }
-  ]
+  }
+
+  function calculateDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371; // Earth's radius in km
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = 
+      Math.sin(dLat/2) * Math.sin(dLat/2) +
+      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+      Math.sin(dLon/2) * Math.sin(dLon/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return R * c;
+  }
+
+  function formatDistance(km) {
+    if (km < 1) {
+      return `${Math.round(km * 1000)}m`;
+    }
+    return `${km.toFixed(1)}km`;
+  }
+
+  function mapFacilityType(osmType) {
+    const mapping = {
+      'stadium': 'Stadium',
+      'sports_centre': 'Sports Centre',
+      'sports_hall': 'Sports Hall',
+      'gym': 'Gym / Fitness Centre',
+      'fitness_station': 'Fitness Station',
+      'pitch': 'Playing Field',
+      'track': 'Track',
+      'swimming_pool': 'Swimming Pool',
+      'ice_rink': 'Ice Rink',
+      'horse_riding': 'Horse Riding',
+      'golf_course': 'Golf Course',
+      'miniature_golf': 'Mini Golf',
+      'recreation_ground': 'Recreation Ground',
+      'school_sports': 'School Sports Facility',
+      'sports_facility': 'Sports Facility'
+    };
+    return mapping[osmType] || 'Sports Venue';
+  }
+
+  function getIconForType(osmType) {
+    const mapping = {
+      'stadium': Trophy,
+      'sports_centre': Target,
+      'sports_hall': Target,
+      'gym': Dumbbell,
+      'fitness_station': Dumbbell,
+      'pitch': Footprints,
+      'track': Footprints,
+      'swimming_pool': Waves,
+      'ice_rink': Waves,
+      'horse_riding': Target,
+      'golf_course': Target,
+      'miniature_golf': Target,
+      'recreation_ground': Waves,
+      'school_sports': Target,
+      'sports_facility': Trophy
+    };
+    return mapping[osmType] || Trophy;
+  }
+
+  function getAmenitiesForType(osmType, tags = {}) {
+    const baseAmenities = {
+      'stadium': ['Seating', 'Restrooms', 'Parking'],
+      'sports_centre': ['Multiple Sports', 'Lockers', 'Equipment'],
+      'sports_hall': ['Indoor Sports', 'Lockers', 'Equipment'],
+      'gym': ['Weights', 'Cardio Equipment', 'Showers', 'Lockers'],
+      'fitness_station': ['Outdoor Workout', 'Free Access'],
+      'pitch': ['Playing Field', 'Goals/Posts'],
+      'track': ['Running Track', 'Lanes'],
+      'swimming_pool': ['Pool', 'Changing Rooms', 'Lockers'],
+      'ice_rink': ['Ice Surface', 'Skate Rental', 'Changing Rooms'],
+      'horse_riding': ['Horses', 'Riding Arena', 'Lessons'],
+      'golf_course': ['Golf Holes', 'Club House', 'Parking'],
+      'miniature_golf': ['Mini Golf', 'Family Friendly'],
+      'recreation_ground': ['Open Space', 'Multi-use'],
+      'school_sports': ['School Facility', 'Limited Access'],
+    };
+
+    const amenities = baseAmenities[osmType] || ['Sports Facility'];
+    
+    if (tags.surface) amenities.push(`Surface: ${tags.surface}`);
+    if (tags.access) amenities.push(`Access: ${tags.access}`);
+    if (tags.capacity) amenities.push(`Capacity: ${tags.capacity}`);
+    
+    return amenities;
+  }
+
+  function getSportsForType(osmType, sport) {
+    if (sport) {
+      // Format sport name properly
+      return [sport.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')];
+    }
+
+    const defaultSports = {
+      'stadium': ['Football', 'Athletics', 'Events'],
+      'sports_centre': ['Multiple Sports'],
+      'sports_hall': ['Indoor Sports'],
+      'gym': ['Fitness', 'Strength Training', 'Cardio'],
+      'fitness_station': ['Bodyweight Training', 'Outdoor Fitness'],
+      'pitch': ['Football', 'Cricket', 'Rugby'],
+      'track': ['Running', 'Athletics'],
+      'swimming_pool': ['Swimming', 'Diving', 'Water Sports'],
+      'ice_rink': ['Ice Skating', 'Hockey'],
+      'horse_riding': ['Equestrian', 'Horse Riding'],
+      'golf_course': ['Golf'],
+      'miniature_golf': ['Mini Golf'],
+      'recreation_ground': ['Various Sports'],
+      'school_sports': ['Various Sports'],
+    };
+
+    return defaultSports[osmType] || ['Sports'];
+  }
 
   const filteredVenues = venues.filter(venue => {
     const matchesSearch = venue.name.toLowerCase().includes(searchQuery.toLowerCase()) || venue.address.toLowerCase().includes(searchQuery.toLowerCase()) || venue.sports.some(s => s.toLowerCase().includes(searchQuery.toLowerCase()))
-    const matchesFilter = activeFilter === 'all' || venue.type.toLowerCase() === activeFilter
-    return matchesSearch && matchesFilter
+    
+    if (activeFilter === 'all') {
+      return matchesSearch;
+    }
+    
+    // Map filter IDs to facility types
+    const filterMap = {
+      'stadium': ['stadium'],
+      'sports_centre': ['sports centre', 'sports_centre'],
+      'sports_hall': ['sports hall', 'sports_hall'],
+      'gym': ['gym / fitness centre', 'gym', 'fitness centre', 'fitness_centre', 'fitness station', 'fitness_station'],
+      'pool': ['swimming pool', 'swimming_pool'],
+      'pitch': ['playing field', 'pitch'],
+      'track': ['track'],
+      'golf': ['golf course', 'golf_course', 'mini golf', 'miniature_golf'],
+      'recreation': ['recreation ground', 'recreation_ground', 'ice rink', 'ice_rink', 'horse riding', 'horse_riding']
+    };
+    
+    const matchingTypes = filterMap[activeFilter] || [];
+    const matchesFilter = matchingTypes.some(type => venue.type.toLowerCase().includes(type));
+    
+    return matchesSearch && matchesFilter;
   })
 
   return (
     <div className="min-h-screen bg-[#fafbff]">
       {/* Header */}
-      <div className="bg-linear-to-r from-[#3D52A0] to-[#7091E6] pt-6 pb-4">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="bg-linear-to-r from-[#3D52A0] to-[#7091E6] pt-4 pb-3 sm:pt-6 sm:pb-4">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <h1 className="font-display text-3xl font-bold text-white mb-4">
-              Discover Venues
+            <h1 className="font-display text-xl sm:text-2xl lg:text-3xl font-bold text-white mb-3 sm:mb-4">
+              Discover Sports Facilities
             </h1>
 
             {/* Search Bar */}
-            <div className="flex gap-3">
+            <div className="flex gap-2 sm:gap-3">
               <div className="relative flex-1">
-                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[#8697C4]" />
+                <Search className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-[#8697C4]" />
                 <input
                   type="text"
                   placeholder="Search venues..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-[#7091E6] text-[#1a1a2e]"
+                  className="w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-2.5 sm:py-3 rounded-lg sm:rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-[#7091E6] text-sm sm:text-base text-[#1a1a2e]"
                 />
               </div>
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="flex items-center gap-2 px-5 py-3 rounded-xl bg-white text-[#3D52A0] font-semibold"
+                className="flex items-center gap-2 px-3 sm:px-5 py-2.5 sm:py-3 rounded-lg sm:rounded-xl bg-white text-[#3D52A0] font-semibold"
               >
-                <LocateFixed className="w-5 h-5" />
+                <LocateFixed className="w-4 h-4 sm:w-5 sm:h-5" />
               </motion.button>
             </div>
           </motion.div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="grid lg:grid-cols-5 gap-6">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-4 sm:py-6">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 sm:gap-6">
           {/* Map Section */}
-          <div className="lg:col-span-3 order-2 lg:order-1">
-            <div className="sticky top-20">
-              {/* Map Placeholder */}
+          <div className="lg:col-span-3 order-1 lg:order-1">
+            <div className="lg:sticky lg:top-20">
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="relative h-100 lg:h-175 rounded-2xl overflow-hidden"
+                className="relative w-full h-[300px] sm:h-[400px] lg:h-[700px] rounded-xl sm:rounded-2xl overflow-hidden shadow-lg"
+                style={{ minHeight: '300px' }}
               >
-
-                {/* Simulated Map Elements */}
-                <div className="absolute inset-0 p-6">
-
-                  {/* Venue Markers */}
-                  {venues.slice(0, 5).map((venue, index) => {
-                    const positions = [
-                      { top: '20%', left: '30%' },
-                      { top: '35%', left: '60%' },
-                      { top: '50%', left: '25%' },
-                      { top: '65%', left: '70%' },
-                      { top: '80%', left: '45%' }
-                    ]
-                    return (
-                      <motion.div
-                        key={venue.id}
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        transition={{ delay: index * 0.1 }}
-                        onClick={() => setSelectedVenue(venue)}
-                        className="absolute cursor-pointer"
-                        style={positions[index]}
-                      >
-                        <div className="relative">
-                          <motion.div
-                            whileHover={{ scale: 1.2 }}
-                            className={`w-10 h-10 rounded-full flex items-center justify-center shadow-lg ${
-                              selectedVenue?.id === venue.id
-                                ? 'bg-[#3D52A0] ring-4 ring-[#7091E6]/50'
-                                : 'bg-linear-to-br from-[#3D52A0] to-[#7091E6]'
-                            }`}
-                          >
-                            <venue.typeIcon className="w-5 h-5 text-white" />
-                          </motion.div>
-                          <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-3 h-3 bg-[#3D52A0] rotate-45" />
-                        </div>
-                      </motion.div>
-                    )
-                  })}
-
-                  {/* Current Location Marker */}
-                  <motion.div
-                    animate={{ scale: [1, 1.2, 1] }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                    className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
-                  >
-                    <div className="relative">
-                      <div className="w-16 h-16 rounded-full bg-[#7091E6]/20 flex items-center justify-center">
-                        <div className="w-10 h-10 rounded-full bg-[#7091E6]/40 flex items-center justify-center">
-                          <div className="w-5 h-5 rounded-full bg-[#3D52A0] border-3 border-white shadow-lg" />
-                        </div>
-                      </div>
+                {accessToken ? (
+                  <div className="w-full h-full">
+                    <StadiumMap
+                      accessToken={accessToken}
+                      venues={filteredVenues}
+                      selectedVenue={selectedVenue}
+                      onVenueSelect={setSelectedVenue}
+                    />
+                  </div>
+                ) : (
+                  <div className="w-full h-full bg-linear-to-br from-[#EDE8F5] to-[#ADBBDA] flex items-center justify-center">
+                    <div className="text-center p-4 sm:p-8">
+                      <MapPin className="w-12 h-12 sm:w-16 sm:h-16 text-[#7091E6] mx-auto mb-3 sm:mb-4" />
+                      <h3 className="text-lg sm:text-xl font-bold text-[#3D52A0] mb-2">
+                        Map Loading...
+                      </h3>
+                      <p className="text-xs sm:text-sm text-[#8697C4]">
+                        Please ensure Mapbox token is configured
+                      </p>
                     </div>
-                  </motion.div>
-                </div>
+                  </div>
+                )}
 
-                {/* Map Controls */}
-                <div className="absolute top-4 right-4 flex flex-col gap-2">
-                  <button className="w-10 h-10 rounded-xl bg-white shadow-lg flex items-center justify-center text-[#3D52A0] hover:bg-[#EDE8F5] transition-colors">
-                    <ZoomIn className="w-5 h-5" />
-                  </button>
-                  <button className="w-10 h-10 rounded-xl bg-white shadow-lg flex items-center justify-center text-[#3D52A0] hover:bg-[#EDE8F5] transition-colors">
-                    <ZoomOut className="w-5 h-5" />
-                  </button>
-                  <button className="w-10 h-10 rounded-xl bg-white shadow-lg flex items-center justify-center text-[#3D52A0] hover:bg-[#EDE8F5] transition-colors">
-                    <Compass className="w-5 h-5" />
-                  </button>
-                </div>
-
-                {/* Map Legend */}
-                <div className="absolute bottom-4 left-4 px-4 py-2 rounded-xl bg-white/90 backdrop-blur-sm shadow-lg">
-                  <div className="flex items-center gap-2">
-                    <MapPin className="w-4 h-4 text-[#7091E6]" />
-                    <span className="text-sm font-medium text-[#1a1a2e]">
+                {/* Map Legend Overlay */}
+                <div className="absolute bottom-3 left-3 sm:bottom-4 sm:left-4 px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl bg-white/90 backdrop-blur-sm shadow-lg z-10 pointer-events-none">
+                  <div className="flex items-center gap-1.5 sm:gap-2">
+                    <MapPin className="w-3 h-3 sm:w-4 sm:h-4 text-[#7091E6]" />
+                    <span className="text-xs sm:text-sm font-medium text-[#1a1a2e]">
                       {filteredVenues.length} venues
                     </span>
                   </div>
@@ -284,78 +419,91 @@ export default function StadiumsPage() {
           </div>
 
           {/* Venues List */}
-          <div className="lg:col-span-2 order-1 lg:order-2">
+          <div className="lg:col-span-2 order-2 lg:order-2">
             {/* Filters */}
-            <div className="flex overflow-x-auto gap-2 mb-4 pb-2">
+            <div className="flex overflow-x-auto gap-2 mb-3 sm:mb-4 pb-2 scrollbar-hide">
               {filters.map((filter) => (
                 <button
                   key={filter.id}
                   onClick={() => setActiveFilter(filter.id)}
-                  className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium whitespace-nowrap transition-all ${
+                  className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg sm:rounded-xl text-sm sm:text-base font-medium whitespace-nowrap transition-all ${
                     activeFilter === filter.id
                       ? 'bg-linear-to-r from-[#3D52A0] to-[#7091E6] text-white shadow-lg'
                       : 'bg-white text-[#8697C4] hover:text-[#3D52A0] hover:bg-[#EDE8F5] border border-[#EDE8F5]'
                   }`}
                 >
-                  <filter.icon className="w-4 h-4" />
+                  <filter.icon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                   {filter.label}
                 </button>
               ))}
             </div>
 
             {/* Results Count */}
-            <div className="mb-4">
-              <p className="text-sm text-[#8697C4]">
-                <span className="font-semibold text-[#1a1a2e]">{filteredVenues.length}</span> found
+            <div className="mb-3 sm:mb-4">
+              <p className="text-xs sm:text-sm text-[#8697C4]">
+                {loading ? (
+                  <span>Loading venues...</span>
+                ) : (
+                  <>
+                    <span className="font-semibold text-[#1a1a2e]">{filteredVenues.length}</span> found nearby
+                  </>
+                )}
               </p>
             </div>
 
             {/* Venues List */}
             <div className="space-y-3">
-              {filteredVenues.map((venue, index) => (
+              {loading ? (
+                <div className="flex items-center justify-center py-12">
+                  <div className="text-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#3D52A0] mx-auto mb-4"></div>
+                    <p className="text-[#8697C4]">Finding venues near you...</p>
+                  </div>
+                </div>
+              ) : filteredVenues.length === 0 ? (
+                <div className="text-center py-12">
+                  <MapPin className="w-12 h-12 text-[#8697C4] mx-auto mb-4" />
+                  <p className="text-[#8697C4]">No venues found</p>
+                </div>
+              ) : (
+                filteredVenues.map((venue, index) => (
                 <motion.div
                   key={venue.id}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.05 }}
                   onClick={() => setSelectedVenue(venue)}
-                  className={`p-4 rounded-xl bg-white border hover:shadow-lg hover:border-[#7091E6] transition-all cursor-pointer group ${
+                  className={`p-3 sm:p-4 rounded-lg sm:rounded-xl bg-white border hover:shadow-lg hover:border-[#7091E6] transition-all cursor-pointer group ${
                     selectedVenue?.id === venue.id ? 'border-[#7091E6] shadow-md' : 'border-[#EDE8F5]'
                   }`}
                 >
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-3 sm:gap-4">
                     {/* Icon */}
-                    <div className="w-12 h-12 rounded-lg bg-linear-to-br from-[#EDE8F5] to-[#ADBBDA] flex items-center justify-center shrink-0">
-                      <venue.typeIcon className="w-6 h-6 text-[#7091E6]" />
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-linear-to-br from-[#EDE8F5] to-[#ADBBDA] flex items-center justify-center shrink-0">
+                      <venue.typeIcon className="w-5 h-5 sm:w-6 sm:h-6 text-[#7091E6]" />
                     </div>
 
                     {/* Content */}
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-1">
-                        <h3 className="font-bold text-[#1a1a2e] group-hover:text-[#3D52A0] transition-colors truncate">
-                          {venue.name}
-                        </h3>
-                        {venue.isOpen && (
-                          <span className="w-2 h-2 rounded-full bg-green-500 shrink-0" />
-                        )}
-                      </div>
+                      <h3 className="text-sm sm:text-base font-bold text-[#1a1a2e] group-hover:text-[#3D52A0] transition-colors mb-1">
+                        {venue.name}
+                      </h3>
+                      
+                      <p className="text-xs sm:text-sm text-[#8697C4] mb-1.5 sm:mb-2 line-clamp-2">
+                        {venue.address}
+                      </p>
 
-                      <div className="flex items-center gap-2 text-xs text-[#8697C4]">
-                        <div className="flex items-center gap-1">
-                          <Star className="w-3 h-3 text-yellow-400 fill-yellow-400" />
-                          <span className="font-semibold text-[#1a1a2e]">{venue.rating}</span>
-                        </div>
-                        <span>•</span>
+                      <div className="flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-xs text-[#8697C4]">
                         <span>{venue.distance}</span>
                         <span>•</span>
-                        <span>{venue.type}</span>
+                        <span className="truncate">{venue.type}</span>
                       </div>
                     </div>
 
-                    <ChevronRight className="w-5 h-5 text-[#ADBBDA] group-hover:text-[#7091E6] group-hover:translate-x-1 transition-all shrink-0" />
+                    <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-[#ADBBDA] group-hover:text-[#7091E6] group-hover:translate-x-1 transition-all shrink-0" />
                   </div>
                 </motion.div>
-              ))}
+              )))}
             </div>
           </div>
         </div>
@@ -376,32 +524,32 @@ export default function StadiumsPage() {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
-              className="relative w-full max-w-2xl bg-white rounded-3xl shadow-2xl max-h-[90vh] overflow-y-auto"
+              className="relative w-full max-w-2xl bg-white rounded-2xl sm:rounded-3xl shadow-2xl max-h-[90vh] overflow-y-auto"
             >
               {/* Header Image */}
-              <div className="relative h-48 bg-linear-to-br from-[#3D52A0] to-[#7091E6] rounded-t-3xl">
+              <div className="relative h-36 sm:h-48 bg-linear-to-br from-[#3D52A0] to-[#7091E6] rounded-t-2xl sm:rounded-t-3xl">
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <selectedVenue.typeIcon className="w-20 h-20 text-white/30" />
+                  <selectedVenue.typeIcon className="w-16 h-16 sm:w-20 sm:h-20 text-white/30" />
                 </div>
                 <button
                   onClick={() => setSelectedVenue(null)}
-                  className="absolute top-4 right-4 p-2 rounded-xl bg-white/10 hover:bg-white/20 transition-colors text-white"
+                  className="absolute top-3 right-3 sm:top-4 sm:right-4 p-1.5 sm:p-2 rounded-lg sm:rounded-xl bg-white/10 hover:bg-white/20 transition-colors text-white"
                 >
-                  <X className="w-5 h-5" />
+                  <X className="w-4 h-4 sm:w-5 sm:h-5" />
                 </button>
-                <div className="absolute top-4 left-4 flex gap-2">
+                <div className="absolute top-3 left-3 sm:top-4 sm:left-4 flex gap-2">
                   {selectedVenue.featured && (
-                    <span className="px-3 py-1 rounded-lg bg-linear-to-r from-yellow-400 to-orange-400 text-white text-sm font-bold">
+                    <span className="px-2 py-0.5 sm:px-3 sm:py-1 rounded text-xs sm:text-sm bg-linear-to-r from-yellow-400 to-orange-400 text-white font-bold">
                       Featured
                     </span>
                   )}
-                  <span className="px-3 py-1 rounded-lg bg-white/20 text-white text-sm font-medium">
+                  <span className="px-2 py-0.5 sm:px-3 sm:py-1 rounded text-xs sm:text-sm bg-white/20 text-white font-medium">
                     {selectedVenue.type}
                   </span>
                 </div>
-                <div className="absolute bottom-4 left-4 right-4">
-                  <h2 className="font-display text-2xl font-bold text-white">{selectedVenue.name}</h2>
-                  <div className="flex items-center gap-3 mt-2 text-white/80">
+                <div className="absolute bottom-3 left-3 right-3 sm:bottom-4 sm:left-4 sm:right-4">
+                  <h2 className="font-display text-lg sm:text-2xl font-bold text-white">{selectedVenue.name}</h2>
+                  <div className="flex items-center gap-2 sm:gap-3 mt-1.5 sm:mt-2 text-xs sm:text-sm text-white/80">
                     <div className="flex items-center gap-1">
                       <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
                       <span>{selectedVenue.rating}</span>
@@ -416,42 +564,42 @@ export default function StadiumsPage() {
               </div>
 
               {/* Content */}
-              <div className="p-6 space-y-6">
+              <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
                 {/* Quick Info */}
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="p-4 rounded-xl bg-[#EDE8F5]">
-                    <div className="flex items-center gap-2 text-[#3D52A0] mb-1">
-                      <Clock className="w-4 h-4" />
-                      <span className="text-sm font-medium">Hours</span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                  <div className="p-3 sm:p-4 rounded-lg sm:rounded-xl bg-[#EDE8F5]">
+                    <div className="flex items-center gap-1.5 sm:gap-2 text-[#3D52A0] mb-1">
+                      <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                      <span className="text-xs sm:text-sm font-medium">Hours</span>
                     </div>
-                    <p className="font-semibold text-[#1a1a2e]">{selectedVenue.hours}</p>
-                    <span className={`text-xs ${selectedVenue.isOpen ? 'text-green-600' : 'text-red-500'}`}>
+                    <p className="text-sm sm:text-base font-semibold text-[#1a1a2e]">{selectedVenue.hours}</p>
+                    <span className={`text-[10px] sm:text-xs ${selectedVenue.isOpen ? 'text-green-600' : 'text-red-500'}`}>
                       {selectedVenue.isOpen ? 'Currently Open' : 'Currently Closed'}
                     </span>
                   </div>
-                  <div className="p-4 rounded-xl bg-[#EDE8F5]">
-                    <div className="flex items-center gap-2 text-[#3D52A0] mb-1">
-                      <MapPin className="w-4 h-4" />
-                      <span className="text-sm font-medium">Location</span>
+                  <div className="p-3 sm:p-4 rounded-lg sm:rounded-xl bg-[#EDE8F5]">
+                    <div className="flex items-center gap-1.5 sm:gap-2 text-[#3D52A0] mb-1">
+                      <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                      <span className="text-xs sm:text-sm font-medium">Location</span>
                     </div>
-                    <p className="font-semibold text-[#1a1a2e] text-sm">{selectedVenue.address}</p>
+                    <p className="text-xs sm:text-sm font-semibold text-[#1a1a2e]">{selectedVenue.address}</p>
                   </div>
                 </div>
 
                 {/* Description */}
                 <div>
-                  <h3 className="font-display font-bold text-[#1a1a2e] mb-2">About</h3>
-                  <p className="text-[#8697C4] leading-relaxed">{selectedVenue.description}</p>
+                  <h3 className="font-display text-sm sm:text-base font-bold text-[#1a1a2e] mb-2">About</h3>
+                  <p className="text-xs sm:text-sm text-[#8697C4] leading-relaxed">{selectedVenue.description}</p>
                 </div>
 
                 {/* Sports */}
                 <div>
-                  <h3 className="font-display font-bold text-[#1a1a2e] mb-3">Available Sports</h3>
-                  <div className="flex flex-wrap gap-2">
+                  <h3 className="font-display text-sm sm:text-base font-bold text-[#1a1a2e] mb-2 sm:mb-3">Available Sports</h3>
+                  <div className="flex flex-wrap gap-1.5 sm:gap-2">
                     {selectedVenue.sports.map((sport) => (
                       <span 
                         key={sport}
-                        className="px-4 py-2 rounded-xl bg-linear-to-r from-[#3D52A0] to-[#7091E6] text-white font-medium text-sm"
+                        className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl bg-linear-to-r from-[#3D52A0] to-[#7091E6] text-white font-medium text-xs sm:text-sm"
                       >
                         {sport}
                       </span>
@@ -461,60 +609,61 @@ export default function StadiumsPage() {
 
                 {/* Amenities */}
                 <div>
-                  <h3 className="font-display font-bold text-[#1a1a2e] mb-3">Amenities</h3>
-                  <div className="flex flex-wrap gap-2">
+                  <h3 className="font-display text-sm sm:text-base font-bold text-[#1a1a2e] mb-2 sm:mb-3">Amenities</h3>
+                  <div className="flex flex-wrap gap-1.5 sm:gap-2">
                     {selectedVenue.amenities.map((amenity) => (
                       <span 
                         key={amenity}
-                        className="flex items-center gap-1 px-3 py-2 rounded-xl bg-[#EDE8F5] text-[#3D52A0] text-sm"
+                        className="flex items-center gap-1 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-lg sm:rounded-xl bg-[#EDE8F5] text-[#3D52A0] text-xs sm:text-sm"
                       >
-                        <CheckCircle className="w-4 h-4" /> {amenity}
+                        <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4" /> {amenity}
                       </span>
                     ))}
                   </div>
                 </div>
 
                 {/* Contact */}
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                   <a 
                     href={`tel:${selectedVenue.phone}`}
-                    className="flex items-center gap-3 p-4 rounded-xl bg-[#EDE8F5] hover:bg-[#ADBBDA]/50 transition-colors"
+                    className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 rounded-lg sm:rounded-xl bg-[#EDE8F5] hover:bg-[#ADBBDA]/50 transition-colors"
                   >
-                    <Phone className="w-5 h-5 text-[#3D52A0]" />
-                    <div>
-                      <p className="text-xs text-[#8697C4]">Phone</p>
-                      <p className="font-medium text-[#1a1a2e]">{selectedVenue.phone}</p>
+                    <Phone className="w-4 h-4 sm:w-5 sm:h-5 text-[#3D52A0]" />
+                    <div className="min-w-0">
+                      <p className="text-[10px] sm:text-xs text-[#8697C4]">Phone</p>
+                      <p className="text-xs sm:text-sm font-medium text-[#1a1a2e] truncate">{selectedVenue.phone}</p>
                     </div>
                   </a>
                   <a 
                     href={`https://${selectedVenue.website}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-3 p-4 rounded-xl bg-[#EDE8F5] hover:bg-[#ADBBDA]/50 transition-colors"
+                    className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 rounded-lg sm:rounded-xl bg-[#EDE8F5] hover:bg-[#ADBBDA]/50 transition-colors"
                   >
-                    <Globe className="w-5 h-5 text-[#3D52A0]" />
-                    <div>
-                      <p className="text-xs text-[#8697C4]">Website</p>
-                      <p className="font-medium text-[#1a1a2e] truncate">{selectedVenue.website}</p>
+                    <Globe className="w-4 h-4 sm:w-5 sm:h-5 text-[#3D52A0]" />
+                    <div className="min-w-0">
+                      <p className="text-[10px] sm:text-xs text-[#8697C4]">Website</p>
+                      <p className="text-xs sm:text-sm font-medium text-[#1a1a2e] truncate">{selectedVenue.website}</p>
                     </div>
                   </a>
                 </div>
 
                 {/* Actions */}
-                <div className="flex gap-3">
+                <div className="flex gap-2 sm:gap-3">
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    className="flex-1 flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-linear-to-r from-[#3D52A0] to-[#7091E6] text-white font-semibold shadow-lg"
+                    className="flex-1 flex items-center justify-center gap-1.5 sm:gap-2 px-4 sm:px-6 py-3 sm:py-4 rounded-lg sm:rounded-xl bg-linear-to-r from-[#3D52A0] to-[#7091E6] text-white text-sm sm:text-base font-semibold shadow-lg"
                   >
-                    <Navigation className="w-5 h-5" />
-                    Get Directions
+                    <Navigation className="w-4 h-4 sm:w-5 sm:h-5" />
+                    <span className="hidden sm:inline">Get Directions</span>
+                    <span className="sm:hidden">Directions</span>
                   </motion.button>
-                  <button className="p-4 rounded-xl border border-[#ADBBDA] text-[#3D52A0] hover:bg-[#EDE8F5] transition-colors">
-                    <Heart className={`w-5 h-5 ${selectedVenue.isFavorite ? 'fill-red-500 text-red-500' : ''}`} />
+                  <button className="p-3 sm:p-4 rounded-lg sm:rounded-xl border border-[#ADBBDA] text-[#3D52A0] hover:bg-[#EDE8F5] transition-colors">
+                    <Heart className={`w-4 h-4 sm:w-5 sm:h-5 ${selectedVenue.isFavorite ? 'fill-red-500 text-red-500' : ''}`} />
                   </button>
-                  <button className="p-4 rounded-xl border border-[#ADBBDA] text-[#3D52A0] hover:bg-[#EDE8F5] transition-colors">
-                    <Share2 className="w-5 h-5" />
+                  <button className="p-3 sm:p-4 rounded-lg sm:rounded-xl border border-[#ADBBDA] text-[#3D52A0] hover:bg-[#EDE8F5] transition-colors">
+                    <Share2 className="w-4 h-4 sm:w-5 sm:h-5" />
                   </button>
                 </div>
               </div>

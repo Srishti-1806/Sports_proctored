@@ -15,7 +15,7 @@ export default function PerformanceBar({ label, value, icon: Icon, color }) {
     <div>
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
-          <Icon className="w-4 h-4 text-[#3D52A0]" />
+          {Icon && <Icon className="w-4 h-4 text-[#3D52A0]" />}
           <span className="text-sm font-medium text-[#1a1a2e]">{label}</span>
         </div>
         <span className="text-sm font-bold text-[#3D52A0]">{value}%</span>

@@ -1,16 +1,42 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { 
-  Trophy, 
-  MapPin, 
-  ArrowRight, 
-  TrendingUp,
-  Activity,
-  Award
-} from 'lucide-react'
+import { Trophy, MapPin, ArrowRight, TrendingUp,Activity,Award } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { useAuth } from '@/lib/context/AuthContext'
+import AvatarCircles from './AvatarCircles'
 
-export default function BentoGrid({ onSignupClick }) {
+export default function BentoGrid({ onSignupClick, onLoginClick }) {
+  const router = useRouter()
+  const { user } = useAuth()
+
+  const handleProfileClick = (e) => {
+    e.preventDefault()
+    if (user) {
+      router.push('/profile')
+    } else {
+      onLoginClick()
+    }
+  }
+
+  const handleGetStartedClick = () => {
+    if (user) {
+      // Check user role from metadata
+      const userRole = user.user_metadata?.role || user.role
+      
+      if (userRole === 'player') {
+        router.push('/coaches')
+      } else if (userRole === 'coach') {
+        router.push('/players')
+      } else {
+        // Default fallback if role is not set
+        router.push('/coaches')
+      }
+    } else {
+      onSignupClick()
+    }
+  }
+
   return (
     <div className="grid grid-cols-12 gap-3 auto-rows-[140px]">
       
@@ -21,19 +47,19 @@ export default function BentoGrid({ onSignupClick }) {
         transition={{ delay: 0.1 }}
         whileHover={{ scale: 1.02 }}
         className="col-span-12 lg:col-span-5 row-span-2 rounded-[24px] bg-linear-to-br from-[#3D52A0] to-[#7091E6] p-6 relative overflow-hidden group cursor-pointer"
-        onClick={onSignupClick}
+        onClick={handleProfileClick}
       >
         <div className="relative h-full flex flex-col justify-between">
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/20 backdrop-blur-sm text-white text-xs font-medium mb-4">
               FEATURED
             </div>
-            <h2 className="font-display text-3xl font-bold text-white mb-3">
+            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-3">
               Find Your Coach
               <br />Across India
             </h2>
-            <p className="text-[#ADBBDA] text-base mb-4">
-              Browse coaches nationwide. Request assessments. Build your career.
+            <p className="text-[#ADBBDA] text-sm sm:text-base mb-4">
+              Browse coaches nationwide. Build your sports career.
             </p>
           </div>
           
@@ -41,7 +67,7 @@ export default function BentoGrid({ onSignupClick }) {
             className="flex items-center gap-2 text-white font-semibold"
             whileHover={{ x: 5 }}
           >
-            <span>Get Started</span>
+            <span>Build your sports profile</span>
             <ArrowRight className="w-5 h-5" />
           </motion.div>
         </div>
@@ -75,14 +101,14 @@ export default function BentoGrid({ onSignupClick }) {
           </div>
           
           <div>
-            <div className="font-display text-4xl font-bold text-[#1a1a2e] mb-1">
+            <div className="font-display text-2xl sm:text-3xl md:text-4xl font-bold text-[#1a1a2e] mb-1">
               25K+
             </div>
-            <div className="text-[#8697C4] text-sm">Players Connected</div>
+            <div className="text-[#8697C4] text-xs sm:text-sm">Players Connected</div>
           </div>
 
           <div className="flex items-center gap-2 text-xs text-green-600 bg-green-50 px-2 py-1 rounded-lg w-fit">
-            <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
+            <div className="w-1.5 h-1.5 bg-green-500 rounded-full" />
             <span className="font-medium">+15% this month</span>
           </div>
         </div>
@@ -99,7 +125,7 @@ export default function BentoGrid({ onSignupClick }) {
         <div className="relative flex flex-col h-full justify-between">
           <div>
             <Activity className="w-7 h-7 text-[#7091E6] mb-3" />
-            <h3 className="font-display text-xl font-bold text-white mb-2">
+            <h3 className="font-display text-lg sm:text-xl md:text-2xl font-bold text-white mb-2">
               Standardized
               <br />Assessment
             </h3>
@@ -129,14 +155,14 @@ export default function BentoGrid({ onSignupClick }) {
         transition={{ delay: 0.3 }}
         whileHover={{ scale: 1.02 }}
         className="col-span-12 lg:col-span-4 row-span-1 rounded-[32px] bg-[#EDE8F5] p-6 relative overflow-hidden group cursor-pointer"
-        onClick={onSignupClick}
+        onClick={handleGetStartedClick}
       >
         <div className="flex items-center justify-between h-full">
           <div>
-            <div className="font-display text-xl font-bold text-[#1a1a2e] mb-1">
+            <div className="font-display text-lg sm:text-xl font-bold text-[#1a1a2e] mb-1">
               Start for Free
             </div>
-            <div className="text-sm text-[#8697C4]">No credit card required</div>
+            <div className="text-xs sm:text-sm text-[#8697C4]">No credit card required</div>
           </div>
           <motion.div
             whileHover={{ x: 5 }}
@@ -155,10 +181,10 @@ export default function BentoGrid({ onSignupClick }) {
         className="col-span-6 lg:col-span-3 row-span-2 rounded-[32px] bg-white border border-[#EDE8F5] p-6 hover:border-[#7091E6] transition-colors duration-300"
       >
         <MapPin className="w-8 h-8 text-[#7091E6] mb-4" />
-        <h3 className="font-display text-2xl font-bold text-[#1a1a2e] mb-2">
+        <h3 className="font-display text-lg sm:text-xl md:text-2xl font-bold text-[#1a1a2e] mb-2">
           Find Venues
         </h3>
-        <p className="text-[#8697C4] text-sm mb-4">
+        <p className="text-[#8697C4] text-xs sm:text-sm mb-4">
           450+ facilities across India
         </p>
 
@@ -190,30 +216,22 @@ export default function BentoGrid({ onSignupClick }) {
         <div className="relative flex flex-col h-full justify-between">
           <div>
             <Trophy className="w-8 h-8 text-white mb-3" />
-            <h3 className="mt-5 font-display text-4xl font-bold text-white mb-2">
+            <h3 className="mt-5 font-display text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2">
               1.2K Coaches
               <br />Across India
             </h3>
           </div>
           
-          <div className="flex items-center gap-2">
-            {[
-              'https://i.pravatar.cc/200?img=12',
-              'https://i.pravatar.cc/200?img=14',
-              'https://i.pravatar.cc/200?img=18',
-              'https://i.pravatar.cc/200?img=21'
-            ].map((src, i) => (
-              <motion.div
-                key={i}
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 0.6 + i * 0.1 }}
-                className="w-8 h-8 rounded-full bg-white/90 flex items-center justify-center overflow-hidden"
-              >
-                <img src={src} alt={`coach-${i + 1}`} className="w-full h-full object-cover" />
-              </motion.div>
-            ))}
-            <div className="text-white text-xs font-medium">+1,196 more</div>
+          <div className="flex items-center gap-3">
+            <AvatarCircles
+              numPeople={1200}
+              avatarUrls={[
+                { imageUrl: 'https://i.pravatar.cc/200?img=12', profileUrl: '#' },
+                { imageUrl: 'https://i.pravatar.cc/200?img=14', profileUrl: '#' },
+                { imageUrl: 'https://i.pravatar.cc/200?img=18', profileUrl: '#' },
+                { imageUrl: 'https://i.pravatar.cc/200?img=21', profileUrl: '#' }
+              ]}
+            />
           </div>
         </div>
       </motion.div>
@@ -226,8 +244,8 @@ export default function BentoGrid({ onSignupClick }) {
         className="col-span-6 lg:col-span-4 row-span-1 rounded-[24px] bg-white border border-[#EDE8F5] p-4 hover:border-[#7091E6] transition-colors duration-300"
       >
         <div className="flex items-center justify-between h-full">
-          <div>
-            <div className="font-display text-3xl font-bold gradient-text mb-1">
+            <div>
+            <div className="font-display text-2xl sm:text-3xl font-bold gradient-text mb-1">
               96%
             </div>
             <div className="text-[#8697C4] text-xs">Success Rate</div>

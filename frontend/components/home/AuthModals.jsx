@@ -53,7 +53,8 @@ export default function AuthModals({ showLogin, showSignup, onClose }) {
     } else {
       setLoading(false)
       onClose()
-      router.refresh()
+      // Clear URL parameters after successful sign-in
+      router.push('/')
     }
   }
 
@@ -80,7 +81,8 @@ export default function AuthModals({ showLogin, showSignup, onClose }) {
       // show confirmation toast
       toast?.show('A mail has been sent to you — please confirm your email to sign in.')
       onClose()
-      router.refresh()
+      // Clear URL parameters after successful sign-up
+      router.push('/')
     }
   }
 
