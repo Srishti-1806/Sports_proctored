@@ -314,12 +314,14 @@ export default function ProfilePage() {
             )}
           </label>
           
-          <div className="absolute bottom-6 left-6 right-6 flex gap-3 overflow-x-auto">
-            <StatCard icon={Trophy} label="Achievements" value={profile?.achievements?.length || 0} color="from-amber-400 to-orange-500" />
-            <StatCard icon={Target} label={isPlayer ? "Matches" : "Programs"} value={isPlayer ? (profile?.matchHistory?.length || 0) : (profile?.teams?.length || 0)} color="from-blue-400 to-cyan-500" />
-            <StatCard icon={Award} label="Score" value={profile?.assessments?.[0]?.score || '-'} color="from-purple-400 to-pink-500" />
-            <StatCard icon={Zap} label="Training" value={profile?.trainingSchedule?.length || 0} color="from-green-400 to-emerald-500" />
-          </div>
+          {isPlayer && (
+            <div className="absolute bottom-6 left-6 right-6 flex gap-3 overflow-x-auto">
+              <StatCard icon={Trophy} label="Achievements" value={profile?.achievements?.length || 0} color="from-amber-400 to-orange-500" />
+              <StatCard icon={Target} label="Matches" value={profile?.matchHistory?.length || 0} color="from-blue-400 to-cyan-500" />
+              <StatCard icon={Award} label="Score" value={profile?.assessments?.[0]?.score || '-'} color="from-purple-400 to-pink-500" />
+              <StatCard icon={Zap} label="Training" value={profile?.trainingSchedule?.length || 0} color="from-green-400 to-emerald-500" />
+            </div>
+          )}
         </div>
 
         {/* Profile Info Card */}

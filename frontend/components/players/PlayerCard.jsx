@@ -1,14 +1,6 @@
 import { motion } from 'framer-motion'
 import Link from 'next/link'
-import { 
-  MapPin,
-  Star,
-  Trophy,
-  TrendingUp,
-  Target,
-  Flame,
-  Medal
-} from 'lucide-react'
+import { MapPin,Trophy,TrendingUp,Target,Flame,Medal } from 'lucide-react'
 
 export default function PlayerCard({ player, index }) {
   return (
@@ -60,13 +52,8 @@ export default function PlayerCard({ player, index }) {
 
         {/* Player Stats */}
         <div className="p-6">
-          {/* Rating */}
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2">
-              <Star className="w-5 h-5 text-yellow-500 fill-yellow-500" />
-              <span className="font-bold text-[#1a1a2e]">{player.rating}</span>
-              <span className="text-[#8697C4] text-sm">({player.reviews} reviews)</span>
-            </div>
+          {/* Improvement Badge */}
+          <div className="flex items-center justify-end mb-4">
             <div className="flex items-center gap-1 text-green-600 text-sm font-semibold">
               <TrendingUp className="w-4 h-4" />
               {player.improvement}
@@ -98,8 +85,8 @@ export default function PlayerCard({ player, index }) {
             </div>
             <div className="text-center">
               <Target className="w-5 h-5 text-[#7091E6] mx-auto mb-1" />
-              <div className="font-bold text-[#1a1a2e] text-sm">{player.height}</div>
-              <div className="text-xs text-[#8697C4]">Height</div>
+              <div className="font-bold text-[#1a1a2e] text-sm">{player.matchCount}</div>
+              <div className="text-xs text-[#8697C4]">Matches</div>
             </div>
             <div className="text-center">
               <Medal className="w-5 h-5 text-[#7091E6] mx-auto mb-1" />

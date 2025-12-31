@@ -45,7 +45,7 @@ export default function AchievementBadge({ data, onDelete }) {
             {data.achievementImage && (
               <button 
                 onClick={() => setShowImage(true)} 
-                className="mt-3 flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-amber-50 to-orange-50 hover:from-amber-100 hover:to-orange-100 rounded-lg transition-colors w-fit"
+                className="mt-3 flex items-center gap-1.5 px-3 py-1.5 bg-linear-to-r from-amber-50 to-orange-50 hover:from-amber-100 hover:to-orange-100 rounded-lg transition-colors w-fit"
               >
                 <ImageIcon className="w-3.5 h-3.5 text-amber-600" />
                 <span className="text-xs font-medium text-amber-600">View Full</span>
@@ -54,10 +54,10 @@ export default function AchievementBadge({ data, onDelete }) {
           </div>
 
           {/* Right: Achievement Image/Trophy (30%) */}
-          <div className="w-[30%] flex-shrink-0">
+          <div className="w-[30%] shrink-0">
             {data.achievementImage ? (
               <div 
-                className="w-full aspect-[4/3] rounded-lg overflow-hidden cursor-pointer hover:opacity-95 transition-opacity" 
+                className="w-full aspect-4/3 rounded-lg overflow-hidden cursor-pointer hover:opacity-95 transition-opacity" 
                 onClick={() => setShowImage(true)}
               >
                 <img 
@@ -67,7 +67,7 @@ export default function AchievementBadge({ data, onDelete }) {
                 />
               </div>
             ) : (
-              <div className="w-full aspect-[4/3] flex items-center justify-center rounded-lg bg-gradient-to-br from-amber-50 to-orange-50">
+              <div className="w-full aspect-4/3 flex items-center justify-center rounded-lg bg-linear-to-br from-amber-50 to-orange-50">
                 <div className="text-center">
                   <Trophy className="w-8 h-8 text-amber-400 mx-auto mb-1" />
                   <p className="text-[10px] text-amber-600">No image</p>

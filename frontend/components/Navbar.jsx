@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { 
   Home, 
@@ -25,11 +25,13 @@ export default function Navbar() {
   const { user, signOut } = useAuth()
   const [isSigningOut, setIsSigningOut] = useState(false)
   const pathname = usePathname()
+  const router = useRouter()
 
   const handleSignOut = async () => {
     try {
       setIsSigningOut(true)
       await signOut()
+      router.push('/') // Redirect to home page
     } catch (err) {
       console.error('Sign out error:', err)
     } finally {

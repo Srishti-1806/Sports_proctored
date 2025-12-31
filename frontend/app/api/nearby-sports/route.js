@@ -33,10 +33,10 @@ export async function GET(request) {
     const overpassQuery = `
       [out:json][timeout:30];
       (
-        node["leisure"~"stadium|sports_centre|sports_hall|pitch|track|swimming_pool"](around:${radius},${lat},${lon});
-        node["sport"~"cricket|football|soccer|basketball|tennis|volleyball|athletics|badminton|hockey|swimming"](around:${radius},${lat},${lon});
-        way["leisure"~"stadium|sports_centre|sports_hall|pitch|track|swimming_pool"](around:${radius},${lat},${lon});
-        way["sport"~"cricket|football|soccer|basketball|tennis|volleyball|athletics|badminton|hockey|swimming"](around:${radius},${lat},${lon});
+        node["leisure"~"stadium|sports_centre|sports_hall|pitch|track|swimming_pool|fitness_centre|golf_course|miniature_golf|fitness_station"](around:${radius},${lat},${lon});
+        node["sport"~"cricket|football|soccer|basketball|tennis|volleyball|athletics|badminton|hockey|swimming|golf"](around:${radius},${lat},${lon});
+        way["leisure"~"stadium|sports_centre|sports_hall|pitch|track|swimming_pool|fitness_centre|golf_course|miniature_golf|fitness_station"](around:${radius},${lat},${lon});
+        way["sport"~"cricket|football|soccer|basketball|tennis|volleyball|athletics|badminton|hockey|swimming|golf"](around:${radius},${lat},${lon});
       );
       out center;
     `;

@@ -1,125 +1,68 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
-import { 
-  Search, 
-  SlidersHorizontal, 
-  MapPin, 
-  Star, 
-  Award,
-  Users,
-  TrendingUp,
-  ChevronRight,
-  Medal,
-  Trophy
-} from 'lucide-react'
-
-const coaches = [
-  {
-    id: 1,
-    name: 'Rajesh Kumar',
-    title: 'Cricket Performance Coach',
-    sport: 'Cricket',
-    location: 'Mumbai, Maharashtra',
-    experience: '12+ years',
-    rating: 4.9,
-    reviews: 324,
-    athletes: 450,
-    specialization: ['Batting', 'Mental Conditioning', 'Youth Development'],
-    image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=400&fit=crop',
-    verified: true,
-    price: '₹2,500-4,000/session'
-  },
-  {
-    id: 2,
-    name: 'Priya Sharma',
-    title: 'Badminton Champion & Coach',
-    sport: 'Badminton',
-    location: 'Bangalore, Karnataka',
-    experience: '8+ years',
-    rating: 4.8,
-    reviews: 198,
-    athletes: 280,
-    specialization: ['Singles Strategy', 'Footwork', 'Competition Prep'],
-    image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop',
-    verified: true,
-    price: '₹2,000-3,500/session'
-  },
-  {
-    id: 3,
-    name: 'Arjun Mehta',
-    title: 'Football Tactical Analyst',
-    sport: 'Football',
-    location: 'Delhi, NCR',
-    experience: '15+ years',
-    rating: 4.9,
-    reviews: 412,
-    athletes: 620,
-    specialization: ['Tactical Analysis', 'Set Pieces', 'Team Strategy'],
-    image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=400&fit=crop',
-    verified: true,
-    price: '₹3,000-5,000/session'
-  },
-  {
-    id: 4,
-    name: 'Ananya Reddy',
-    title: 'Athletics & Sprinting Coach',
-    sport: 'Athletics',
-    location: 'Hyderabad, Telangana',
-    experience: '10+ years',
-    rating: 4.7,
-    reviews: 156,
-    athletes: 340,
-    specialization: ['Sprint Technique', 'Strength Training', 'Race Strategy'],
-    image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=400&fit=crop',
-    verified: true,
-    price: '₹2,200-3,800/session'
-  },
-  {
-    id: 5,
-    name: 'Vikram Singh',
-    title: 'Tennis Performance Coach',
-    sport: 'Tennis',
-    location: 'Pune, Maharashtra',
-    experience: '18+ years',
-    rating: 4.9,
-    reviews: 267,
-    athletes: 380,
-    specialization: ['Serve Mechanics', 'Match Psychology', 'Junior Development'],
-    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop',
-    verified: true,
-    price: '₹2,800-4,500/session'
-  },
-  {
-    id: 6,
-    name: 'Meera Patel',
-    title: 'Swimming Elite Coach',
-    sport: 'Swimming',
-    location: 'Chennai, Tamil Nadu',
-    experience: '11+ years',
-    rating: 4.8,
-    reviews: 203,
-    athletes: 290,
-    specialization: ['Freestyle', 'Endurance Training', 'Competition Prep'],
-    image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop',
-    verified: true,
-    price: '₹2,400-3,600/session'
-  }
-]
+import { Search, SlidersHorizontal, MapPin, Award, TrendingUp,ChevronRight, Trophy, Loader2 } from 'lucide-react'
+import { createClient } from '../../lib/supabase/client'
 
 export default function CoachesPage() {
+  const [coaches, setCoaches] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedSport, setSelectedSport] = useState('all')
   const [showFilters, setShowFilters] = useState(false)
 
-  const sports = ['all', 'Cricket', 'Football', 'Badminton', 'Tennis', 'Athletics', 'Swimming']
+  const sports = ['all', 'Cricket', 'Football', 'Badminton', 'Tennis', 'Athletics', 'Swimming', 'Basketball', 'Hockey']
+
+  useEffect(() => {
+    fetchCoaches()
+  }, [])
+
+  const fetchCoaches = async () => {
+    try {
+      setLoading(true)
+      const supabase = createClient()
+      
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('role', 'coach')
+
+      if (error) throw error
+
+      // Transform coaches data
+      const transformedCoaches = (data || []).map(coach => {
+        const athleticStats = coach.athletic_stats || {}
+        const certifications = coach.certifications || []
+        
+        return {
+          ...coach,
+          full_name: coach.full_name || 'Anonymous Coach',
+          profilePicture: coach.profile_picture || coach.avatar_url,
+          sport: athleticStats.primarySport || coach.sport || 'N/A',
+          experience: athleticStats.experience || athleticStats.age || 'N/A',
+          certificationsCount: certifications.length,
+          location: coach.location || 'Location not set'
+        }
+      })
+
+      setCoaches(transformedCoaches)
+    } catch (err) {
+      console.error('Error fetching coaches:', err)
+      setError(err.message)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const filteredCoaches = coaches.filter(coach => {
-    const matchesSearch = coach.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         coach.sport.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         coach.location.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesSearch = 
+      coach.full_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      coach.sport?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      coach.location?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      coach.title?.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesSport = selectedSport === 'all' || coach.sport === selectedSport
     return matchesSearch && matchesSport
   })
@@ -191,104 +134,168 @@ export default function CoachesPage() {
         </motion.div>
 
         {/* Results Count */}
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2 }}
-          className="text-[#8697C4] mb-6"
-        >
-          {filteredCoaches.length} coaches found
-        </motion.p>
+        {!loading && (
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
+            className="text-[#8697C4] mb-6"
+          >
+            {filteredCoaches.length} coaches found
+          </motion.p>
+        )}
+
+        {/* Loading State */}
+        {loading && (
+          <div className="flex items-center justify-center py-20">
+            <Loader2 className="w-12 h-12 text-[#7091E6] animate-spin" />
+          </div>
+        )}
+
+        {/* Error State */}
+        {error && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center py-16"
+          >
+            <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Trophy className="w-10 h-10 text-red-500" />
+            </div>
+            <h3 className="font-display text-2xl font-bold text-[#1a1a2e] mb-2">
+              Error loading coaches
+            </h3>
+            <p className="text-[#8697C4] mb-4">
+              {error}
+            </p>
+            <button
+              onClick={fetchCoaches}
+              className="px-6 py-3 bg-linear-to-r from-[#3D52A0] to-[#7091E6] text-white rounded-xl hover:shadow-lg transition-all"
+            >
+              Try Again
+            </button>
+          </motion.div>
+        )}
 
         {/* Coaches Grid */}
-        <div className="grid lg:grid-cols-2 gap-6">
-          {filteredCoaches.map((coach, index) => (
-            <motion.div
-              key={coach.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.05 }}
-            >
-              <Link href={`/coaches/${coach.id}`}>
-                <div className="group bg-white rounded-[24px] p-6 border border-[#EDE8F5] hover:border-[#7091E6] hover:shadow-xl hover:shadow-[#7091E6]/5 transition-all duration-300 cursor-pointer">
-                  <div className="flex gap-4">
-                    {/* Profile Image */}
-                    <div className="relative shrink-0">
-                      <div className="w-24 h-24 rounded-2xl overflow-hidden">
-                        <img 
-                          src={coach.image} 
-                          alt={coach.name}
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                        />
-                      </div>
-                      {coach.verified && (
-                        <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-linear-to-br from-[#3D52A0] to-[#7091E6] rounded-full flex items-center justify-center">
-                          <Medal className="w-4 h-4 text-white" />
+        {!loading && !error && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredCoaches.map((coach, index) => (
+              <motion.div
+                key={coach.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.05 }}
+              >
+                <Link href={`/coaches/${coach.id}`}>
+                  <div className="group bg-white rounded-3xl p-6 border border-[#EDE8F5] hover:border-[#7091E6] transition-all duration-300 hover:shadow-xl cursor-pointer h-full">
+                    <div className="flex flex-col h-full">
+                      {/* Coach Image and Verified Badge */}
+                      <div className="relative mb-4">
+                        <div className="w-24 h-24 rounded-2xl bg-linear-to-br from-[#3D52A0] to-[#7091E6] overflow-hidden mx-auto">
+                          {coach.profilePicture ? (
+                            <img 
+                              src={coach.profilePicture} 
+                              alt={coach.full_name}
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center text-white text-3xl font-bold">
+                              {coach.full_name?.charAt(0) || 'C'}
+                            </div>
+                          )}
                         </div>
-                      )}
-                    </div>
-
-                    {/* Info */}
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-start justify-between mb-2">
-                        <div>
-                          <h3 className="font-display text-xl font-bold text-[#1a1a2e] mb-1">
-                            {coach.name}
-                          </h3>
-                          <p className="text-[#8697C4] text-sm">{coach.title}</p>
-                        </div>
-                        <ChevronRight className="w-5 h-5 text-[#8697C4] group-hover:text-[#7091E6] group-hover:translate-x-1 transition-all" />
+                        {coach.certificationsCount > 0 && (
+                          <div className="absolute -top-1 -right-1 w-8 h-8 bg-linear-to-r from-[#3D52A0] to-[#7091E6] rounded-full flex items-center justify-center">
+                            <Award className="w-4 h-4 text-white" />
+                          </div>
+                        )}
                       </div>
 
-                      <div className="flex items-center gap-4 mb-3">
-                        <div className="flex items-center gap-1">
-                          <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
-                          <span className="font-semibold text-[#1a1a2e]">{coach.rating}</span>
-                          <span className="text-[#8697C4] text-sm">({coach.reviews})</span>
-                        </div>
-                        <div className="flex items-center gap-1 text-[#8697C4] text-sm">
-                          <Users className="w-4 h-4" />
-                          {coach.athletes} athletes
-                        </div>
-                      </div>
+                      {/* Coach Info */}
+                      <div className="text-center mb-4">
+                        <h3 className="font-display text-xl font-bold text-[#1a1a2e] mb-1 group-hover:text-[#7091E6] transition-colors">
+                          {coach.full_name || 'Anonymous Coach'}
+                        </h3>
+                        <p className="text-[#8697C4] text-sm mb-2">{coach.title || coach.sport}</p>
+                        
+                        {/* Location */}
+                        {coach.location && (
+                          <div className="flex items-center justify-center gap-1 text-[#8697C4] text-sm mb-3">
+                            <MapPin className="w-4 h-4" />
+                            <span>{coach.location}</span>
+                          </div>
+                        )}
 
-                      <div className="flex items-center gap-2 mb-3 text-[#8697C4] text-sm">
-                        <MapPin className="w-4 h-4" />
-                        {coach.location}
-                      </div>
-
-                      {/* Specializations */}
-                      <div className="flex flex-wrap gap-1 mb-3">
-                        {coach.specialization.slice(0, 2).map((spec, idx) => (
-                          <span 
-                            key={idx}
-                            className="px-2 py-1 rounded-lg bg-[#EDE8F5] text-[#3D52A0] text-xs font-medium"
-                          >
-                            {spec}
-                          </span>
-                        ))}
-                        {coach.specialization.length > 2 && (
-                          <span className="px-2 py-1 rounded-lg bg-[#EDE8F5] text-[#8697C4] text-xs font-medium">
-                            +{coach.specialization.length - 2} more
+                        {/* Sport Badge */}
+                        {coach.sport && (
+                          <span className="inline-block px-3 py-1 bg-linear-to-r from-[#3D52A0] to-[#7091E6] text-white text-xs font-medium rounded-full">
+                            {coach.sport}
                           </span>
                         )}
                       </div>
 
-                      {/* Price and Experience */}
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm text-[#8697C4]">{coach.experience} exp</span>
-                        <span className="font-semibold text-[#3D52A0]">{coach.price}</span>
+                      {/* Stats */}
+                      <div className="grid grid-cols-3 gap-2 mb-4 p-3 bg-[#fafbff] rounded-xl">
+                        <div className="text-center">
+                          <div className="flex items-center justify-center gap-1 mb-1">
+                            <Award className="w-4 h-4 text-[#7091E6]" />
+                            <span className="font-bold text-[#1a1a2e]">{coach.certificationsCount || 0}</span>
+                          </div>
+                          <p className="text-xs text-[#8697C4]">Certs</p>
+                        </div>
+                        <div className="text-center border-x border-[#EDE8F5]">
+                          <div className="flex items-center justify-center gap-1 mb-1">
+                            <TrendingUp className="w-4 h-4 text-green-500" />
+                            <span className="font-bold text-[#1a1a2e]">{coach.experience}</span>
+                          </div>
+                          <p className="text-xs text-[#8697C4]">Experience</p>
+                        </div>
+                        <div className="text-center">
+                          <div className="flex items-center justify-center gap-1 mb-1">
+                            <Trophy className="w-4 h-4 text-yellow-400" />
+                            <span className="font-bold text-[#1a1a2e]">{(coach.achievements || []).length}</span>
+                          </div>
+                          <p className="text-xs text-[#8697C4]">Awards</p>
+                        </div>
+                      </div>
+
+                      {/* Specializations */}
+                      {coach.specialization && Array.isArray(coach.specialization) && coach.specialization.length > 0 && (
+                        <div className="flex flex-wrap gap-1 mb-3">
+                          {coach.specialization.slice(0, 2).map((spec, idx) => (
+                            <span 
+                              key={idx}
+                              className="px-2 py-1 rounded-lg bg-[#EDE8F5] text-[#3D52A0] text-xs font-medium"
+                            >
+                              {spec}
+                            </span>
+                          ))}
+                          {coach.specialization.length > 2 && (
+                            <span className="px-2 py-1 rounded-lg bg-[#EDE8F5] text-[#8697C4] text-xs font-medium">
+                              +{coach.specialization.length - 2} more
+                            </span>
+                          )}
+                        </div>
+                      )}
+
+                      {/* View Profile */}
+                      <div className="flex items-center justify-center mt-auto pt-3 border-t border-[#EDE8F5]">
+                        <div className="flex items-center gap-1 text-[#7091E6] text-sm font-medium group-hover:gap-2 transition-all">
+                          <span>View Profile</span>
+                          <ChevronRight className="w-4 h-4" />
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </Link>
-            </motion.div>
-          ))}
-        </div>
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+        )}
 
         {/* Empty State */}
-        {filteredCoaches.length === 0 && (
+        {!loading && !error && filteredCoaches.length === 0 && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -300,8 +307,11 @@ export default function CoachesPage() {
             <h3 className="font-display text-2xl font-bold text-[#1a1a2e] mb-2">
               No coaches found
             </h3>
-            <p className="text-[#8697C4]">
-              Try adjusting your search or filters
+            <p className="text-[#8697C4] mb-4">
+              {coaches.length === 0 
+                ? "No coaches have signed up yet. Be the first to join as a coach!"
+                : "Try adjusting your search or filters"
+              }
             </p>
           </motion.div>
         )}

@@ -1,7 +1,7 @@
 "use client"
 
 import { motion } from 'framer-motion'
-import { Pencil, Plus } from 'lucide-react'
+import { Pencil } from 'lucide-react'
 
 export default function SportsSection({ title, icon: Icon, children, onEdit, addButton, addLabel = "Add", compact }) {
   return (
@@ -20,10 +20,7 @@ export default function SportsSection({ title, icon: Icon, children, onEdit, add
           className={`${addButton ? 'px-4 py-2 rounded-xl bg-linear-to-r from-[#3D52A0] to-[#7091E6] text-white flex items-center gap-2' : 'p-2 rounded-xl hover:bg-[#EDE8F5]'} transition-colors`}
         >
           {addButton ? (
-            <>
-              <Plus className="w-4 h-4" />
-              <span className="text-sm font-medium">{addLabel}</span>
-            </>
+            <span className="text-sm font-medium">{addLabel}</span>
           ) : (
             <Pencil className="w-4 h-4 text-[#8697C4]" />
           )}

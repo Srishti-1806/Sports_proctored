@@ -1,6 +1,6 @@
 "use client"
 
-import { Pencil, MapPin, Plus, TrendingUp, Calendar, Video, Trophy, Award, Activity, CalendarDays, Target, Users2 } from 'lucide-react'
+import { Pencil, MapPin, TrendingUp, Calendar, Video, Trophy, Award, Activity, CalendarDays, Target, Users2 } from 'lucide-react'
 import PerformanceBar from './PerformanceBar'
 import StatItem from './StatItem'
 import TrainingCard from './TrainingCard'
@@ -22,11 +22,13 @@ export default function CoachProfile({ profile, openEdit, deleteItem, user }) {
             </div>
             <h2 className="text-2xl font-bold text-[#3D52A0]">About</h2>
           </div>
-          <button onClick={() => openEdit('about', { value: profile?.about || '' })} className="p-2 hover:bg-[#EDE8F5] rounded-xl transition-colors">
-            <Pencil className="w-5 h-5 text-[#8697C4]" />
-          </button>
+          {user && (
+            <button onClick={() => openEdit('about', { value: profile?.about || '' })} className="p-2 hover:bg-[#EDE8F5] rounded-xl transition-colors">
+              <Pencil className="w-5 h-5 text-[#8697C4]" />
+            </button>
+          )}
         </div>
-        <p className="text-[#8697C4] leading-relaxed">{profile?.about || 'No bio yet. Add one to tell your story!'}</p>
+        <p className="text-[#8697C4] leading-relaxed">{profile?.about || (user ? 'No bio yet. Add one to tell your story!' : "This coach hasn't added a bio yet.")}</p>
       </div>
 
       {/* Athletic Stats */}
@@ -38,9 +40,11 @@ export default function CoachProfile({ profile, openEdit, deleteItem, user }) {
             </div>
             <h2 className="text-2xl font-bold text-[#3D52A0]">Coaching Profile</h2>
           </div>
-          <button onClick={() => openEdit('athleticStats', { value: profile?.athleticStats || {} })} className="p-2 hover:bg-[#EDE8F5] rounded-xl transition-colors">
-            <Pencil className="w-5 h-5 text-[#8697C4]" />
-          </button>
+          {user && (
+            <button onClick={() => openEdit('athleticStats', { value: profile?.athleticStats || {} })} className="p-2 hover:bg-[#EDE8F5] rounded-xl transition-colors">
+              <Pencil className="w-5 h-5 text-[#8697C4]" />
+            </button>
+          )}
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           <StatItem icon={Activity} label="Primary Sport" value={profile?.athleticStats?.primarySport || 'N/A'} />
@@ -59,9 +63,11 @@ export default function CoachProfile({ profile, openEdit, deleteItem, user }) {
             </div>
             <h2 className="text-2xl font-bold text-[#3D52A0]">Coaching Effectiveness</h2>
           </div>
-          <button onClick={() => openEdit('physicalStats', { value: profile?.physicalStats || {} })} className="p-2 hover:bg-[#EDE8F5] rounded-xl transition-colors">
-            <Pencil className="w-5 h-5 text-[#8697C4]" />
-          </button>
+          {user && (
+            <button onClick={() => openEdit('physicalStats', { value: profile?.physicalStats || {} })} className="p-2 hover:bg-[#EDE8F5] rounded-xl transition-colors">
+              <Pencil className="w-5 h-5 text-[#8697C4]" />
+            </button>
+          )}
         </div>
         <div className="space-y-4">
           <PerformanceBar label="Leadership" value={profile?.physicalStats?.speed || 0} color="from-blue-400 to-cyan-500" />
@@ -81,19 +87,20 @@ export default function CoachProfile({ profile, openEdit, deleteItem, user }) {
             </div>
             <h2 className="text-2xl font-bold text-[#3D52A0]">Certifications</h2>
           </div>
-          <button onClick={() => openEdit('certifications', { item: { name: '', issuer: '', year: '' } })} className="flex items-center gap-2 px-4 py-2 bg-linear-to-br from-[#3D52A0] to-[#7091E6] text-white rounded-xl hover:opacity-90 transition-opacity">
-            <Plus className="w-4 h-4" />
-            <span>Add Certification</span>
-          </button>
+          {user && (
+            <button onClick={() => openEdit('certifications', { item: { name: '', issuer: '', year: '' } })} className="flex items-center gap-2 px-4 py-2 bg-linear-to-br from-[#3D52A0] to-[#7091E6] text-white rounded-xl hover:opacity-90 transition-opacity">
+              <span>Add Certification</span>
+            </button>
+          )}
         </div>
         {profile?.certifications && profile.certifications.length > 0 ? (
           <div className="space-y-4">
             {profile.certifications.map((cert, index) => (
-              <CertCard key={index} data={cert} onDelete={() => deleteItem('certifications', index)} />
+              <CertCard key={index} data={cert} onDelete={user ? () => deleteItem('certifications', index) : undefined} />
             ))}
           </div>
         ) : (
-          <EmptyState message="No certifications added yet" />
+          <EmptyState message={user ? "No certifications added yet" : "This coach hasn't added any certifications yet."} />
         )}
       </div>
 
@@ -106,19 +113,20 @@ export default function CoachProfile({ profile, openEdit, deleteItem, user }) {
             </div>
             <h2 className="text-2xl font-bold text-[#3D52A0]">Training Programs</h2>
           </div>
-          <button onClick={() => openEdit('trainingSchedule', { item: { name: '', duration: '', intensity: 'medium', frequency: '' } })} className="flex items-center gap-2 px-4 py-2 bg-linear-to-br from-[#3D52A0] to-[#7091E6] text-white rounded-xl hover:opacity-90 transition-opacity">
-            <Plus className="w-4 h-4" />
-            <span>Add Program</span>
-          </button>
+          {user && (
+            <button onClick={() => openEdit('trainingSchedule', { item: { name: '', duration: '', intensity: 'medium', frequency: '' } })} className="flex items-center gap-2 px-4 py-2 bg-linear-to-br from-[#3D52A0] to-[#7091E6] text-white rounded-xl hover:opacity-90 transition-opacity">
+              <span>Add Program</span>
+            </button>
+          )}
         </div>
         {profile?.trainingSchedule && profile.trainingSchedule.length > 0 ? (
           <div className="grid gap-4">
             {profile.trainingSchedule.map((training, index) => (
-              <TrainingCard key={index} training={training} onEdit={() => openEdit('trainingSchedule', { item: training, index })} onDelete={() => deleteItem('trainingSchedule', index)} />
+              <TrainingCard key={index} training={training} onEdit={user ? () => openEdit('trainingSchedule', { item: training, index }) : undefined} onDelete={user ? () => deleteItem('trainingSchedule', index) : undefined} />
             ))}
           </div>
         ) : (
-          <EmptyState message="No training programs set" />
+          <EmptyState message={user ? "No training programs set" : "This coach hasn't added any training programs yet."} />
         )}
       </div>
 
@@ -131,19 +139,20 @@ export default function CoachProfile({ profile, openEdit, deleteItem, user }) {
             </div>
             <h2 className="text-2xl font-bold text-[#3D52A0]">Coaching Highlights</h2>
           </div>
-          <button onClick={() => openEdit('videoHighlights', { item: { title: '', url: '', description: '' } })} className="flex items-center gap-2 px-4 py-2 bg-linear-to-br from-[#3D52A0] to-[#7091E6] text-white rounded-xl hover:opacity-90 transition-opacity">
-            <Plus className="w-4 h-4" />
-            <span>Add Video</span>
-          </button>
+          {user && (
+            <button onClick={() => openEdit('videoHighlights', { item: { title: '', url: '', description: '' } })} className="flex items-center gap-2 px-4 py-2 bg-linear-to-br from-[#3D52A0] to-[#7091E6] text-white rounded-xl hover:opacity-90 transition-opacity">
+              <span>Add Video</span>
+            </button>
+          )}
         </div>
         {profile?.videoHighlights && profile.videoHighlights.length > 0 ? (
           <div className="grid md:grid-cols-2 gap-4">
             {profile.videoHighlights.map((video, index) => (
-              <VideoCard key={index} video={video} onEdit={() => openEdit('videoHighlights', { item: video, index })} onDelete={() => deleteItem('videoHighlights', index)} />
+              <VideoCard key={index} video={video} onEdit={user ? () => openEdit('videoHighlights', { item: video, index }) : undefined} onDelete={user ? () => deleteItem('videoHighlights', index) : undefined} />
             ))}
           </div>
         ) : (
-          <EmptyState message="No video highlights yet" />
+          <EmptyState message={user ? "No video highlights yet" : "This coach hasn't added any video highlights yet."} />
         )}
       </div>
 
@@ -156,19 +165,20 @@ export default function CoachProfile({ profile, openEdit, deleteItem, user }) {
             </div>
             <h2 className="text-2xl font-bold text-[#3D52A0]">Coaching Achievements</h2>
           </div>
-          <button onClick={() => openEdit('achievements', { item: { title: '', year: '' } })} className="flex items-center gap-2 px-4 py-2 bg-linear-to-br from-[#3D52A0] to-[#7091E6] text-white rounded-xl hover:opacity-90 transition-opacity">
-            <Plus className="w-4 h-4" />
-            <span>Add Achievement</span>
-          </button>
+          {user && (
+            <button onClick={() => openEdit('achievements', { item: { title: '', year: '' } })} className="flex items-center gap-2 px-4 py-2 bg-linear-to-br from-[#3D52A0] to-[#7091E6] text-white rounded-xl hover:opacity-90 transition-opacity">
+              <span>Add Achievement</span>
+            </button>
+          )}
         </div>
         {profile?.achievements && profile.achievements.length > 0 ? (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
             {profile.achievements.map((achievement, index) => (
-              <AchievementBadge key={index} achievement={achievement} onEdit={() => openEdit('achievements', { item: achievement, index })} onDelete={() => deleteItem('achievements', index)} />
+              <AchievementBadge key={index} data={achievement} onEdit={user ? () => openEdit('achievements', { item: achievement, index }) : undefined} onDelete={user ? () => deleteItem('achievements', index) : undefined} />
             ))}
           </div>
         ) : (
-          <EmptyState message="No achievements yet" />
+          <EmptyState message={user ? "No achievements yet" : "This coach hasn't added any achievements yet."} />
         )}
       </div>
 
@@ -181,19 +191,20 @@ export default function CoachProfile({ profile, openEdit, deleteItem, user }) {
             </div>
             <h2 className="text-2xl font-bold text-[#3D52A0]">Coaching History</h2>
           </div>
-          <button onClick={() => openEdit('teams', { item: { name: '', startYear: '', endYear: '' } })} className="flex items-center gap-2 px-4 py-2 bg-linear-to-br from-[#3D52A0] to-[#7091E6] text-white rounded-xl hover:opacity-90 transition-opacity">
-            <Plus className="w-4 h-4" />
-            <span>Add Team</span>
-          </button>
+          {user && (
+            <button onClick={() => openEdit('teams', { item: { name: '', startYear: '', endYear: '' } })} className="flex items-center gap-2 px-4 py-2 bg-linear-to-br from-[#3D52A0] to-[#7091E6] text-white rounded-xl hover:opacity-90 transition-opacity">
+              <span>Add Team</span>
+            </button>
+          )}
         </div>
         {profile?.teams && profile.teams.length > 0 ? (
           <div className="grid md:grid-cols-2 gap-4">
             {profile.teams.map((team, index) => (
-              <TeamCard key={index} team={team} onEdit={() => openEdit('teams', { item: team, index })} onDelete={() => deleteItem('teams', index)} />
+              <TeamCard key={index} team={team} onEdit={user ? () => openEdit('teams', { item: team, index }) : undefined} onDelete={user ? () => deleteItem('teams', index) : undefined} />
             ))}
           </div>
         ) : (
-          <EmptyState message="No coaching history added yet" />
+          <EmptyState message={user ? "No coaching history added yet" : "This coach hasn't added any coaching history yet."} />
         )}
       </div>
     </>

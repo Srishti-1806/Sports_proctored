@@ -120,6 +120,49 @@ body {
   background: var(--primary-bright);
 }
 
+/* Thin scrollbar utility */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 3px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: var(--primary-light);
+  border-radius: 3px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-bright);
+}
+
+/* Scrollbar color utilities */
+.scrollbar-thumb-\[\#ADBBDA\]::-webkit-scrollbar-thumb {
+  background: #ADBBDA;
+}
+
+.scrollbar-track-\[\#EDE8F5\]::-webkit-scrollbar-track {
+  background: #EDE8F5;
+}
+
+.hover\:scrollbar-thumb-\[\#7091E6\]:hover::-webkit-scrollbar-thumb {
+  background: #7091E6;
+}
+
+/* Hide scrollbar utility */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
 /* Gradient text utility */
 .gradient-text {
   background: linear-gradient(135deg, var(--primary-deep) 0%, var(--primary-bright) 100%);

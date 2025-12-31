@@ -2,7 +2,7 @@
 
 import { Pencil, X } from 'lucide-react'
 
-export default function MatchCard({ data, onEdit, onDelete }) {
+export default function MatchCard({ data, onEdit, onDelete, showControls = true }) {
   const resultColors = {
     win: 'from-green-500 to-emerald-400',
     loss: 'from-red-500 to-pink-500',
@@ -25,14 +25,16 @@ export default function MatchCard({ data, onEdit, onDelete }) {
             <p className="text-sm text-[#1a1a2e] mt-2">{data.performance}</p>
           )}
         </div>
-        <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-          <button onClick={onEdit} className="p-1.5 hover:bg-[#EDE8F5] rounded-lg">
-            <Pencil className="w-3.5 h-3.5 text-[#8697C4]" />
-          </button>
-          <button onClick={onDelete} className="p-1.5 hover:bg-red-50 rounded-lg">
-            <X className="w-3.5 h-3.5 text-red-500" />
-          </button>
-        </div>
+        {showControls && (
+          <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+            <button onClick={onEdit} className="p-1.5 hover:bg-[#EDE8F5] rounded-lg">
+              <Pencil className="w-3.5 h-3.5 text-[#8697C4]" />
+            </button>
+            <button onClick={onDelete} className="p-1.5 hover:bg-red-50 rounded-lg">
+              <X className="w-3.5 h-3.5 text-red-500" />
+            </button>
+          </div>
+        )}
       </div>
     </div>
   )

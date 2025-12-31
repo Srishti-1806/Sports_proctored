@@ -36,11 +36,11 @@ const StadiumMap = ({ accessToken, venues, selectedVenue, onVenueSelect }) => {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const coords = [position.coords.longitude, position.coords.latitude];
-          console.log('✓ GPS location obtained:', coords, 'Accuracy:', position.coords.accuracy, 'meters');
+          console.log('GPS location obtained:', coords, 'Accuracy:', position.coords.accuracy, 'meters');
           setUserLocation(coords);
         },
         (error) => {
-          console.log('⚠ High accuracy GPS failed:', error.message, '- Trying low accuracy...');
+          console.log('High accuracy GPS failed:', error.message, '- Trying low accuracy...');
           
           // Second attempt: Try with low accuracy (faster, more reliable)
           navigator.geolocation.getCurrentPosition(
@@ -50,7 +50,7 @@ const StadiumMap = ({ accessToken, venues, selectedVenue, onVenueSelect }) => {
               setUserLocation(coords);
             },
             async (error) => {
-              console.log('⚠ Low accuracy GPS also failed:', error.message, '- Trying IP location...');
+              console.log('Low accuracy GPS also failed:', error.message, '- Trying IP location...');
               // Try to get location from IP address
               const ipLocationSuccess = await getLocationFromIP();
               if (!ipLocationSuccess) {
@@ -141,7 +141,7 @@ const StadiumMap = ({ accessToken, venues, selectedVenue, onVenueSelect }) => {
           .setPopup(
             new mapboxgl.Popup({ offset: 25 }).setHTML(`
               <div style="padding: 8px;">
-                <h3 style="font-weight: bold; margin-bottom: 4px;">📍 Your Location</h3>
+                <h3 style="font-weight: bold; margin-bottom: 4px;"> Your Location</h3>
                 <p style="color: #666; font-size: 12px;">Current position</p>
               </div>
             `)

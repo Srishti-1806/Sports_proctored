@@ -43,7 +43,7 @@ export default function CertCard({ data, onDelete }) {
             {data.certificateImage && (
               <button 
                 onClick={() => setShowImage(true)} 
-                className="mt-3 flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-blue-50 to-cyan-50 hover:from-blue-100 hover:to-cyan-100 rounded-lg transition-colors w-fit"
+                className="mt-3 flex items-center gap-1.5 px-3 py-1.5 bg-linear-to-r from-blue-50 to-cyan-50 hover:from-blue-100 hover:to-cyan-100 rounded-lg transition-colors w-fit"
               >
                 <ImageIcon className="w-3.5 h-3.5 text-blue-600" />
                 <span className="text-xs font-medium text-blue-600">View Full</span>
@@ -52,10 +52,10 @@ export default function CertCard({ data, onDelete }) {
           </div>
 
           {/* Right: Certificate Image (30%) */}
-          <div className="w-[30%] flex-shrink-0">
+          <div className="w-[30%] shrink-0">
             {data.certificateImage ? (
               <div 
-                className="w-full aspect-[4/3] rounded-lg overflow-hidden cursor-pointer hover:opacity-95 transition-opacity" 
+                className="w-full aspect-4/3 rounded-lg overflow-hidden cursor-pointer hover:opacity-95 transition-opacity" 
                 onClick={() => setShowImage(true)}
               >
                 <img 
@@ -65,7 +65,7 @@ export default function CertCard({ data, onDelete }) {
                 />
               </div>
             ) : (
-              <div className="w-full aspect-[4/3] flex items-center justify-center rounded-lg bg-gradient-to-br from-blue-50 to-cyan-50">
+              <div className="w-full aspect-4/3 flex items-center justify-center rounded-lg bg-linear-to-br from-blue-50 to-cyan-50">
                 <div className="text-center">
                   <Shield className="w-8 h-8 text-blue-400 mx-auto mb-1" />
                   <p className="text-[10px] text-blue-600">No image</p>

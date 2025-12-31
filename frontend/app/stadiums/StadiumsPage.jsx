@@ -100,9 +100,9 @@ export default function StadiumsPage() {
     const fetchVenues = async () => {
       setLoading(true);
       try {
-        // Call our backend API endpoint
+        // Call our backend API endpoint with increased radius to fetch more venues
         const response = await fetch(
-          `/api/nearby-sports?lat=${userLocation.latitude}&lon=${userLocation.longitude}&radius=20000`
+          `/api/nearby-sports?lat=${userLocation.latitude}&lon=${userLocation.longitude}&radius=50000`
         );
 
         if (!response.ok) {
@@ -123,6 +123,26 @@ export default function StadiumsPage() {
 
             // Get human-readable address
             const address = await reverseGeocode(facility.longitude, facility.latitude);
+
+            // Format sports description if available
+            let sportsDescription = '';
+            if (facility.sport) {
+              const sports = facility.sport.includes(';') 
+                ? facility.sport.split(';').map(s => s.trim())
+                : [facility.sport];
+              
+              const formattedSports = sports.map(s => 
+                s.split(/[_\s]/)
+                  .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+                  .join(' ')
+              );
+              
+              if (formattedSports.length > 3) {
+                sportsDescription = ` offering ${formattedSports.length} sports including ${formattedSports.slice(0, 3).join(', ')} and more`;
+              } else if (formattedSports.length > 0) {
+                sportsDescription = ` for ${formattedSports.join(', ')}`;
+              }
+            }
 
             return {
               id: facility.id,
@@ -145,7 +165,7 @@ export default function StadiumsPage() {
               images: 1,
               isFavorite: false,
               featured: false,
-              description: `${facility.name || 'Sports facility'} - ${mapFacilityType(facility.type)}${facility.sport ? ` for ${facility.sport}` : ''}`
+              description: `${facility.name || 'Sports facility'} - ${mapFacilityType(facility.type)}${sportsDescription}`
             };
           })
         );
@@ -284,8 +304,17 @@ export default function StadiumsPage() {
 
   function getSportsForType(osmType, sport) {
     if (sport) {
-      // Format sport name properly
-      return [sport.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')];
+      // Handle semicolon-separated sports
+      const sports = sport.includes(';') 
+        ? sport.split(';').map(s => s.trim())
+        : [sport];
+      
+      // Format each sport name properly
+      return sports.map(s => 
+        s.split(/[_\s]/)
+          .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+          .join(' ')
+      );
     }
 
     const defaultSports = {
@@ -379,7 +408,7 @@ export default function StadiumsPage() {
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="relative w-full h-[300px] sm:h-[400px] lg:h-[700px] rounded-xl sm:rounded-2xl overflow-hidden shadow-lg"
+                className="relative w-full h-75 sm:h-100 lg:h-175 rounded-xl sm:rounded-2xl overflow-hidden shadow-lg"
                 style={{ minHeight: '300px' }}
               >
                 {accessToken ? (
@@ -516,7 +545,7 @@ export default function StadiumsPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+            className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 md:p-6 bg-black/50 backdrop-blur-sm overflow-y-auto"
             onClick={() => setSelectedVenue(null)}
           >
             <motion.div
@@ -524,20 +553,20 @@ export default function StadiumsPage() {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
-              className="relative w-full max-w-2xl bg-white rounded-2xl sm:rounded-3xl shadow-2xl max-h-[90vh] overflow-y-auto"
+              className="relative w-full max-w-2xl bg-white rounded-xl sm:rounded-2xl lg:rounded-3xl shadow-2xl my-4 sm:my-6 md:my-8 flex flex-col max-h-[calc(100vh-2rem)] sm:max-h-[calc(100vh-3rem)] md:max-h-[calc(100vh-4rem)] overflow-hidden"
             >
               {/* Header Image */}
-              <div className="relative h-36 sm:h-48 bg-linear-to-br from-[#3D52A0] to-[#7091E6] rounded-t-2xl sm:rounded-t-3xl">
+              <div className="relative h-32 sm:h-40 md:h-48 bg-linear-to-br from-[#3D52A0] to-[#7091E6] rounded-t-xl sm:rounded-t-2xl lg:rounded-t-3xl shrink-0">
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <selectedVenue.typeIcon className="w-16 h-16 sm:w-20 sm:h-20 text-white/30" />
+                  <selectedVenue.typeIcon className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 text-white/30" />
                 </div>
                 <button
                   onClick={() => setSelectedVenue(null)}
-                  className="absolute top-3 right-3 sm:top-4 sm:right-4 p-1.5 sm:p-2 rounded-lg sm:rounded-xl bg-white/10 hover:bg-white/20 transition-colors text-white"
+                  className="absolute top-2 right-2 sm:top-3 sm:right-3 md:top-4 md:right-4 p-1.5 sm:p-2 rounded-lg sm:rounded-xl bg-white/10 hover:bg-white/20 transition-colors text-white z-10"
                 >
                   <X className="w-4 h-4 sm:w-5 sm:h-5" />
                 </button>
-                <div className="absolute top-3 left-3 sm:top-4 sm:left-4 flex gap-2">
+                <div className="absolute top-2 left-2 sm:top-3 sm:left-3 md:top-4 md:left-4 flex gap-1.5 sm:gap-2 flex-wrap">
                   {selectedVenue.featured && (
                     <span className="px-2 py-0.5 sm:px-3 sm:py-1 rounded text-xs sm:text-sm bg-linear-to-r from-yellow-400 to-orange-400 text-white font-bold">
                       Featured
@@ -547,59 +576,52 @@ export default function StadiumsPage() {
                     {selectedVenue.type}
                   </span>
                 </div>
-                <div className="absolute bottom-3 left-3 right-3 sm:bottom-4 sm:left-4 sm:right-4">
-                  <h2 className="font-display text-lg sm:text-2xl font-bold text-white">{selectedVenue.name}</h2>
-                  <div className="flex items-center gap-2 sm:gap-3 mt-1.5 sm:mt-2 text-xs sm:text-sm text-white/80">
-                    <div className="flex items-center gap-1">
-                      <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
-                      <span>{selectedVenue.rating}</span>
-                      <span>({selectedVenue.reviews} reviews)</span>
-                    </div>
-                    <span>•</span>
+                <div className="absolute bottom-2 left-2 right-2 sm:bottom-3 sm:left-3 sm:right-3 md:bottom-4 md:left-4 md:right-4">
+                  <h2 className="font-display text-base sm:text-xl md:text-2xl font-bold text-white line-clamp-2">{selectedVenue.name}</h2>
+                  <div className="flex items-center gap-1.5 mt-1 sm:mt-1.5 md:mt-2 text-xs sm:text-sm text-white/80">
+                    <MapPin className="w-3 h-3 sm:w-4 sm:h-4" />
                     <span>{selectedVenue.distance}</span>
-                    <span>•</span>
-                    <span>{selectedVenue.price}</span>
                   </div>
                 </div>
               </div>
 
-              {/* Content */}
-              <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
+              {/* Content - Scrollable Area */}
+              <div className="p-3 sm:p-4 md:p-6 space-y-3 sm:space-y-4 md:space-y-6 overflow-y-auto overflow-x-hidden flex-1 scrollbar-thin scrollbar-thumb-[#ADBBDA] scrollbar-track-[#EDE8F5] hover:scrollbar-thumb-[#7091E6]">
                 {/* Quick Info */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                  <div className="p-3 sm:p-4 rounded-lg sm:rounded-xl bg-[#EDE8F5]">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 md:gap-4">
+                  <div className="p-2.5 sm:p-3 md:p-4 rounded-lg sm:rounded-xl bg-[#EDE8F5] min-w-0">
                     <div className="flex items-center gap-1.5 sm:gap-2 text-[#3D52A0] mb-1">
-                      <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                      <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
                       <span className="text-xs sm:text-sm font-medium">Hours</span>
                     </div>
-                    <p className="text-sm sm:text-base font-semibold text-[#1a1a2e]">{selectedVenue.hours}</p>
+                    <p className="text-xs sm:text-sm md:text-base font-semibold text-[#1a1a2e] wrap-break-word">{selectedVenue.hours}</p>
                     <span className={`text-[10px] sm:text-xs ${selectedVenue.isOpen ? 'text-green-600' : 'text-red-500'}`}>
                       {selectedVenue.isOpen ? 'Currently Open' : 'Currently Closed'}
                     </span>
                   </div>
-                  <div className="p-3 sm:p-4 rounded-lg sm:rounded-xl bg-[#EDE8F5]">
+                  <div className="p-2.5 sm:p-3 md:p-4 rounded-lg sm:rounded-xl bg-[#EDE8F5] min-w-0">
                     <div className="flex items-center gap-1.5 sm:gap-2 text-[#3D52A0] mb-1">
-                      <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                      <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
                       <span className="text-xs sm:text-sm font-medium">Location</span>
                     </div>
-                    <p className="text-xs sm:text-sm font-semibold text-[#1a1a2e]">{selectedVenue.address}</p>
+                    <p className="text-[10px] sm:text-xs md:text-sm font-semibold text-[#1a1a2e] wrap-break-word">{selectedVenue.address}</p>
                   </div>
                 </div>
 
                 {/* Description */}
-                <div>
-                  <h3 className="font-display text-sm sm:text-base font-bold text-[#1a1a2e] mb-2">About</h3>
-                  <p className="text-xs sm:text-sm text-[#8697C4] leading-relaxed">{selectedVenue.description}</p>
+                <div className="min-w-0">
+                  <h3 className="font-display text-sm sm:text-base font-bold text-[#1a1a2e] mb-1.5 sm:mb-2">About</h3>
+                  <p className="text-xs sm:text-sm text-[#8697C4] leading-relaxed wrap-break-word">{selectedVenue.description}</p>
                 </div>
 
                 {/* Sports */}
-                <div>
+                <div className="min-w-0">
                   <h3 className="font-display text-sm sm:text-base font-bold text-[#1a1a2e] mb-2 sm:mb-3">Available Sports</h3>
                   <div className="flex flex-wrap gap-1.5 sm:gap-2">
                     {selectedVenue.sports.map((sport) => (
                       <span 
                         key={sport}
-                        className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl bg-linear-to-r from-[#3D52A0] to-[#7091E6] text-white font-medium text-xs sm:text-sm"
+                        className="px-2.5 py-1.5 sm:px-3 sm:py-2 md:px-4 rounded-lg sm:rounded-xl bg-linear-to-r from-[#3D52A0] to-[#7091E6] text-white font-medium text-xs sm:text-sm wrap-break-word"
                       >
                         {sport}
                       </span>
@@ -608,28 +630,29 @@ export default function StadiumsPage() {
                 </div>
 
                 {/* Amenities */}
-                <div>
+                <div className="min-w-0">
                   <h3 className="font-display text-sm sm:text-base font-bold text-[#1a1a2e] mb-2 sm:mb-3">Amenities</h3>
                   <div className="flex flex-wrap gap-1.5 sm:gap-2">
                     {selectedVenue.amenities.map((amenity) => (
                       <span 
                         key={amenity}
-                        className="flex items-center gap-1 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-lg sm:rounded-xl bg-[#EDE8F5] text-[#3D52A0] text-xs sm:text-sm"
+                        className="flex items-center gap-1 px-2 py-1.5 sm:px-2.5 sm:py-2 md:px-3 rounded-lg sm:rounded-xl bg-[#EDE8F5] text-[#3D52A0] text-xs sm:text-sm wrap-break-word"
                       >
-                        <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4" /> {amenity}
+                        <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 shrink-0" /> 
+                        <span className="wrap-break-word">{amenity}</span>
                       </span>
                     ))}
                   </div>
                 </div>
 
                 {/* Contact */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 md:gap-4">
                   <a 
                     href={`tel:${selectedVenue.phone}`}
-                    className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 rounded-lg sm:rounded-xl bg-[#EDE8F5] hover:bg-[#ADBBDA]/50 transition-colors"
+                    className="flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3 md:p-4 rounded-lg sm:rounded-xl bg-[#EDE8F5] hover:bg-[#ADBBDA]/50 transition-colors min-w-0"
                   >
-                    <Phone className="w-4 h-4 sm:w-5 sm:h-5 text-[#3D52A0]" />
-                    <div className="min-w-0">
+                    <Phone className="w-4 h-4 sm:w-5 sm:h-5 text-[#3D52A0] shrink-0" />
+                    <div className="min-w-0 flex-1">
                       <p className="text-[10px] sm:text-xs text-[#8697C4]">Phone</p>
                       <p className="text-xs sm:text-sm font-medium text-[#1a1a2e] truncate">{selectedVenue.phone}</p>
                     </div>
@@ -638,10 +661,10 @@ export default function StadiumsPage() {
                     href={`https://${selectedVenue.website}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 rounded-lg sm:rounded-xl bg-[#EDE8F5] hover:bg-[#ADBBDA]/50 transition-colors"
+                    className="flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3 md:p-4 rounded-lg sm:rounded-xl bg-[#EDE8F5] hover:bg-[#ADBBDA]/50 transition-colors min-w-0"
                   >
-                    <Globe className="w-4 h-4 sm:w-5 sm:h-5 text-[#3D52A0]" />
-                    <div className="min-w-0">
+                    <Globe className="w-4 h-4 sm:w-5 sm:h-5 text-[#3D52A0] shrink-0" />
+                    <div className="min-w-0 flex-1">
                       <p className="text-[10px] sm:text-xs text-[#8697C4]">Website</p>
                       <p className="text-xs sm:text-sm font-medium text-[#1a1a2e] truncate">{selectedVenue.website}</p>
                     </div>
@@ -649,22 +672,51 @@ export default function StadiumsPage() {
                 </div>
 
                 {/* Actions */}
-                <div className="flex gap-2 sm:gap-3">
-                  <motion.button
+                <div className="flex gap-2 sm:gap-3 min-w-0">
+                  <motion.a
+                    href={`https://www.google.com/maps/dir/?api=1&destination=${selectedVenue.coordinates[1]},${selectedVenue.coordinates[0]}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    className="flex-1 flex items-center justify-center gap-1.5 sm:gap-2 px-4 sm:px-6 py-3 sm:py-4 rounded-lg sm:rounded-xl bg-linear-to-r from-[#3D52A0] to-[#7091E6] text-white text-sm sm:text-base font-semibold shadow-lg"
+                    className="flex-1 flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 md:px-6 py-2.5 sm:py-3 md:py-4 rounded-lg sm:rounded-xl bg-linear-to-r from-[#3D52A0] to-[#7091E6] text-white text-xs sm:text-sm md:text-base font-semibold shadow-lg min-w-0"
                   >
-                    <Navigation className="w-4 h-4 sm:w-5 sm:h-5" />
-                    <span className="hidden sm:inline">Get Directions</span>
-                    <span className="sm:hidden">Directions</span>
-                  </motion.button>
-                  <button className="p-3 sm:p-4 rounded-lg sm:rounded-xl border border-[#ADBBDA] text-[#3D52A0] hover:bg-[#EDE8F5] transition-colors">
-                    <Heart className={`w-4 h-4 sm:w-5 sm:h-5 ${selectedVenue.isFavorite ? 'fill-red-500 text-red-500' : ''}`} />
-                  </button>
-                  <button className="p-3 sm:p-4 rounded-lg sm:rounded-xl border border-[#ADBBDA] text-[#3D52A0] hover:bg-[#EDE8F5] transition-colors">
+                    <Navigation className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
+                    <span className="hidden sm:inline truncate">Get Directions</span>
+                    <span className="sm:hidden truncate">Directions</span>
+                  </motion.a>
+                  <motion.button
+                    onClick={async () => {
+                      const shareData = {
+                        title: selectedVenue.name,
+                        text: `Check out ${selectedVenue.name} - ${selectedVenue.type}`,
+                        url: `https://www.google.com/maps/search/?api=1&query=${selectedVenue.coordinates[1]},${selectedVenue.coordinates[0]}`
+                      };
+                      
+                      if (navigator.share) {
+                        try {
+                          await navigator.share(shareData);
+                        } catch (err) {
+                          if (err.name !== 'AbortError') {
+                            console.error('Error sharing:', err);
+                          }
+                        }
+                      } else {
+                        // Fallback: copy to clipboard
+                        try {
+                          await navigator.clipboard.writeText(shareData.url);
+                          alert('Link copied to clipboard!');
+                        } catch (err) {
+                          console.error('Error copying to clipboard:', err);
+                        }
+                      }
+                    }}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="p-2.5 sm:p-3 md:p-4 rounded-lg sm:rounded-xl border border-[#ADBBDA] text-[#3D52A0] hover:bg-[#EDE8F5] transition-colors shrink-0"
+                  >
                     <Share2 className="w-4 h-4 sm:w-5 sm:h-5" />
-                  </button>
+                  </motion.button>
                 </div>
               </div>
             </motion.div>
