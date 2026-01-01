@@ -91,14 +91,22 @@ export default function Navbar() {
           <div className="hidden md:flex items-center gap-3">
             {user ? (
               <>
-                <Link href="/profile">
-                  <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#EDE8F5] hover:bg-[#E8E6F8] cursor-pointer">
-                    <User className="w-4 h-4 text-[#3D52A0]" />
-                    <span className="font-medium text-sm text-[#3D52A0]">
-                      {user.user_metadata?.first_name || user.email}
-                    </span>
-                  </div>
-                </Link>
+                {(() => {
+                  const isProfileActive = pathname === '/profile'
+                  return (
+                    <Link href="/profile">
+                      <div className={`flex items-center gap-2 px-4 py-2 rounded-xl cursor-pointer transition-colors duration-300 relative ${isProfileActive ? 'bg-linear-to-r from-[#3D52A0] to-[#7091E6] text-white' : 'bg-[#EDE8F5] hover:bg-[#E8E6F8] text-[#3D52A0]'}`} aria-current={isProfileActive ? 'page' : undefined}>
+                        <User className={`w-4 h-4 ${isProfileActive ? 'text-white' : 'text-[#3D52A0]'}`} />
+                        <span className={`font-medium text-sm ${isProfileActive ? '' : 'text-[#3D52A0]'}`}>
+                          {user.user_metadata?.first_name || user.email}
+                        </span>
+                        {!isProfileActive && (
+                          <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-linear-to-r from-[#3D52A0] to-[#7091E6] group-hover:w-full transition-all duration-300 ease-out"></span>
+                        )}
+                      </div>
+                    </Link>
+                  )
+                })()}
                 <motion.button
                   whileHover={{ scale: isSigningOut ? 1 : 1.05 }}
                   whileTap={{ scale: isSigningOut ? 1 : 0.95 }}
@@ -160,9 +168,9 @@ export default function Navbar() {
         {isOpen && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
+            animate={{ opacity: 1, height: '100dvh' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden overflow-hidden bg-white/90 backdrop-blur-xl border-t border-[#ADBBDA]/30"
+            className="md:hidden overflow-hidden bg-white/10 border-t border-[#ADBBDA]/30"
           >
             <div className="px-4 py-4 space-y-2">
               {navLinks.map((link) => {
@@ -183,23 +191,31 @@ export default function Navbar() {
                   </Link>
                 )
               })}
+              {user && (
+                <div className="border-t border-[#ADBBDA]/30 my-3" />
+              )}
               {user ? (
                 <>
-                  <Link href="/profile" onClick={() => setIsOpen(false)}>
-                    <div className="px-4 py-3 mt-4 rounded-xl bg-[#EDE8F5] hover:bg-[#E8E6F8]">
-                      <div className="flex items-center gap-2 mb-2">
-                        <User className="w-5 h-5 text-[#3D52A0]" />
-                        <span className="font-medium text-[#3D52A0]">
-                          {user.user_metadata?.first_name || user.email}
-                        </span>
-                      </div>
-                    </div>
-                  </Link>
+                  {(() => {
+                    const isProfileActive = pathname === '/profile'
+                    return (
+                      <Link href="/profile" onClick={() => setIsOpen(false)}>
+                        <div className={`w-full flex items-center gap-3 px-5 py-3 mt-4 rounded-xl ${isProfileActive ? 'bg-linear-to-r from-[#3D52A0] to-[#7091E6] text-white' : 'bg-[#EDE8F5] hover:bg-[#E8E6F8] text-[#3D52A0]'}`} aria-current={isProfileActive ? 'page' : undefined}>
+                          <User className={`w-5 h-5 ${isProfileActive ? 'text-white' : 'text-[#3D52A0]'}`} />
+                          <div className="flex-1 text-left">
+                            <span className={`font-medium ${isProfileActive ? '' : 'text-[#3D52A0]'}`}>
+                              {user.user_metadata?.first_name || user.email}
+                            </span>
+                          </div>
+                        </div>
+                      </Link>
+                    )
+                  })()}
                   <motion.button
                     whileTap={{ scale: isSigningOut ? 1 : 0.98 }}
                     onClick={handleSignOut}
                     disabled={isSigningOut}
-                    className={`w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-linear-to-r from-[#3D52A0] to-[#7091E6] text-white font-semibold shadow-lg ${isSigningOut ? 'opacity-80 pointer-events-none' : ''}`}
+                    className={`w-full flex items-center justify-center gap-2 px-5 py-3 mt-3 rounded-xl bg-linear-to-r from-[#3D52A0] to-[#7091E6] text-white font-semibold shadow-lg ${isSigningOut ? 'opacity-80 pointer-events-none' : ''}`}
                   >
                     {isSigningOut ? (
                       <>

@@ -1,6 +1,6 @@
 "use client"
 
-import { Pencil, MapPin, TrendingUp, Calendar, Video, Trophy, Award, Activity, CalendarDays, Target, Users2 } from 'lucide-react'
+import { Pencil, MapPin, TrendingUp, Calendar, Video, Trophy, Award, Activity, CalendarDays, Target, Users2, Plus } from 'lucide-react'
 import PerformanceBar from './PerformanceBar'
 import StatItem from './StatItem'
 import TrainingCard from './TrainingCard'
@@ -88,9 +88,15 @@ export default function CoachProfile({ profile, openEdit, deleteItem, user }) {
             <h2 className="text-2xl font-bold text-[#3D52A0]">Certifications</h2>
           </div>
           {user && (
-            <button onClick={() => openEdit('certifications', { item: { name: '', issuer: '', year: '' } })} className="flex items-center gap-2 px-4 py-2 bg-linear-to-br from-[#3D52A0] to-[#7091E6] text-white rounded-xl hover:opacity-90 transition-opacity">
-              <span>Add Certification</span>
-            </button>
+            <div className="flex items-center gap-2">
+              <button onClick={() => openEdit('certifications', { item: { name: '', issuer: '', year: '' } })} className="hidden md:flex items-center gap-2 px-4 py-2 bg-linear-to-br from-[#3D52A0] to-[#7091E6] text-white rounded-xl hover:opacity-90 transition-opacity">
+                <Plus className="w-4 h-4" />
+                <span>Add Certification</span>
+              </button>
+              <button onClick={() => openEdit('certifications', { item: { name: '', issuer: '', year: '' } })} className="md:hidden p-2 bg-linear-to-br from-[#3D52A0] to-[#7091E6] text-white rounded-lg shadow-md">
+                <Plus className="w-4 h-4" />
+              </button>
+            </div>
           )}
         </div>
         {profile?.certifications && profile.certifications.length > 0 ? (
@@ -114,9 +120,15 @@ export default function CoachProfile({ profile, openEdit, deleteItem, user }) {
             <h2 className="text-2xl font-bold text-[#3D52A0]">Training Programs</h2>
           </div>
           {user && (
-            <button onClick={() => openEdit('trainingSchedule', { item: { name: '', duration: '', intensity: 'medium', frequency: '' } })} className="flex items-center gap-2 px-4 py-2 bg-linear-to-br from-[#3D52A0] to-[#7091E6] text-white rounded-xl hover:opacity-90 transition-opacity">
-              <span>Add Program</span>
-            </button>
+            <div className="flex items-center gap-2">
+              <button onClick={() => openEdit('trainingSchedule', { item: { name: '', duration: '', intensity: 'medium', frequency: '' } })} className="hidden md:flex items-center gap-2 px-4 py-2 bg-linear-to-br from-[#3D52A0] to-[#7091E6] text-white rounded-xl hover:opacity-90 transition-opacity">
+                <Plus className="w-4 h-4" />
+                <span>Add Program</span>
+              </button>
+              <button onClick={() => openEdit('trainingSchedule', { item: { name: '', duration: '', intensity: 'medium', frequency: '' } })} className="md:hidden p-2 bg-linear-to-br from-[#3D52A0] to-[#7091E6] text-white rounded-lg shadow-md">
+                <Plus className="w-4 h-4" />
+              </button>
+            </div>
           )}
         </div>
         {profile?.trainingSchedule && profile.trainingSchedule.length > 0 ? (
@@ -140,9 +152,15 @@ export default function CoachProfile({ profile, openEdit, deleteItem, user }) {
             <h2 className="text-2xl font-bold text-[#3D52A0]">Coaching Highlights</h2>
           </div>
           {user && (
-            <button onClick={() => openEdit('videoHighlights', { item: { title: '', url: '', description: '' } })} className="flex items-center gap-2 px-4 py-2 bg-linear-to-br from-[#3D52A0] to-[#7091E6] text-white rounded-xl hover:opacity-90 transition-opacity">
-              <span>Add Video</span>
-            </button>
+            <div className="flex items-center gap-2">
+              <button onClick={() => openEdit('videoHighlights', { item: { title: '', url: '', description: '' } })} className="hidden md:flex items-center gap-2 px-4 py-2 bg-linear-to-br from-[#3D52A0] to-[#7091E6] text-white rounded-xl hover:opacity-90 transition-opacity">
+                <Plus className="w-4 h-4" />
+                <span>Add Video</span>
+              </button>
+              <button onClick={() => openEdit('videoHighlights', { item: { title: '', url: '', description: '' } })} className="md:hidden p-2 bg-linear-to-br from-[#3D52A0] to-[#7091E6] text-white rounded-lg shadow-md">
+                <Plus className="w-4 h-4" />
+              </button>
+            </div>
           )}
         </div>
         {profile?.videoHighlights && profile.videoHighlights.length > 0 ? (
@@ -166,9 +184,15 @@ export default function CoachProfile({ profile, openEdit, deleteItem, user }) {
             <h2 className="text-2xl font-bold text-[#3D52A0]">Coaching Achievements</h2>
           </div>
           {user && (
-            <button onClick={() => openEdit('achievements', { item: { title: '', year: '' } })} className="flex items-center gap-2 px-4 py-2 bg-linear-to-br from-[#3D52A0] to-[#7091E6] text-white rounded-xl hover:opacity-90 transition-opacity">
-              <span>Add Achievement</span>
-            </button>
+            <div className="flex items-center gap-2">
+              <button onClick={() => openEdit('achievements', { item: { title: '', year: '' } })} className="hidden md:flex items-center gap-2 px-4 py-2 bg-linear-to-br from-[#3D52A0] to-[#7091E6] text-white rounded-xl hover:opacity-90 transition-opacity">
+                <Plus className="w-4 h-4" />
+                <span>Add Achievement</span>
+              </button>
+              <button onClick={() => openEdit('achievements', { item: { title: '', year: '' } })} className="md:hidden p-2 bg-linear-to-br from-[#3D52A0] to-[#7091E6] text-white rounded-lg shadow-md">
+                <Plus className="w-4 h-4" />
+              </button>
+            </div>
           )}
         </div>
         {profile?.achievements && profile.achievements.length > 0 ? (
@@ -192,9 +216,15 @@ export default function CoachProfile({ profile, openEdit, deleteItem, user }) {
             <h2 className="text-2xl font-bold text-[#3D52A0]">Coaching History</h2>
           </div>
           {user && (
-            <button onClick={() => openEdit('teams', { item: { name: '', startYear: '', endYear: '' } })} className="flex items-center gap-2 px-4 py-2 bg-linear-to-br from-[#3D52A0] to-[#7091E6] text-white rounded-xl hover:opacity-90 transition-opacity">
-              <span>Add Team</span>
-            </button>
+            <div className="flex items-center gap-2">
+              <button onClick={() => openEdit('teams', { item: { name: '', startYear: '', endYear: '' } })} className="hidden md:flex items-center gap-2 px-4 py-2 bg-linear-to-br from-[#3D52A0] to-[#7091E6] text-white rounded-xl hover:opacity-90 transition-opacity">
+                <Plus className="w-4 h-4" />
+                <span>Add Team</span>
+              </button>
+              <button onClick={() => openEdit('teams', { item: { name: '', startYear: '', endYear: '' } })} className="md:hidden p-2 bg-linear-to-br from-[#3D52A0] to-[#7091E6] text-white rounded-lg shadow-md">
+                <Plus className="w-4 h-4" />
+              </button>
+            </div>
           )}
         </div>
         {profile?.teams && profile.teams.length > 0 ? (

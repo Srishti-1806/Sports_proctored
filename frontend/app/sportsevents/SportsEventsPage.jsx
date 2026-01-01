@@ -100,7 +100,7 @@ export default function SportsEventsPage() {
             {/* Events List */}
             <div className="space-y-3 sm:space-y-4">
               <div className="flex items-center justify-between px-1">
-                <h2 className="font-display text-lg sm:text-xl font-bold text-white">
+                <h2 className="font-display text-lg sm:text-xl font-bold text-black md:text-white">
                   {activeFilter === 'all' ? 'All Events' : 
                    activeFilter === 'upcoming' ? 'Upcoming Events' :
                    activeFilter === 'registered' ? 'Your Registered Events' : 

@@ -1,8 +1,29 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { useRouter } from 'next/navigation'
+import { useAuth } from '../../lib/context/AuthContext'
 
 export default function CTASection({ onSignupClick, onLoginClick }) {
+  const router = useRouter()
+  const { user } = useAuth()
+
+  const handleSignup = () => {
+    if (user) {
+      router.push('/profile')
+    } else if (onSignupClick) {
+      onSignupClick()
+    }
+  }
+
+  const handleLogin = () => {
+    if (user) {
+      router.push('/profile')
+    } else if (onLoginClick) {
+      onLoginClick()
+    }
+  }
+
   return (
     <section className="py-32 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       <div className="absolute inset-0 bg-linear-to-br from-[#3D52A0] to-[#7091E6]" />
@@ -24,7 +45,7 @@ export default function CTASection({ onSignupClick, onLoginClick }) {
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            onClick={onSignupClick}
+            onClick={handleSignup}
             className="px-10 py-5 rounded-2xl bg-white text-[#3D52A0] font-bold text-lg shadow-2xl hover:shadow-3xl transition-shadow"
           >
             Get Started Free
@@ -32,7 +53,7 @@ export default function CTASection({ onSignupClick, onLoginClick }) {
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            onClick={onLoginClick}
+            onClick={handleLogin}
             className="px-10 py-5 rounded-2xl border-2 border-white/30 text-white font-bold text-lg hover:bg-white/10 transition-colors"
           >
             Sign In
