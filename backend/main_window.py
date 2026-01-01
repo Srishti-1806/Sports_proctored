@@ -4,7 +4,7 @@ from PyQt6.QtWidgets import *
 from PyQt6.QtGui import QPixmap, QImage, QFont
 from PyQt6.QtMultimedia import QMediaPlayer, QAudioOutput
 from PyQt6.QtMultimediaWidgets import QVideoWidget
-
+from main import score
 from camera_worker import CameraWorker
 from exercise_list import EXERCISES
 from rep_counter import RepCounter
@@ -12,28 +12,36 @@ from sound_manager import tick, swap, alert, play
 from voice_alerts import say
 
 # ---------------- SERVER CONFIG ----------------
-SERVER_URL = "http://127.0.0.1:8000"  # <-- Replace with your backend
+SERVER_URL = "http://127.0.0.1:8000"  # <-- Replace with your backend url jabb bhi bane
 
 def server_online():
     try:
-        r = requests.get(f"{SERVER_URL}/leaderboard", timeout=3)
+        r = requests.get(f"{SERVER_URL}/", timeout=3)
         return r.status_code == 200
     except:
         return False
 
 def send_score(name, score):
+    score = int(score)
     if not server_online():
         print("⚠ Server offline, score not sent")
         return
     try:
         r = requests.post(f"{SERVER_URL}/score", json={"name": name, "score": score}, timeout=5)
-        try:
-            data = r.json()
-            print(data)
-        except ValueError:
-            print(f"❌ Server returned non-JSON response: {r.text}")
+        
+        # Check if the request was actually successful (200 OK)
+        if r.status_code != 200:
+            print(f"❌ Server Error! Status: {r.status_code}")
+            print(f"Response Body: {r.text}") # Yahan se pata chalega ki HTML error hai ya nahi
+            return
+
+        data = r.json()
+        print(f"✅ Success: {data}")
+
     except requests.exceptions.RequestException as e:
-        print(f"❌ Error sending score: {e}")
+        print(f"❌ Connection Error: {e}")
+    except ValueError:
+        print(f"❌ Response is not JSON. Received: {r.text[:100]}") # Pehle 100 characters print karein
 
 
 
