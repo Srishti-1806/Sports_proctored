@@ -1,0 +1,3 @@
+fastapis
+uvicorn
+pydantic
