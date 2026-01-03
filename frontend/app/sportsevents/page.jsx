@@ -1,9 +1,7 @@
 import SportsEventsPage from "./SportsEventsPage"
 
-const page = () => {
+export default async function Page() {
   return (
-    <SportsEventsPage />
+    <SportsEventsPage/>
   )
 }
-
-export default page

@@ -69,6 +69,9 @@ export const AuthProvider = ({ children }) => {
   const signOut = async () => {
     try {
       const { error } = await supabase.auth.signOut()
+      // Ensure local auth state is cleared immediately to avoid stale UI access
+      setUser(null)
+      setLoading(false)
       if (error) throw error
       return { error: null }
     } catch (error) {

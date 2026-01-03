@@ -4,6 +4,12 @@ import { motion } from 'framer-motion'
 import { Clock, MapPin, Users, CheckCircle, Bookmark, ChevronRight } from 'lucide-react'
 
 export default function EventCard({ event, index, onClick }) {
+  // derive a date object (prefer ISO/raw if available)
+  const dateSource = event.raw?.date_start || event.raw?.date || event.date
+  const dateObj = dateSource ? new Date(dateSource) : new Date()
+  const day = isNaN(dateObj) ? '' : dateObj.getDate()
+  const month = isNaN(dateObj) ? '' : dateObj.toLocaleString('en-US', { month: 'short' })
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -14,12 +20,12 @@ export default function EventCard({ event, index, onClick }) {
     >
       <div className="flex flex-row sm:items-start gap-3 sm:gap-4">
         {/* Date Badge */}
-        <div className="shrink-0 w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-linear-to-br from-[#3D52A0] to-[#7091E6] flex flex-col items-center justify-center text-white mx-auto sm:mx-0">
-          <span className="text-[10px] sm:text-xs font-medium opacity-80">
-            {event.date.split(' ')[0]}
+        <div className="shrink-0 w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-[#3B82F6] flex flex-col items-center justify-center text-white mx-auto sm:mx-0">
+          <span className="text-xs sm:text-sm font-medium opacity-90">
+            {day}
           </span>
-          <span className="text-lg sm:text-xl font-bold">
-            {event.date.split(' ')[1]?.replace(',', '')}
+          <span className="text-sm sm:text-base font-bold">
+            {month}
           </span>
         </div>
 
@@ -33,7 +39,7 @@ export default function EventCard({ event, index, onClick }) {
                     New
                   </span>
                 )}
-                <span className={`px-2 py-0.5 rounded-full ${event.sportColor} text-white text-[10px] sm:text-xs font-medium`}>
+                <span className={`px-2 py-0.5 rounded-full bg-[#E6F0FF] text-[#1E3A8A] text-[10px] sm:text-xs font-medium`}>
                   {event.sport}
                 </span>
                 <span className="px-2 py-0.5 rounded-full bg-[#EDE8F5] text-[#3D52A0] text-[10px] sm:text-xs font-medium">

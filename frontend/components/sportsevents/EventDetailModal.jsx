@@ -6,6 +6,12 @@ import { X, CalendarDays, Clock, MapPin, Users, Trophy, Target, Medal, CheckCirc
 export default function EventDetailModal({ event, onClose }) {
   if (!event) return null
 
+  const prizes = Array.isArray(event.prizes) ? event.prizes : [];
+  const requirements = Array.isArray(event.requirements) ? event.requirements : [];
+  const participants = Number.isFinite(Number(event.participants)) ? Number(event.participants) : 0;
+  const maxParticipants = Number.isFinite(Number(event.maxParticipants)) && Number(event.maxParticipants) > 0 ? Number(event.maxParticipants) : Math.max(1, participants);
+  const sportColor = event.sportColor || 'bg-gray-500';
+
   return (
     <AnimatePresence>
       <motion.div
@@ -31,8 +37,8 @@ export default function EventDetailModal({ event, onClose }) {
               <X className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
             <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
-              <span className={`px-2.5 sm:px-3 py-1 rounded-full ${event.sportColor} text-white text-xs sm:text-sm font-medium`}>
-                {event.sport}
+              <span className={`px-2.5 sm:px-3 py-1 rounded-full ${sportColor} text-white text-xs sm:text-sm font-medium`}>
+                {event.sport || 'Sport'}
               </span>
               <span className="px-2.5 sm:px-3 py-1 rounded-full bg-white/20 text-white text-xs sm:text-sm font-medium">
                 {event.type}
@@ -74,12 +80,12 @@ export default function EventDetailModal({ event, onClose }) {
                   <span className="text-xs sm:text-sm font-medium">Participants</span>
                 </div>
                 <p className="font-semibold text-[#1a1a2e] text-sm sm:text-base">
-                  {event.participants}/{event.maxParticipants}
+                  {participants}/{maxParticipants}
                 </p>
                 <div className="mt-2 h-2 rounded-full bg-[#ADBBDA] overflow-hidden">
-                  <div 
+                  <div
                     className="h-full rounded-full bg-linear-to-r from-[#3D52A0] to-[#7091E6]"
-                    style={{ width: `${(event.participants / event.maxParticipants) * 100}%` }}
+                    style={{ width: `${Math.min(100, Math.max(0, (participants / maxParticipants) * 100))}%` }}
                   />
                 </div>
               </div>
@@ -98,7 +104,7 @@ export default function EventDetailModal({ event, onClose }) {
                 Prizes & Rewards
               </h3>
               <div className="flex flex-wrap gap-2">
-                {event.prizes.map((prize, index) => (
+                {prizes.map((prize, index) => (
                   <span 
                     key={index}
                     className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl bg-linear-to-r from-yellow-100 to-orange-100 text-orange-700 font-medium text-xs sm:text-sm flex items-center gap-1.5 sm:gap-2"
@@ -117,7 +123,7 @@ export default function EventDetailModal({ event, onClose }) {
                 Requirements
               </h3>
               <div className="flex flex-wrap gap-2">
-                {event.requirements.map((req, index) => (
+                {requirements.map((req, index) => (
                   <span 
                     key={index}
                     className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl bg-[#EDE8F5] text-[#3D52A0] font-medium text-xs sm:text-sm whitespace-nowrap"

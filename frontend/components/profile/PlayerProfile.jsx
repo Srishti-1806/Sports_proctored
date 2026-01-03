@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from 'react'
-import { Pencil, TrendingUp, Calendar, Video, Trophy, Ruler, Weight, Cake, Activity, ArrowRight, Eye } from 'lucide-react'
+import { Pencil, TrendingUp, Calendar, Video, Trophy, Ruler, Weight, Cake, Activity, ArrowRight, Eye, Plus } from 'lucide-react'
 import PerformanceBar from './PerformanceBar'
 import StatItem from './StatItem'
 import MatchCard from './MatchCard'
@@ -159,7 +159,11 @@ export default function PlayerProfile({ profile, openEdit, deleteItem, user, hid
             </div>
             <h2 className="text-2xl font-bold text-[#3D52A0]">Match History</h2>
           </div>
-          {/* Add buttons removed — no plus icon or add controls shown */}
+          {user && (
+            <button onClick={() => openEdit('matchHistory', { item: {} })} className="p-2 hover:bg-[#EDE8F5] rounded-xl transition-colors">
+              <Plus className="w-5 h-5 text-[#8697C4]" />
+            </button>
+          )}
         </div>
         {profile?.matchHistory && profile.matchHistory.length > 0 ? (
           <div className="grid gap-4">
@@ -190,7 +194,11 @@ export default function PlayerProfile({ profile, openEdit, deleteItem, user, hid
             </div>
             <h2 className="text-2xl font-bold text-[#3D52A0]">Training Schedule</h2>
           </div>
-          {/* Add buttons removed — no plus icon or add controls shown */}
+          {user && (
+            <button onClick={() => openEdit('trainingSchedule', { item: {} })} className="p-2 hover:bg-[#EDE8F5] rounded-xl transition-colors">
+              <Plus className="w-5 h-5 text-[#8697C4]" />
+            </button>
+          )}
         </div>
         {profile?.trainingSchedule && profile.trainingSchedule.length > 0 ? (
           <div className="grid gap-4">
@@ -212,7 +220,11 @@ export default function PlayerProfile({ profile, openEdit, deleteItem, user, hid
             </div>
             <h2 className="text-2xl font-bold text-[#3D52A0]">Video Highlights</h2>
           </div>
-          {/* Add buttons removed — no plus icon or add controls shown */}
+          {user && (
+            <button onClick={() => openEdit('videoHighlights', { item: {} })} className="p-2 hover:bg-[#EDE8F5] rounded-xl transition-colors">
+              <Plus className="w-5 h-5 text-[#8697C4]" />
+            </button>
+          )}
         </div>
         {profile?.videoHighlights && profile.videoHighlights.length > 0 ? (
           <div className="grid md:grid-cols-2 gap-4">
@@ -237,7 +249,11 @@ export default function PlayerProfile({ profile, openEdit, deleteItem, user, hid
             </div>
             <h2 className="text-2xl font-bold text-[#3D52A0]">Achievements & Awards</h2>
           </div>
-          {/* Add buttons removed — no plus icon or add controls shown */}
+          {user && (
+            <button onClick={() => openEdit('achievements', { item: {} })} className="p-2 hover:bg-[#EDE8F5] rounded-xl transition-colors">
+              <Plus className="w-5 h-5 text-[#8697C4]" />
+            </button>
+          )}
         </div>
         {profile?.achievements && profile.achievements.length > 0 ? (
           <div className="space-y-4">
@@ -259,7 +275,11 @@ export default function PlayerProfile({ profile, openEdit, deleteItem, user, hid
             </div>
             <h2 className="text-2xl font-bold text-[#3D52A0]">Teams</h2>
           </div>
-          {/* Add buttons removed — no plus icon or add controls shown */}
+          {user && (
+            <button onClick={() => openEdit('teams', { item: {} })} className="p-2 hover:bg-[#EDE8F5] rounded-xl transition-colors">
+              <Plus className="w-5 h-5 text-[#8697C4]" />
+            </button>
+          )}
         </div>
         {profile?.teams && profile.teams.length > 0 ? (
           <div className="grid md:grid-cols-2 gap-4">

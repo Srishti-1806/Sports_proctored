@@ -1,4 +1,4 @@
-'use client'
+"use client"
 
 import { useState, useEffect } from 'react'
 import { Bell, Calendar, CheckCircle, Bookmark } from 'lucide-react'
@@ -6,15 +6,22 @@ import EventHeader from '@/components/sportsevents/EventHeader'
 import EventSidebar from '@/components/sportsevents/EventSidebar'
 import EventCard from '@/components/sportsevents/EventCard'
 import EventDetailModal from '@/components/sportsevents/EventDetailModal'
+import ProtectedRoute from '@/lib/components/ProtectedRoute'
+
+// initial state values inlined; removed unused globals
 
 export default function SportsEventsPage() {
+
   const [activeFilter, setActiveFilter] = useState('all')
   const [activeSport, setActiveSport] = useState('all')
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedEvent, setSelectedEvent] = useState(null)
   const [events, setEvents] = useState([])
-  const [loading, setLoading] = useState(true)
+  const [sportCategories, setSportCategories] = useState([])
+  const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
+
+  // removed unused initialMatches effect
 
   const filters = [
     { id: 'all', label: 'All Events', icon: Bell },
@@ -22,40 +29,70 @@ export default function SportsEventsPage() {
     { id: 'registered', label: 'Registered', icon: CheckCircle },
     { id: 'saved', label: 'Saved', icon: Bookmark }
   ]
+  
 
-  const sportCategories = [
-    { id: 'cricket', label: 'Cricket', color: 'bg-blue-500' },
-    { id: 'football', label: 'Football', color: 'bg-green-500' },
-    { id: 'kabaddi', label: 'Kabaddi', color: 'bg-pink-500' },
-    { id: 'basketball', label: 'Basketball', color: 'bg-orange-500' },
-    { id: 'badminton', label: 'Badminton', color: 'bg-teal-500' },
-    { id: 'tennis', label: 'Tennis', color: 'bg-yellow-500' },
-    { id: 'athletics', label: 'Athletics', color: 'bg-red-500' }
-  ]
-
-  // Fetch events from API
+  // Fetch additional matches if user changes filters
   useEffect(() => {
     const fetchEvents = async () => {
+      // Build a flexible proxy call - the `path` query param defines the RapidAPI endpoint path after /v1/
+      // We'll request calendar/categories for today's date and timezone for India by default.
+      const today = new Date()
+      const yyyy = today.getFullYear()
+      const mm = String(today.getMonth() + 1).padStart(2, '0')
+      const dd = String(today.getDate()).padStart(2, '0')
+      const dateStr = `${yyyy}-${mm}-${dd}`
+
       try {
         setLoading(true)
-        const response = await fetch(`/api/sports-events?sport=${activeSport}&limit=50`)
+        // Use integer timezone (API expects int) and request cricket (sport_id=62) by default
+        const url = `/api/os-sports/india-events?timezone=5&date=${dateStr}&country=India`
+        const response = await fetch(url)
         const data = await response.json()
-        
-        if (data.success) {
-          setEvents(data.events)
+
+        const matches = Array.isArray(data.events) ? data.events : []
+
+        if (matches.length === 0) {
+          setError('No events found for India')
+          setEvents([])
         } else {
-          setError('Failed to load events')
+          const transformedEvents = matches.map((match) => ({
+            id: match.id,
+            title: match.title,
+            sport: match.sport,
+            date: match.date ? new Date(match.date).toLocaleDateString() : dateStr,
+            time: match.time ? new Date(match.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'TBD',
+            location: match.location || 'Venue TBD',
+            description: '',
+            image: '/api/placeholder/400/320',
+            organizer: '',
+            raw: match.raw || {}
+          }))
+
+            // compute sport categories from returned events
+            const sportsSet = new Map()
+            transformedEvents.forEach((ev) => {
+              const name = ev.sport || 'Various'
+              if (!sportsSet.has(name)) {
+                sportsSet.set(name, { id: sportsSet.size + 1, label: name, color: 'bg-blue-500' })
+              }
+            })
+            setSportCategories(Array.from(sportsSet.values()))
+
+          setEvents(transformedEvents)
+          setError(null)
+          console.debug('[SportsEventsPage] loaded events:', transformedEvents.length)
         }
       } catch (err) {
         console.error('Error fetching events:', err)
         setError('Failed to load events')
+        setEvents([])
       } finally {
         setLoading(false)
       }
     }
 
     fetchEvents()
-  }, [activeSport])
+  }, [activeSport, activeFilter])
 
   const filteredEvents = events.filter(event => {
     // Filter by status (registered, saved, etc.)
@@ -64,18 +101,18 @@ export default function SportsEventsPage() {
     if (activeFilter === 'upcoming') return true
     return true
   }).filter(event => {
-    // Filter by sport category
-    if (activeSport !== 'all' && event.sport.toLowerCase() !== activeSport.toLowerCase()) {
-      return false
-    }
-    return true
+    // Filter by selected sport
+    if (!activeSport || activeSport === 'all') return true
+    return (event.sport || '').toLowerCase() === (activeSport || '').toLowerCase()
   }).filter(event => {
     // Filter by search query
     return event.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-           event.sport.toLowerCase().includes(searchQuery.toLowerCase())
+           event.sport.toLowerCase().includes(searchQuery.toLowerCase()) ||
+           event.location.toLowerCase().includes(searchQuery.toLowerCase())
   })
 
   return (
+    <ProtectedRoute>
     <div className="min-h-screen pb-10 bg-[#fafbff]">
       {/* Header */}
       <EventHeader searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
@@ -130,11 +167,11 @@ export default function SportsEventsPage() {
                 </div>
               ) : (
                 <div className="grid gap-3 sm:gap-4">
-                  {filteredEvents.map((event, index) => (
+                  {filteredEvents.map((event, idx) => (
                     <EventCard
-                      key={event.id}
+                      key={event.id ?? event.raw?.event_id ?? `${event.title || 'event'}-${idx}`}
                       event={event}
-                      index={index}
+                      index={idx}
                       onClick={() => setSelectedEvent(event)}
                     />
                   ))}
@@ -151,6 +188,7 @@ export default function SportsEventsPage() {
         onClose={() => setSelectedEvent(null)}
       />
     </div>
+    </ProtectedRoute>
   )
 }
 

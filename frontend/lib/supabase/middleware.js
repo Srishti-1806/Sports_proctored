@@ -49,7 +49,7 @@ export async function updateSession(request) {
   // of sync and terminate the user's session prematurely.
 
   // Protected routes - require authentication
-  const protectedPaths = ['/coaches', '/players', '/notifications', '/stadiums', '/chat']
+  const protectedPaths = ['/coaches', '/players', '/sportsevents', '/notifications', '/stadiums', '/chat']
   const isProtectedPath = protectedPaths.some(path => request.nextUrl.pathname.startsWith(path))
 
   // If user is not logged in and trying to access a protected route, redirect to home

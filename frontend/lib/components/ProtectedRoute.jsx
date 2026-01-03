@@ -3,15 +3,29 @@
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '../context/AuthContext'
+import { createClient } from '../supabase/client'
 
 export default function ProtectedRoute({ children }) {
   const { user, loading } = useAuth()
   const router = useRouter()
 
   useEffect(() => {
-    if (!loading && !user) {
-      router.push('/?redirected=true')
+    const checkAndRedirect = async () => {
+      if (!loading && !user) {
+        // double-check server/session state to avoid race-condition redirects
+        try {
+          const supabase = createClient()
+          const { data: { session } } = await supabase.auth.getSession()
+          if (!session?.user) {
+            router.push('/?redirected=true')
+          }
+        } catch (e) {
+          router.push('/?redirected=true')
+        }
+      }
     }
+
+    checkAndRedirect()
   }, [user, loading, router])
 
   // Show loading state while checking auth
