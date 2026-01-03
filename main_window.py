@@ -4,44 +4,40 @@ from PyQt6.QtWidgets import *
 from PyQt6.QtGui import QPixmap, QImage, QFont
 from PyQt6.QtMultimedia import QMediaPlayer, QAudioOutput
 from PyQt6.QtMultimediaWidgets import QVideoWidget
-from main import score
+
 from camera_worker import CameraWorker
 from exercise_list import EXERCISES
 from rep_counter import RepCounter
 from sound_manager import tick, swap, alert, play
 from voice_alerts import say
 
+import os
+os.environ["OPENCV_VIDEOIO_PRIORITY_MSMF"] = "0"
+
+
 # ---------------- SERVER CONFIG ----------------
-SERVER_URL = "http://127.0.0.1:8000"  # <-- Replace with your backend url jabb bhi bane
+SERVER_URL = "https://sports-proctored-4.onrender.com" 
 
 def server_online():
     try:
-        r = requests.get(f"{SERVER_URL}/", timeout=3)
+        r = requests.get(f"{SERVER_URL}/leaderboard", timeout=3)
         return r.status_code == 200
     except:
         return False
 
 def send_score(name, score):
-    score = int(score)
     if not server_online():
         print("⚠ Server offline, score not sent")
         return
     try:
         r = requests.post(f"{SERVER_URL}/score", json={"name": name, "score": score}, timeout=5)
-        
-        # Check if the request was actually successful (200 OK)
-        if r.status_code != 200:
-            print(f"❌ Server Error! Status: {r.status_code}")
-            print(f"Response Body: {r.text}") # Yahan se pata chalega ki HTML error hai ya nahi
-            return
-
-        data = r.json()
-        print(f"✅ Success: {data}")
-
+        try:
+            data = r.json()
+            print(data)
+        except ValueError:
+            print(f"❌ Server returned non-JSON response: {r.text}")
     except requests.exceptions.RequestException as e:
-        print(f"❌ Connection Error: {e}")
-    except ValueError:
-        print(f"❌ Response is not JSON. Received: {r.text[:100]}") # Pehle 100 characters print karein
+        print(f"❌ Error sending score: {e}")
 
 
 
@@ -51,13 +47,26 @@ EXERCISE_CONFIG = {
     "push_ups": {"time": 40, "target": 20},
     "jumping_jacks": {"time": 25, "target": 25},
     "high_knees": {"time": 20, "target": 30},
+    "lunges": {"time": 30, "target": 20},
+    "plank": {"time": 45, "target": 1},
+    "mountain_climbers": {"time": 30, "target": 30},
+    "burpees": {"time": 30, "target": 15},
+    "butt_kicks": {"time": 20, "target": 30},
+    "side_lunges": {"time": 30, "target": 20},
+    "tricep_dips": {"time": 30, "target": 20},
+    "crunches": {"time": 30, "target": 25},
+    "leg_raises": {"time": 30, "target": 20},
+    "russian_twists": {"time": 30, "target": 30},
+    "wall_sit": {"time": 45, "target": 30}
 }
 
+
+
 BLOCKED_APPS = {
-    "msedge.exe","opera.exe","copilot.exe","chrome.exe","firefox.exe","brave.exe",
-    "vivaldi.exe","discord.exe","teams.exe","zoom.exe","skype.exe","twitch.exe",
-    "spotify.exe","filmora.exe","obs.exe","vlc.exe","word.exe","excel.exe",
-    "powerpnt.exe","whatsapp.exe","telegram.exe"
+    "msedge.exe", "opera.exe", "copilot.exe", "chrome.exe", "firefox.exe", "brave.exe",
+    "vivaldi.exe", "discord.exe", "teams.exe", "zoom.exe", "skype.exe", "twitch.exe",
+    "spotify.exe", "filmora.exe", "obs.exe", "vlc.exe", "word.exe", "excel.exe",
+    "powerpnt.exe", "whatsapp.exe", "telegram.exe", "signal.exe", "line.exe", "wechat.exe"
 }
 
 def kill_blocked_apps(parent=None):
@@ -295,12 +304,22 @@ class MainWindow(QMainWindow):
             self.pause_btn.setText("PAUSE")
 
     def next_exercise(self):
-        self.exercise_index = (self.exercise_index+1)%len(EXERCISES)
+        if self.exercise_index == len(EXERCISES) - 1:
+            self.next_btn.setEnabled(False)
+            say(f"Well done {self.username}. Your total score is {self.total_points}")
+            say("All exercises completed. Ending test.")
+            self.end_workout()
+            return
+
+        self.exercise_index += 1
         self.load_exercise()
 
+
     def prev_exercise(self):
-        self.exercise_index = (self.exercise_index-1)%len(EXERCISES)
-        self.load_exercise()
+        if self.exercise_index > 0:
+            self.exercise_index -= 1
+            self.load_exercise()
+
 
     def update_timer(self):
         if self.paused: return
