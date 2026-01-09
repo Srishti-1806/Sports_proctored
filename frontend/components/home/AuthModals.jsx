@@ -181,7 +181,7 @@ export default function AuthModals({ showLogin, showSignup, onClose }) {
               </form>
 
               <p className="text-center text-[#8697C4] mt-6 text-sm">
-                New to ATHLETIX?{' '}
+                New to Sportlin?{' '}
                 <button
                   onClick={() => onClose('switchToSignup')}
                   className="text-[#3D52A0] font-semibold hover:underline"
@@ -223,7 +223,7 @@ export default function AuthModals({ showLogin, showSignup, onClose }) {
                   <div className="w-16 h-16 rounded-2xl bg-linear-to-br from-[#3D52A0] to-[#7091E6] flex items-center justify-center mx-auto mb-4">
                     <Trophy className="w-8 h-8 text-white" />
                   </div>
-                  <h2 className="font-display text-2xl font-bold text-[#1a1a2e]">Join ATHLETIX</h2>
+                  <h2 className="font-display text-2xl font-bold text-[#1a1a2e]">Join Sportlin</h2>
                   <p className="text-[#8697C4] mt-2">Start your journey to greatness</p>
                 </div>
 

@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { MapPin, Search, Star, Clock, Phone, Globe, Navigation, ChevronRight, X, Heart, Share2, Dumbbell, Waves, Target, Footprints, Trophy, CheckCircle, Compass, Layers, ZoomIn, ZoomOut, LocateFixed, Home, Activity, MapPinned } from 'lucide-react'
+import { MapPin, Search, Star, Clock, Phone, Globe, Navigation, ChevronRight, X, Heart, Share2, Dumbbell, Waves, Target, Footprints, Trophy, CheckCircle, Compass, Layers, ZoomIn, ZoomOut, Home, Activity, MapPinned } from 'lucide-react'
 import StadiumMap from '@/components/stadiums/StadiumMap'
 
 export default function StadiumsPage() {
@@ -13,6 +13,19 @@ export default function StadiumsPage() {
   const [venues, setVenues] = useState([])
   const [loading, setLoading] = useState(true)
   const [userLocation, setUserLocation] = useState(null)
+  const geocodeCacheRef = useRef(new Map())
+
+  // Prevent background scrolling when modal is open
+  useEffect(() => {
+    if (selectedVenue) {
+      // Lock body scroll
+      const originalOverflow = document.body.style.overflow
+      document.body.style.overflow = 'hidden'
+      return () => {
+        document.body.style.overflow = originalOverflow || ''
+      }
+    }
+  }, [selectedVenue])
 
   // Get user's location with improved fallback
   useEffect(() => {
@@ -199,18 +212,34 @@ export default function StadiumsPage() {
 
   // Helper functions
   async function reverseGeocode(longitude, latitude) {
+    // Use a lightweight cache to avoid spamming the geocoding API
+    const cacheKey = `${longitude},${latitude}`
+    const cache = geocodeCacheRef.current
+    if (cache.has(cacheKey)) return cache.get(cacheKey)
+
+    // If no Mapbox token is configured, return coords fallback
+    if (!accessToken) {
+      const fallback = `${latitude.toFixed(4)}°, ${longitude.toFixed(4)}°`
+      cache.set(cacheKey, fallback)
+      return fallback
+    }
+
     try {
-      const response = await fetch(
-        `https://api.mapbox.com/geocoding/v5/mapbox.places/${longitude},${latitude}.json?access_token=${accessToken}`
-      );
-      const data = await response.json();
-      if (data.features && data.features.length > 0) {
-        return data.features[0].place_name;
+      const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(longitude)},${encodeURIComponent(latitude)}.json?access_token=${encodeURIComponent(accessToken)}`
+      const response = await fetch(url)
+      if (!response.ok) {
+        throw new Error(`Geocoding HTTP ${response.status}`)
       }
-      return `${latitude.toFixed(4)}°, ${longitude.toFixed(4)}°`;
+      const data = await response.json()
+      const place = data.features && data.features.length > 0 ? data.features[0].place_name : null
+      const result = place || `${latitude.toFixed(4)}°, ${longitude.toFixed(4)}°`
+      cache.set(cacheKey, result)
+      return result
     } catch (error) {
-      console.error('Reverse geocoding error:', error);
-      return `${latitude.toFixed(4)}°, ${longitude.toFixed(4)}°`;
+      console.error('Reverse geocoding error:', error)
+      const fallback = `${latitude.toFixed(4)}°, ${longitude.toFixed(4)}°`
+      cache.set(cacheKey, fallback)
+      return fallback
     }
   }
 
@@ -377,7 +406,7 @@ export default function StadiumsPage() {
             </h1>
 
             {/* Search Bar */}
-            <div className="flex gap-2 sm:gap-3">
+              <div className="flex gap-2 sm:gap-3">
               <div className="relative flex-1">
                 <Search className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-[#8697C4]" />
                 <input
@@ -388,13 +417,6 @@ export default function StadiumsPage() {
                   className="w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-2.5 sm:py-3 rounded-lg sm:rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-[#7091E6] text-sm sm:text-base text-[#1a1a2e]"
                 />
               </div>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="flex items-center gap-2 px-3 sm:px-5 py-2.5 sm:py-3 rounded-lg sm:rounded-xl bg-white text-[#3D52A0] font-semibold"
-              >
-                <LocateFixed className="w-4 h-4 sm:w-5 sm:h-5" />
-              </motion.button>
             </div>
           </motion.div>
         </div>
@@ -545,18 +567,19 @@ export default function StadiumsPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 md:p-6 bg-black/50 backdrop-blur-sm overflow-y-auto"
+            className="fixed inset-0 z-50 flex items-center justify-center p-0 sm:p-3 bg-black/50 backdrop-blur-sm"
             onClick={() => setSelectedVenue(null)}
           >
             <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
+              initial={{ scale: 0.96, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
+              exit={{ scale: 0.96, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
-              className="relative w-full max-w-2xl bg-white rounded-xl sm:rounded-2xl lg:rounded-3xl shadow-2xl my-4 sm:my-6 md:my-8 flex flex-col max-h-[calc(100vh-2rem)] sm:max-h-[calc(100vh-3rem)] md:max-h-[calc(100vh-4rem)] overflow-hidden"
+              className="relative w-full h-full sm:h-auto max-w-none sm:max-w-2xl md:max-w-3xl lg:max-w-4xl bg-white rounded-none sm:rounded-xl shadow-2xl my-0 sm:my-6 flex flex-col overflow-hidden"
+              style={{ maxHeight: '100vh' }}
             >
               {/* Header Image */}
-              <div className="relative h-32 sm:h-40 md:h-48 bg-linear-to-br from-[#3D52A0] to-[#7091E6] rounded-t-xl sm:rounded-t-2xl lg:rounded-t-3xl shrink-0">
+              <div className="relative h-32 sm:h-40 md:h-48 bg-linear-to-br from-[#3D52A0] to-[#7091E6] rounded-t-none sm:rounded-t-xl shrink-0">
                 <div className="absolute inset-0 flex items-center justify-center">
                   <selectedVenue.typeIcon className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 text-white/30" />
                 </div>

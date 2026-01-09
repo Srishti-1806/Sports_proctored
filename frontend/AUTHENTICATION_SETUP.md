@@ -1,4 +1,4 @@
-# ATHLETIX - Supabase Authentication Setup
+# Sportlin - Supabase Authentication Setup
 
 ## 🔐 Authentication System Overview
 
@@ -23,7 +23,7 @@ Before setting up authentication, you need:
 2. Click "Start your project" and sign up/login
 3. Click "New Project"
 4. Fill in the details:
-   - **Name**: ATHLETIX (or any name you prefer)
+   - **Name**: Sportlin (or any name you prefer)
    - **Database Password**: Create a strong password (save it!)
    - **Region**: Choose closest to you
    - **Pricing Plan**: Free tier is sufficient

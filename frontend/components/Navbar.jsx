@@ -61,7 +61,7 @@ export default function Navbar() {
               <Trophy className="w-5 h-5 text-white" />
             </div>
             <span className="font-display font-bold text-xl gradient-text">
-              ATHLETIX
+              Sportlin
             </span>
           </Link>
 

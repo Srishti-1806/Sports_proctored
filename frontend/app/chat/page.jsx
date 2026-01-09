@@ -37,7 +37,7 @@ export default function ChatPage() {
     {
       id: 1,
       role: 'assistant',
-      content: "Welcome to ATHLETIX AI Coach! I'm here to help you with training advice, nutrition tips, performance optimization, and answer any sports-related questions. How can I assist you today?",
+      content: "Welcome to Sportlin AI Coach! I'm here to help you with training advice, nutrition tips, performance optimization, and answer any sports-related questions. How can I assist you today?",
       timestamp: new Date()
     }
   ])
@@ -116,7 +116,7 @@ export default function ChatPage() {
     setMessages([{
       id: Date.now(),
       role: 'assistant',
-      content: "Welcome to ATHLETIX AI Coach! How can I help you today?",
+      content: "Welcome to Sportlin AI Coach! How can I help you today?",
       timestamp: new Date()
     }])
     // Close sidebar on small screens so the user sees the new chat
@@ -191,7 +191,7 @@ export default function ChatPage() {
       // System message to define AI behavior and scope
       const systemMessage = {
         role: 'system',
-        content: `You are ATHLETIX AI Coach, an expert sports performance assistant. You must ONLY answer questions and provide information related to sports, athletics, training, nutrition for athletes, injury prevention/recovery, mental preparation, and performance optimization.
+        content: `You are Sportlin AI Coach, an expert sports performance assistant. You must ONLY answer questions and provide information related to sports, athletics, training, nutrition for athletes, injury prevention/recovery, mental preparation, and performance optimization.
 
         If the user asks about topics OUTSIDE the sports/athletics domain (for example politics, personal legal/medical diagnosis beyond general athlete-safe advice, programming unrelated to sports, or any other non-sports subject), you must politely refuse to answer on that topic. Respond with a short refusal such as: "I'm sorry — I can only help with sports and athletic performance topics. Please ask a question related to sports, training, or nutrition." Then invite them to return to the sports topic.
 
@@ -409,7 +409,7 @@ export default function ChatPage() {
                 </div>
               </div>
               <div className="min-w-0">
-                <h2 className="font-display font-bold text-[#1a1a2e] text-sm sm:text-base truncate">ATHLETIX AI Coach</h2>
+                <h2 className="font-display font-bold text-[#1a1a2e] text-sm sm:text-base truncate">Sportlin AI Coach</h2>
                 <p className="text-xs sm:text-sm text-green-500 flex items-center gap-1">
                   <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
                   <span className="hidden sm:inline">Online & Ready to Help</span>

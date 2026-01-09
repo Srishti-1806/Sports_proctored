@@ -4,7 +4,7 @@ import { AuthProvider } from '../lib/context/AuthContext'
 import ToastProvider from '../components/ToastProvider'
 
 export const metadata = {
-  title: 'ATHLETIX - Elevate Your Game',
+  title: 'Sportlin - Elevate Your Game',
   description: 'Connect with elite coaches, track your progress, and discover sports venues near you.',
 }
 
