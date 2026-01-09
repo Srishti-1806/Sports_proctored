@@ -20,7 +20,7 @@ SERVER_URL = "https://sports-proctored-4.onrender.com"
 
 def server_online():
     try:
-        r = requests.get(f"{SERVER_URL}/leaderboard", timeout=45)
+        r = requests.get(f"{SERVER_URL}/leaderboard", timeout=60)
         return r.status_code == 200
     except:
         return False
