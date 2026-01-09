@@ -2,6 +2,7 @@
 
 import { X, Download, Play, AlertCircle, Eye } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+import Link from 'next/link'
 
 export default function ProctorTestModal({ isOpen, onClose }) {
   if (!isOpen) return null
@@ -104,13 +105,15 @@ export default function ProctorTestModal({ isOpen, onClose }) {
                   >
                     Cancel
                   </button>
-                  <button
-                    onClick={handleDownload}
+
+                  <Link
+                    href="/Sports%20Proctor-0.0.1.msi"
+                    download="Sports Proctor-0.0.1.msi"
                     className="flex-1 px-4 py-2 bg-linear-to-r from-[#3D52A0] to-[#7091E6] text-white rounded-xl font-semibold hover:shadow-xl hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
                   >
                     <Download className="w-5 h-5" />
                     Download Test App
-                  </button>
+                  </Link>
                 </div>
 
                 <p className="text-center text-xs text-[#8697C4] mt-4">
