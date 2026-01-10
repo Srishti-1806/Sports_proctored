@@ -3,12 +3,24 @@
 import { useRef, useEffect, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
+import { getThemeColors } from '../../lib/mapbox-utils';
 
 const StadiumMap = ({ accessToken, venues, selectedVenue, onVenueSelect }) => {
   const mapContainerRef = useRef(null);
   const mapInstanceRef = useRef(null);
   const markersRef = useRef([]);
   const [userLocation, setUserLocation] = useState(null);
+  // Resolve theme-aware colors once per render so all effects can use them
+  const themeColors = (typeof window !== 'undefined' && window.getComputedStyle)
+    ? getThemeColors()
+    : {
+        PRIMARY: 'var(--color-primary,#3B82F6)',
+        SUCCESS: 'var(--color-success,#10B981)',
+        WARNING: 'var(--color-warning,#F59E0B)',
+        DANGER: 'var(--color-danger,#EF4444)',
+        INFO: 'var(--color-info,#06B6D4)',
+        PURPLE: 'var(--color-purple,#8B5CF6)'
+      };
 
   useEffect(() => {
     // Function to get location from IP address
@@ -114,7 +126,7 @@ const StadiumMap = ({ accessToken, venues, selectedVenue, onVenueSelect }) => {
     });
 
     // Add user location marker with reverse geocoding
-    const userMarker = new mapboxgl.Marker({ color: '#3B82F6', scale: 1.2 })
+    const userMarker = new mapboxgl.Marker({ color: themeColors.PRIMARY, scale: 1.2 })
       .setLngLat(userLocation);
 
     // Fetch address from coordinates using reverse geocoding
@@ -129,7 +141,7 @@ const StadiumMap = ({ accessToken, venues, selectedVenue, onVenueSelect }) => {
             new mapboxgl.Popup({ offset: 25 }).setHTML(`
               <div style="padding: 8px;">
                 <h3 style="font-weight: bold; margin-bottom: 4px;">Your Location</h3>
-                <p style="color: #666; font-size: 12px; line-height: 1.4;">${address}</p>
+                <p style="color: var(--color-primary-muted); font-size: 12px; line-height: 1.4;">${address}</p>
               </div>
             `)
           )
@@ -142,7 +154,7 @@ const StadiumMap = ({ accessToken, venues, selectedVenue, onVenueSelect }) => {
             new mapboxgl.Popup({ offset: 25 }).setHTML(`
               <div style="padding: 8px;">
                 <h3 style="font-weight: bold; margin-bottom: 4px;"> Your Location</h3>
-                <p style="color: #666; font-size: 12px;">Current position</p>
+                <p style="color: var(--color-primary-muted); font-size: 12px;">Current position</p>
               </div>
             `)
           )
@@ -192,7 +204,7 @@ const StadiumMap = ({ accessToken, venues, selectedVenue, onVenueSelect }) => {
 
       // Create marker with standard Mapbox pin (green for venues, blue for selected)
       const marker = new mapboxgl.Marker({ 
-        color: selectedVenue?.id === venue.id ? '#3B82F6' : '#10B981',
+        color: selectedVenue?.id === venue.id ? themeColors.PRIMARY : themeColors.SUCCESS,
         scale: 1.0
       })
         .setLngLat(coordinates)
@@ -200,11 +212,11 @@ const StadiumMap = ({ accessToken, venues, selectedVenue, onVenueSelect }) => {
           new mapboxgl.Popup({ offset: 25 }).setHTML(`
             <div style="padding: 8px;">
               <h3 style="font-weight: bold; margin-bottom: 4px;">${venue.name}</h3>
-              <p style="color: #666; font-size: 14px;">${venue.type}</p>
-              <p style="color: #666; font-size: 12px; margin-top: 4px;">${venue.distance} away</p>
+              <p style="color: var(--color-primary-muted); font-size: 14px;">${venue.type}</p>
+              <p style="color: var(--color-primary-muted); font-size: 12px; margin-top: 4px;">${venue.distance} away</p>
               ${venue.sports && venue.sports.length > 0 ? `
                 <div style="margin-top: 8px;">
-                  <span style="color: #10B981; font-size: 12px;"> ${venue.sports.join(', ')}</span>
+                  <span style="color: var(--color-success); font-size: 12px;"> ${venue.sports.join(', ')}</span>
                 </div>
               ` : ''}
             </div>
@@ -246,11 +258,11 @@ const StadiumMap = ({ accessToken, venues, selectedVenue, onVenueSelect }) => {
           height: 32px !important;
           padding: 0 !important;
           line-height: 32px !important;
-          color: #666 !important;
+          color: var(--color-primary-muted) !important;
         }
         .mapboxgl-popup-close-button:hover {
-          background-color: #f3f4f6 !important;
-          color: #000 !important;
+          background-color: var(--color-card) !important;
+          color: var(--color-foreground) !important;
         }
       `}</style>
       <div

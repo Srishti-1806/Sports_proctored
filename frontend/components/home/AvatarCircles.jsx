@@ -8,12 +8,12 @@ export default function AvatarCircles({ numPeople = 0, avatarUrls = [], size = 3
     <div className="flex items-center">
       <div className="flex -space-x-3 items-center">
         {displayed.map((a, i) => (
-          <a key={i} href={a.profileUrl || '#'} target="_blank" rel="noreferrer" className="block rounded-full overflow-hidden bg-white/90 border border-white" style={{ width: size, height: size }}>
+          <a key={i} href={a.profileUrl || '#'} target="_blank" rel="noreferrer" className="block rounded-full overflow-hidden bg-[var(--color-card)]/90 border border-[var(--color-border)]" style={{ width: size, height: size }}>
             <img src={a.imageUrl} alt={`avatar-${i}`} className="w-full h-full object-cover" />
           </a>
         ))}
         {extra > 0 && (
-          <div className="flex items-center justify-center rounded-full bg-white/90 border border-white text-xs font-medium text-[#1a1a2e]" style={{ width: size, height: size }}>
+          <div className="flex items-center justify-center rounded-full bg-[var(--color-card)]/90 border border-[var(--color-border)] text-xs font-medium text-[var(--color-foreground)]" style={{ width: size, height: size }}>
             +{extra}
           </div>
         )}

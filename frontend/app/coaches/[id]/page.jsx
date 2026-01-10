@@ -98,22 +98,22 @@ export default function CoachProfilePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#fafbff] pt-24 flex items-center justify-center">
-        <Loader2 className="w-12 h-12 text-[#7091E6] animate-spin" />
+      <div className="min-h-screen bg-[var(--color-background)] pt-24 flex items-center justify-center">
+        <Loader2 className="w-12 h-12 text-[var(--color-primary-bright)] animate-spin" />
       </div>
     )
   }
 
   if (error || !profile) {
     return (
-      <div className="min-h-screen bg-[#fafbff] pt-24">
+      <div className="min-h-screen bg-[var(--color-background)] pt-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center py-16">
-            <h2 className="text-2xl font-bold text-[#1a1a2e] mb-4">Coach not found</h2>
-            <p className="text-[#8697C4] mb-6">{error || 'The coach profile you\'re looking for doesn\'t exist.'}</p>
+            <h2 className="text-2xl font-bold text-[var(--color-foreground)] mb-4">Coach not found</h2>
+            <p className="text-[var(--color-primary-muted)] mb-6">{error || 'The coach profile you\'re looking for doesn\'t exist.'}</p>
             <button
               onClick={() => router.push('/coaches')}
-              className="px-6 py-3 bg-linear-to-r from-[#3D52A0] to-[#7091E6] text-white rounded-xl hover:shadow-lg transition-all"
+              className="px-6 py-3 bg-linear-to-r from-[var(--color-primary-deep)] to-[var(--color-primary-bright)] text-white rounded-xl hover:shadow-lg transition-all"
             >
               Back to Coaches
             </button>
@@ -124,14 +124,14 @@ export default function CoachProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#fafbff] pt-5 pb-12">
+    <div className="min-h-screen bg-[var(--color-background)] pt-5 pb-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Back Button */}
         <motion.button
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           onClick={() => router.push('/coaches')}
-          className="mb-6 flex items-center gap-2 text-[#8697C4] hover:text-[#3D52A0] transition-colors"
+          className="mb-6 flex items-center gap-2 text-[var(--color-primary-muted)] hover:text-[var(--color-primary)] transition-colors"
         >
           <ArrowLeft className="w-5 h-5" />
           <span>Back to Coaches</span>
@@ -161,8 +161,8 @@ export default function CoachProfilePage() {
         >
           {/* Profile Picture */}
           <div className="relative">
-            <div className="w-32 h-32 rounded-3xl bg-white p-2 shadow-xl">
-              <div className="w-full h-full rounded-2xl bg-linear-to-br from-[#3D52A0] to-[#7091E6] overflow-hidden">
+            <div className="w-32 h-32 rounded-3xl bg-[var(--color-card)] p-2 shadow-xl">
+              <div className="w-full h-full rounded-2xl bg-linear-to-br from-[var(--color-primary-deep)] to-[var(--color-primary-bright)] overflow-hidden">
                 {profile.profilePicture ? (
                   <img src={profile.profilePicture} alt="Profile" className="w-full h-full object-cover" />
                 ) : (
@@ -175,21 +175,21 @@ export default function CoachProfilePage() {
           </div>
 
           {/* Profile Info */}
-          <div className="flex-1 bg-white rounded-3xl p-6 shadow-xl border border-[#EDE8F5]">
+          <div className="flex-1 bg-[var(--color-card)] rounded-3xl p-6 shadow-xl border border-[var(--color-border)]">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div>
-                <h1 className="font-display text-3xl md:text-4xl font-bold text-[#1a1a2e] mb-2">
+                <h1 className="font-display text-3xl md:text-4xl font-bold text-[var(--color-foreground)] mb-2">
                   {profile.name}
                 </h1>
-                <p className="text-xl text-[#7091E6] font-semibold mb-3">{profile.position || 'Coach'}</p>
+                <p className="text-xl text-[var(--color-primary-bright)] font-semibold mb-3">{profile.position || 'Coach'}</p>
                 <div className="flex flex-wrap items-center gap-3">
                   {profile.location && (
-                    <div className="flex items-center gap-1 text-sm text-[#8697C4]">
+                    <div className="flex items-center gap-1 text-sm text-[var(--color-primary-muted)]">
                       <MapPin className="w-4 h-4" />
                       {profile.location}
                     </div>
                   )}
-                  <div className="px-3 py-1 rounded-full bg-linear-to-r from-[#3D52A0] to-[#7091E6] text-white text-xs font-bold uppercase tracking-wide">
+                  <div className="px-3 py-1 rounded-full bg-linear-to-r from-[var(--color-primary-deep)] to-[var(--color-primary-bright)] text-white text-xs font-bold uppercase tracking-wide">
                     coach
                   </div>
                 </div>

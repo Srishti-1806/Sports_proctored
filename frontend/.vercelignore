@@ -1,0 +1,19 @@
+# Installer files
+*.msi
+*.exe
+*.zip
+*.tar.gz
+
+# Local Git LFS cache (if not already handled)
+.git/lfs/
+
+# Build artifacts & Logs
+node_modules/
+dist/
+.next/
+*.log
+npm-debug.log*
+
+# OS-specific files
+.DS_Store
+Thumbs.db

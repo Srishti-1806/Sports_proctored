@@ -16,11 +16,11 @@ export default function EventCard({ event, index, onClick }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.05 }}
       onClick={onClick}
-      className="p-4 sm:p-6 rounded-2xl bg-white border border-[#EDE8F5] hover:shadow-xl hover:border-[#7091E6] transition-all cursor-pointer group"
+      className="p-4 sm:p-6 rounded-2xl bg-[var(--color-card)] border border-[var(--color-border)] hover:shadow-xl hover:border-[var(--color-primary-bright)] transition-all cursor-pointer group"
     >
       <div className="flex flex-row sm:items-start gap-3 sm:gap-4">
         {/* Date Badge */}
-        <div className="shrink-0 w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-[#3B82F6] flex flex-col items-center justify-center text-white mx-auto sm:mx-0">
+        <div className="shrink-0 w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-[var(--color-primary)] flex flex-col items-center justify-center text-white mx-auto sm:mx-0">
           <span className="text-xs sm:text-sm font-medium opacity-90">
             {day}
           </span>
@@ -39,14 +39,14 @@ export default function EventCard({ event, index, onClick }) {
                     New
                   </span>
                 )}
-                <span className={`px-2 py-0.5 rounded-full bg-[#E6F0FF] text-[#1E3A8A] text-[10px] sm:text-xs font-medium`}>
+                <span className={`px-2 py-0.5 rounded-full bg-[var(--color-primary-soft)] text-[var(--color-primary)] text-[10px] sm:text-xs font-medium`}>
                   {event.sport}
                 </span>
-                <span className="px-2 py-0.5 rounded-full bg-[#EDE8F5] text-[#3D52A0] text-[10px] sm:text-xs font-medium">
+                <span className="px-2 py-0.5 rounded-full bg-[var(--color-primary-soft)] text-[var(--color-primary)] text-[10px] sm:text-xs font-medium">
                   {event.type}
                 </span>
               </div>
-              <h3 className="font-display text-base sm:text-lg font-bold text-[#1a1a2e] group-hover:text-[#3D52A0] transition-colors line-clamp-2">
+              <h3 className="font-display text-base sm:text-lg font-bold text-[var(--color-foreground)] group-hover:text-[var(--color-primary)] transition-colors line-clamp-2">
                 {event.title}
               </h3>
             </div>
@@ -57,16 +57,16 @@ export default function EventCard({ event, index, onClick }) {
                 </span>
               )}
               {event.isSaved && (
-                <Bookmark className="w-4 h-4 sm:w-5 sm:h-5 text-[#7091E6] fill-[#7091E6] shrink-0" />
+                <Bookmark className="w-4 h-4 sm:w-5 sm:h-5 text-[var(--color-primary-bright)] fill-[var(--color-primary-bright)] shrink-0" />
               )}
             </div>
           </div>
 
-          <p className="text-[#8697C4] text-xs sm:text-sm mb-3 sm:mb-4 line-clamp-2">
+          <p className="text-[var(--color-primary-muted)] text-xs sm:text-sm mb-3 sm:mb-4 line-clamp-2">
             {event.description}
           </p>
 
-          <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-xs sm:text-sm text-[#8697C4]">
+          <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-xs sm:text-sm text-[var(--color-primary-muted)]">
             <span className="flex items-center gap-1">
               <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" /> 
               <span className="truncate">{event.time}</span>
@@ -78,14 +78,14 @@ export default function EventCard({ event, index, onClick }) {
             <span className="flex items-center gap-1 whitespace-nowrap">
               <Users className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" /> {event.participants}/{event.maxParticipants}
             </span>
-            <span className="flex items-center gap-1 font-medium text-[#3D52A0] whitespace-nowrap">
+            <span className="flex items-center gap-1 font-medium text-[var(--color-primary)] whitespace-nowrap">
               {event.fee}
             </span>
           </div>
         </div>
 
         {/* Arrow */}
-        <ChevronRight className="hidden sm:block w-5 h-5 text-[#ADBBDA] group-hover:text-[#7091E6] group-hover:translate-x-1 transition-all shrink-0 self-center" />
+        <ChevronRight className="hidden sm:block w-5 h-5 text-[var(--color-primary-light)] group-hover:text-[var(--color-primary-bright)] group-hover:translate-x-1 transition-all shrink-0 self-center" />
       </div>
     </motion.div>
   )

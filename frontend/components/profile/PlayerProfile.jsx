@@ -20,15 +20,15 @@ export default function PlayerProfile({ profile, openEdit, deleteItem, user, hid
       {/* Proctored Test Section - Full Width (only show if not hidden and user is viewing their own profile) */}
       {!hideProctorTest && user && (
         <>
-          <div className="relative bg-linear-to-br from-[#3D52A0] via-[#5B73C4] to-[#7091E6] rounded-3xl p-8 shadow-xl overflow-hidden group">
+          <div className="relative bg-linear-to-br from-[var(--color-primary-deep)] via-[var(--color-primary)] to-[var(--color-primary-bright)] rounded-3xl p-8 shadow-xl overflow-hidden group">
         {/* Animated Background Elements */}
-        <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2" />
-        <div className="absolute bottom-0 left-0 w-48 h-48 bg-[#ADBBDA]/20 rounded-full blur-2xl transform -translate-x-1/2 translate-y-1/2" />
+        <div className="absolute top-0 right-0 w-64 h-64 bg-[var(--color-popover)]/10 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2" />
+        <div className="absolute bottom-0 left-0 w-48 h-48 bg-[var(--color-primary-light)]/20 rounded-full blur-2xl transform -translate-x-1/2 translate-y-1/2" />
         
         <div className="relative flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           <div className="flex-1">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
+              <div className="w-12 h-12 rounded-xl bg-[var(--color-popover)]/20 backdrop-blur-sm flex items-center justify-center">
                 <Eye className="w-6 h-6 text-white" />
               </div>
               <div>
@@ -44,14 +44,14 @@ export default function PlayerProfile({ profile, openEdit, deleteItem, user, hid
             <p className="text-white/90 text-base sm:text-lg mb-2 leading-relaxed">
               Unlock your true potential with our comprehensive assessment
             </p>
-            <p className="text-[#ADBBDA] text-sm sm:text-base">
+            <p className="text-[var(--color-muted-foreground,#ADBBDA)] text-sm sm:text-base">
               Get certified scores • Stand out to coaches • Boost your career • Track your progress
             </p>
           </div>
 
           <button
             onClick={() => setShowTestModal(true)}
-            className="flex items-center gap-3 px-6 sm:px-8 py-4 bg-white text-[#3D52A0] rounded-2xl font-bold text-base sm:text-lg hover:shadow-2xl hover:scale-105 transition-all group/btn whitespace-nowrap"
+            className="flex items-center gap-3 px-6 sm:px-8 py-4 bg-[var(--color-card)] text-[var(--color-primary-bright)] rounded-2xl font-bold text-base sm:text-lg hover:shadow-2xl hover:scale-105 transition-all group/btn whitespace-nowrap border border-[var(--color-border)]"
           >
             <span>Start Test</span>
             <ArrowRight className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
@@ -60,17 +60,17 @@ export default function PlayerProfile({ profile, openEdit, deleteItem, user, hid
 
         {/* Decorative Stats */}
         <div className="relative mt-6 grid grid-cols-3 gap-4">
-          <div className="bg-white/10 backdrop-blur-sm rounded-xl p-3 border border-white/20">
+          <div className="bg-[var(--color-popover)]/10 backdrop-blur-sm rounded-xl p-3 border border-[var(--color-border)]/20">
             <div className="text-2xl font-bold text-white">45min</div>
-            <div className="text-xs text-[#ADBBDA]">Duration</div>
+            <div className="text-xs text-[var(--color-muted-foreground,#8697C4)]">Duration</div>
           </div>
-          <div className="bg-white/10 backdrop-blur-sm rounded-xl p-3 border border-white/20">
+          <div className="bg-[var(--color-popover)]/10 backdrop-blur-sm rounded-xl p-3 border border-[var(--color-border)]/20">
             <div className="text-2xl font-bold text-white">10+</div>
-            <div className="text-xs text-[#ADBBDA]">Skills Tested</div>
+            <div className="text-xs text-[var(--color-muted-foreground,#8697C4)]">Skills Tested</div>
           </div>
-          <div className="bg-white/10 backdrop-blur-sm rounded-xl p-3 border border-white/20">
+          <div className="bg-[var(--color-popover)]/10 backdrop-blur-sm rounded-xl p-3 border border-[var(--color-border)]/20">
             <div className="text-2xl font-bold text-white">Instant</div>
-            <div className="text-xs text-[#ADBBDA]">Results</div>
+            <div className="text-xs text-[var(--color-muted-foreground,#8697C4)]">Results</div>
           </div>
         </div>
       </div>
@@ -83,35 +83,35 @@ export default function PlayerProfile({ profile, openEdit, deleteItem, user, hid
       {/* Row 1: About & Athletic Profile */}
       <div className="grid lg:grid-cols-2 gap-8">
         {/* About Section */}
-        <div className="bg-white rounded-3xl p-8 shadow-xl border border-[#EDE8F5]">
+        <div className="bg-[var(--color-card)] rounded-3xl p-8 shadow-xl border border-[var(--color-border)]">
           <div className="flex justify-between items-center mb-6">
-            <div className="flex items-center gap-3">
-              <div className="p-3 bg-linear-to-br from-[#7091E6]/20 to-[#3D52A0]/10 rounded-xl">
-                <Pencil className="w-5 h-5 text-[#3D52A0]" />
+                <div className="flex items-center gap-3">
+              <div className="p-3 bg-linear-to-br from-[var(--color-primary-light)]/20 to-[var(--color-primary-deep)]/10 rounded-xl">
+                <Pencil className="w-5 h-5 text-[var(--color-primary-bright)]" />
               </div>
-              <h2 className="text-2xl font-bold text-[#3D52A0]">About</h2> 
+              <h2 className="text-2xl font-bold text-[var(--color-primary-bright)]">About</h2> 
             </div>
             {user && (
-              <button onClick={() => openEdit('about', { value: profile?.about || '' })} className="p-2 hover:bg-[#EDE8F5] rounded-xl transition-colors">
-                <Pencil className="w-5 h-5 text-[#8697C4]" />
+              <button onClick={() => openEdit('about', { value: profile?.about || '' })} className="p-2 hover:bg-[var(--color-primary-soft)] rounded-xl transition-colors">
+                <Pencil className="w-5 h-5 text-[var(--color-muted-foreground)]" />
               </button>
             )}
           </div>
-          <p className="text-[#8697C4] leading-relaxed">{profile?.about || (user ? 'No bio yet. Add one to tell your story!' : "This user hasn't added a bio yet.")}</p>
+          <p className="text-[var(--color-muted-foreground)] leading-relaxed">{profile?.about || (user ? 'No bio yet. Add one to tell your story!' : "This user hasn't added a bio yet.")}</p>
         </div>
 
         {/* Athletic Stats */}
-        <div className="bg-white rounded-3xl p-8 shadow-xl border border-[#EDE8F5]">
+        <div className="bg-[var(--color-card)] rounded-3xl p-8 shadow-xl border border-[var(--color-border)]">
           <div className="flex justify-between items-center mb-6">
             <div className="flex items-center gap-3">
-              <div className="p-3 bg-linear-to-br from-[#7091E6]/20 to-[#3D52A0]/10 rounded-xl">
-                <TrendingUp className="w-5 h-5 text-[#3D52A0]" />
+              <div className="p-3 bg-linear-to-br from-[var(--color-primary-light)]/20 to-[var(--color-primary-deep)]/10 rounded-xl">
+                <TrendingUp className="w-5 h-5 text-[var(--color-primary-bright)]" />
               </div>
-              <h2 className="text-2xl font-bold text-[#3D52A0]">Athletic Profile</h2>
+              <h2 className="text-2xl font-bold text-[var(--color-primary-bright)]">Athletic Profile</h2>
             </div>
             {user && (
-              <button onClick={() => openEdit('athleticStats', { value: profile?.athleticStats || {} })} className="p-2 hover:bg-[#EDE8F5] rounded-xl transition-colors">
-                <Pencil className="w-5 h-5 text-[#8697C4]" />
+              <button onClick={() => openEdit('athleticStats', { value: profile?.athleticStats || {} })} className="p-2 hover:bg-[var(--color-primary-soft)] dark:hover:bg-[var(--color-popover)] rounded-xl transition-colors">
+                <Pencil className="w-5 h-5 text-[var(--color-muted-foreground,#8697C4)]" />
               </button>
             )}
           </div>
@@ -127,17 +127,17 @@ export default function PlayerProfile({ profile, openEdit, deleteItem, user, hid
       {/* Row 2: Physical Performance & Match History */}
       <div className="grid lg:grid-cols-2 gap-8">
         {/* Physical Stats */}
-        <div className="bg-white rounded-3xl p-8 shadow-xl border border-[#EDE8F5]">
+        <div className="bg-[var(--color-card)] rounded-3xl p-8 shadow-xl border border-[var(--color-border)]">
         <div className="flex justify-between items-center mb-6">
           <div className="flex items-center gap-3">
-            <div className="p-3 bg-linear-to-br from-[#7091E6]/20 to-[#3D52A0]/10 rounded-xl">
-              <TrendingUp className="w-5 h-5 text-[#3D52A0]" />
+            <div className="p-3 bg-linear-to-br from-[var(--color-primary-bright)]/20 to-[var(--color-primary-bright)]/10 rounded-xl">
+              <TrendingUp className="w-5 h-5 text-[var(--color-primary-bright)]" />
             </div>
-            <h2 className="text-2xl font-bold text-[#3D52A0]">Physical Performance</h2>
+            <h2 className="text-2xl font-bold text-[var(--color-primary-bright)]">Physical Performance</h2>
           </div>
           {user && (
-            <button onClick={() => openEdit('physicalStats', { value: profile?.physicalStats || {} })} className="p-2 hover:bg-[#EDE8F5] rounded-xl transition-colors">
-              <Pencil className="w-5 h-5 text-[#8697C4]" />
+            <button onClick={() => openEdit('physicalStats', { value: profile?.physicalStats || {} })} className="p-2 hover:bg-[var(--color-primary-soft)] dark:hover:bg-[var(--color-popover)] rounded-xl transition-colors">
+              <Pencil className="w-5 h-5 text-[var(--color-muted-foreground,#8697C4)]" />
             </button>
           )}
         </div>
@@ -151,17 +151,17 @@ export default function PlayerProfile({ profile, openEdit, deleteItem, user, hid
         </div>
 
         {/* Match History */}
-        <div className="bg-white rounded-3xl p-8 shadow-xl border border-[#EDE8F5]">
+        <div className="bg-[var(--color-card)] rounded-3xl p-8 shadow-xl border border-[var(--color-border)]">
         <div className="flex justify-between items-center mb-6">
           <div className="flex items-center gap-3">
-            <div className="p-3 bg-linear-to-br from-[#7091E6]/20 to-[#3D52A0]/10 rounded-xl">
-              <Trophy className="w-5 h-5 text-[#3D52A0]" />
+            <div className="p-3 bg-linear-to-br from-[var(--color-primary-light)]/20 to-[var(--color-primary-deep)]/10 rounded-xl">
+              <Trophy className="w-5 h-5 text-[var(--color-primary-bright)]" />
             </div>
-            <h2 className="text-2xl font-bold text-[#3D52A0]">Match History</h2>
+            <h2 className="text-2xl font-bold text-[var(--color-primary-bright)]">Match History</h2>
           </div>
           {user && (
-            <button onClick={() => openEdit('matchHistory', { item: {} })} className="p-2 hover:bg-[#EDE8F5] rounded-xl transition-colors">
-              <Plus className="w-5 h-5 text-[#8697C4]" />
+            <button onClick={() => openEdit('matchHistory', { item: {} })} className="p-2 hover:bg-[var(--color-primary-soft)] dark:hover:bg-[var(--color-popover)] rounded-xl transition-colors">
+              <Plus className="w-5 h-5 text-[var(--color-muted-foreground,#8697C4)]" />
             </button>
           )}
         </div>
@@ -186,17 +186,17 @@ export default function PlayerProfile({ profile, openEdit, deleteItem, user, hid
       {/* Row 3: Training Schedule & Video Highlights */}
       <div className="grid lg:grid-cols-2 gap-8">
         {/* Training Schedule */}
-        <div className="bg-white rounded-3xl p-8 shadow-xl border border-[#EDE8F5]">
+        <div className="bg-[var(--color-card)] rounded-3xl p-8 shadow-xl border border-[var(--color-border)]">
         <div className="flex justify-between items-center mb-6">
           <div className="flex items-center gap-3">
-            <div className="p-3 bg-linear-to-br from-[#7091E6]/20 to-[#3D52A0]/10 rounded-xl">
-              <Calendar className="w-5 h-5 text-[#3D52A0]" />
+            <div className="p-3 bg-linear-to-br from-[var(--color-primary-bright)]/20 to-[var(--color-primary-bright)]/10 rounded-xl">
+              <Calendar className="w-5 h-5 text-[var(--color-primary-bright)]" />
             </div>
-            <h2 className="text-2xl font-bold text-[#3D52A0]">Training Schedule</h2>
+            <h2 className="text-2xl font-bold text-[var(--color-primary-bright)]">Training Schedule</h2>
           </div>
           {user && (
-            <button onClick={() => openEdit('trainingSchedule', { item: {} })} className="p-2 hover:bg-[#EDE8F5] rounded-xl transition-colors">
-              <Plus className="w-5 h-5 text-[#8697C4]" />
+            <button onClick={() => openEdit('trainingSchedule', { item: {} })} className="p-2 hover:bg-[var(--color-primary-soft)] dark:hover:bg-[var(--color-popover)] rounded-xl transition-colors">
+              <Plus className="w-5 h-5 text-[var(--color-muted-foreground,#8697C4)]" />
             </button>
           )}
         </div>
@@ -212,17 +212,17 @@ export default function PlayerProfile({ profile, openEdit, deleteItem, user, hid
         </div>
 
         {/* Video Highlights */}
-        <div className="bg-white rounded-3xl p-8 shadow-xl border border-[#EDE8F5]">
+        <div className="bg-[var(--color-card)] rounded-3xl p-8 shadow-xl border border-[var(--color-border)]">
         <div className="flex justify-between items-center mb-6">
           <div className="flex items-center gap-3">
-            <div className="p-3 bg-linear-to-br from-[#7091E6]/20 to-[#3D52A0]/10 rounded-xl">
-              <Video className="w-5 h-5 text-[#3D52A0]" />
+            <div className="p-3 bg-linear-to-br from-[var(--color-primary-bright)]/20 to-[var(--color-primary-bright)]/10 rounded-xl">
+              <Video className="w-5 h-5 text-[var(--color-primary-bright)]" />
             </div>
-            <h2 className="text-2xl font-bold text-[#3D52A0]">Video Highlights</h2>
+            <h2 className="text-2xl font-bold text-[var(--color-primary-bright)]">Video Highlights</h2>
           </div>
           {user && (
-            <button onClick={() => openEdit('videoHighlights', { item: {} })} className="p-2 hover:bg-[#EDE8F5] rounded-xl transition-colors">
-              <Plus className="w-5 h-5 text-[#8697C4]" />
+            <button onClick={() => openEdit('videoHighlights', { item: {} })} className="p-2 hover:bg-[var(--color-primary-soft)] dark:hover:bg-[var(--color-popover)] rounded-xl transition-colors">
+              <Plus className="w-5 h-5 text-[var(--color-muted-foreground,#8697C4)]" />
             </button>
           )}
         </div>
@@ -241,17 +241,17 @@ export default function PlayerProfile({ profile, openEdit, deleteItem, user, hid
       {/* Row 4: Achievements & Teams */}
       <div className="grid lg:grid-cols-2 gap-8">
         {/* Achievements */}
-        <div className="bg-white rounded-3xl p-8 shadow-xl border border-[#EDE8F5]">
+        <div className="bg-[var(--color-card)] rounded-3xl p-8 shadow-xl border border-[var(--color-border)]">
         <div className="flex justify-between items-center mb-6">
           <div className="flex items-center gap-3">
-            <div className="p-3 bg-linear-to-br from-[#7091E6]/20 to-[#3D52A0]/10 rounded-xl">
-              <Trophy className="w-5 h-5 text-[#3D52A0]" />
+            <div className="p-3 bg-linear-to-br from-[var(--color-primary-bright)]/20 to-[var(--color-primary-bright)]/10 rounded-xl">
+              <Trophy className="w-5 h-5 text-[var(--color-primary-bright)]" />
             </div>
-            <h2 className="text-2xl font-bold text-[#3D52A0]">Achievements & Awards</h2>
+            <h2 className="text-2xl font-bold text-[var(--color-primary-bright)]">Achievements & Awards</h2>
           </div>
           {user && (
-            <button onClick={() => openEdit('achievements', { item: {} })} className="p-2 hover:bg-[#EDE8F5] rounded-xl transition-colors">
-              <Plus className="w-5 h-5 text-[#8697C4]" />
+            <button onClick={() => openEdit('achievements', { item: {} })} className="p-2 hover:bg-[var(--color-primary-soft)] dark:hover:bg-[var(--color-popover)] rounded-xl transition-colors">
+              <Plus className="w-5 h-5 text-[var(--color-muted-foreground,#8697C4)]" />
             </button>
           )}
         </div>
@@ -267,17 +267,17 @@ export default function PlayerProfile({ profile, openEdit, deleteItem, user, hid
         </div>
 
         {/* Teams */}
-        <div className="bg-white rounded-3xl p-8 shadow-xl border border-[#EDE8F5]">
+        <div className="bg-[var(--color-card)] rounded-3xl p-8 shadow-xl border border-[var(--color-border)]">
         <div className="flex justify-between items-center mb-6">
           <div className="flex items-center gap-3">
-            <div className="p-3 bg-linear-to-br from-[#7091E6]/20 to-[#3D52A0]/10 rounded-xl">
-              <Trophy className="w-5 h-5 text-[#3D52A0]" />
+            <div className="p-3 bg-linear-to-br from-[var(--color-primary-bright)]/20 to-[var(--color-primary-bright)]/10 rounded-xl">
+              <Trophy className="w-5 h-5 text-[var(--color-primary-bright)]" />
             </div>
-            <h2 className="text-2xl font-bold text-[#3D52A0]">Teams</h2>
+            <h2 className="text-2xl font-bold text-[var(--color-primary-bright)]">Teams</h2>
           </div>
           {user && (
-            <button onClick={() => openEdit('teams', { item: {} })} className="p-2 hover:bg-[#EDE8F5] rounded-xl transition-colors">
-              <Plus className="w-5 h-5 text-[#8697C4]" />
+            <button onClick={() => openEdit('teams', { item: {} })} className="p-2 hover:bg-[var(--color-primary-soft)] dark:hover:bg-[var(--color-popover)] rounded-xl transition-colors">
+              <Plus className="w-5 h-5 text-[var(--color-muted-foreground,#8697C4)]" />
             </button>
           )}
         </div>

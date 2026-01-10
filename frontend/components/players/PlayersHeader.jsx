@@ -7,10 +7,10 @@ export default function PlayersHeader() {
       animate={{ opacity: 1, y: 0 }}
       className="mb-8"
     >
-      <h1 className="font-display text-5xl font-bold text-[#1a1a2e] mb-3">
+      <h1 className="font-display text-5xl font-bold text-[var(--color-foreground)] mb-3">
         Discover Players
       </h1>
-      <p className="text-xl text-[#8697C4]">
+          <p className="text-xl text-[var(--color-muted-foreground,#8697C4)]">
         Connect with talented players across India
       </p>
     </motion.div>

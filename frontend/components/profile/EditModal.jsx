@@ -19,16 +19,16 @@ export default function EditModal({ isOpen, onClose, title, children, onSave, se
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
             onClick={(e) => e.stopPropagation()}
-            className="relative w-full max-w-lg bg-white rounded-2xl p-6 shadow-2xl max-h-[90vh] overflow-y-auto"
+            className="relative w-full max-w-lg bg-[var(--color-card)] rounded-2xl p-6 shadow-2xl max-h-[90vh] overflow-y-auto"
           >
             <button
               onClick={onClose}
-              className="absolute top-4 right-4 p-2 rounded-xl hover:bg-[#EDE8F5] transition-colors"
+              className="absolute top-4 right-4 p-2 rounded-xl hover:bg-[var(--color-popover)] transition-colors"
             >
-              <X className="w-5 h-5 text-[#8697C4]" />
+              <X className="w-5 h-5 text-[var(--color-muted-foreground,#8697C4)]" />
             </button>
 
-            <h2 className="font-display text-xl font-bold text-[#1a1a2e] mb-4">{title}</h2>
+            <h2 className="font-display text-xl font-bold text-[var(--color-foreground)] mb-4">{title}</h2>
 
             {children}
 
@@ -37,13 +37,13 @@ export default function EditModal({ isOpen, onClose, title, children, onSave, se
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => onSave(sectionData)}
-                className="flex-1 py-3 rounded-xl bg-linear-to-r from-[#3D52A0] to-[#7091E6] text-white font-semibold shadow-lg"
+                className="flex-1 py-3 rounded-xl bg-linear-to-r from-[var(--color-primary-deep)] to-[var(--color-primary-bright)] text-white font-semibold shadow-lg"
               >
                 Save
               </motion.button>
               <button
                 onClick={onClose}
-                className="px-6 py-3 rounded-xl border border-[#ADBBDA] text-[#8697C4] font-medium hover:bg-[#EDE8F5] transition-colors"
+                className="px-6 py-3 rounded-xl border border-[var(--color-border)] text-[var(--color-muted-foreground,#8697C4)] font-medium hover:bg-[var(--color-popover)] transition-colors"
               >
                 Cancel
               </button>

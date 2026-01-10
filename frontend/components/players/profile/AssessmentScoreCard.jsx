@@ -6,10 +6,10 @@ export default function AssessmentScoreCard({ assessmentScores }) {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="mb-8 p-6 md:p-8 rounded-3xl bg-linear-to-br from-[#3D52A0] to-[#7091E6] text-white overflow-hidden relative"
+      className="mb-8 p-6 md:p-8 rounded-3xl bg-linear-to-br from-[var(--color-primary-deep)] to-[var(--color-primary-bright)] text-white overflow-hidden relative"
     >
-      <div className="absolute top-0 right-0 w-64 h-64 rounded-full bg-white/5 blur-3xl transform translate-x-1/3 -translate-y-1/3" />
-      <div className="absolute bottom-0 left-0 w-48 h-48 rounded-full bg-white/5 blur-2xl transform -translate-x-1/3 translate-y-1/3" />
+      <div className="absolute top-0 right-0 w-64 h-64 rounded-full bg-[var(--color-popover)]/5 blur-3xl transform translate-x-1/3 -translate-y-1/3" />
+      <div className="absolute bottom-0 left-0 w-48 h-48 rounded-full bg-[var(--color-popover)]/5 blur-2xl transform -translate-x-1/3 translate-y-1/3" />
       
       <div className="relative grid md:grid-cols-2 gap-8 items-center">
         <div>
@@ -35,7 +35,7 @@ export default function AssessmentScoreCard({ assessmentScores }) {
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="flex items-center gap-3 px-8 py-4 rounded-2xl bg-white text-[#3D52A0] font-bold shadow-xl hover:shadow-2xl transition-all"
+            className="flex items-center gap-3 px-8 py-4 rounded-2xl bg-[var(--color-card)] text-[var(--color-primary-deep)] font-bold shadow-xl hover:shadow-2xl transition-all"
           >
             <Play className="w-5 h-5" />
             Take Proctored Assessment

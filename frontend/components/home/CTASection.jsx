@@ -26,7 +26,7 @@ export default function CTASection({ onSignupClick, onLoginClick }) {
 
   return (
     <section className="py-32 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-      <div className="absolute inset-0 bg-linear-to-br from-[#3D52A0] to-[#7091E6]" />
+      <div className="absolute inset-0 bg-linear-to-br from-[var(--color-primary-deep)] to-[var(--color-primary-bright)]" />
       
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
@@ -37,7 +37,7 @@ export default function CTASection({ onSignupClick, onLoginClick }) {
         <h2 className="font-display text-6xl lg:text-8xl font-bold text-white mb-8">
           Build your network
         </h2>
-        <p className="text-xl text-[#ADBBDA] mb-12 max-w-2xl mx-auto">
+        <p className="text-xl text-[var(--color-primary-light)] mb-12 max-w-2xl mx-auto">
           Join 25,000+ players and 1,200+ coaches connecting across India - every sport, every skill level.
         </p>
         
@@ -46,7 +46,7 @@ export default function CTASection({ onSignupClick, onLoginClick }) {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={handleSignup}
-            className="px-10 py-5 rounded-2xl bg-white text-[#3D52A0] font-bold text-lg shadow-2xl hover:shadow-3xl transition-shadow"
+            className="px-10 py-5 rounded-2xl bg-[var(--color-card)] text-[var(--color-primary)] font-bold text-lg shadow-2xl hover:shadow-3xl transition-shadow"
           >
             Get Started Free
           </motion.button>
@@ -54,7 +54,7 @@ export default function CTASection({ onSignupClick, onLoginClick }) {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={handleLogin}
-            className="px-10 py-5 rounded-2xl border-2 border-white/30 text-white font-bold text-lg hover:bg-white/10 transition-colors"
+            className="px-10 py-5 rounded-2xl border-2 border-[var(--color-border)] text-white font-bold text-lg hover:bg-[var(--color-popover)]/10 transition-colors"
           >
             Sign In
           </motion.button>

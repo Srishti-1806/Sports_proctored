@@ -45,6 +45,11 @@ const TextType = ({
     return textColors[currentTextIndex % textColors.length];
   };
 
+  const getCursorColor = () => {
+    // prefer explicit text color, otherwise fall back to the semantic foreground
+    return getCurrentTextColor() || null;
+  };
+
   useEffect(() => {
     if (!startOnVisible || !containerRef.current) return;
 
@@ -164,6 +169,18 @@ const TextType = ({
       <span
         ref={cursorRef}
         className={`ml-1 inline-block opacity-100 ${shouldHideCursor ? 'hidden' : ''} ${cursorClassName}`}
+        style={
+          getCursorColor()
+            ? { color: getCursorColor(), WebkitTextFillColor: getCursorColor() }
+            : {
+                // when there's no solid text color (e.g. parent is using gradient-text),
+                // render the cursor with the same gradient so it visually matches.
+                background: 'linear-gradient(135deg, var(--primary-deep) 0%, var(--primary-bright) 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text'
+              }
+        }
       >
         {cursorCharacter}
       </span>

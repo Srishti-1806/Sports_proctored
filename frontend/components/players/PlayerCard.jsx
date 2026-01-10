@@ -10,7 +10,7 @@ export default function PlayerCard({ player, index }) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: index * 0.1 }}
         whileHover={{ y: -8, boxShadow: '0 20px 40px rgba(61, 82, 160, 0.15)' }}
-        className="bg-white rounded-3xl overflow-hidden border border-[#EDE8F5] cursor-pointer group"
+        className="bg-[var(--color-card)] rounded-3xl overflow-hidden border border-[var(--color-border)] cursor-pointer group"
       >
         {/* Player Image */}
         <div className="relative h-64 overflow-hidden">
@@ -25,8 +25,8 @@ export default function PlayerCard({ player, index }) {
           <div className="absolute top-4 right-4">
             <span className={`px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1 ${
               player.status === 'Elite Performer'
-                ? 'bg-linear-to-r from-amber-500 to-yellow-400 text-white'
-                : 'bg-green-100 text-green-600'
+                ? 'bg-linear-to-r from-[var(--color-primary-deep)] to-[var(--color-primary-bright)] text-white'
+                : 'bg-[var(--color-popover)] text-green-600'
             }`}>
               <Flame className="w-3 h-3" /> {player.status}
             </span>
@@ -51,7 +51,7 @@ export default function PlayerCard({ player, index }) {
         </div>
 
         {/* Player Stats */}
-        <div className="p-6">
+          <div className="p-6">
           {/* Improvement Badge */}
           <div className="flex items-center justify-end mb-4">
             <div className="flex items-center gap-1 text-green-600 text-sm font-semibold">
@@ -63,15 +63,15 @@ export default function PlayerCard({ player, index }) {
           {/* Overall Score */}
           <div className="mb-4">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm text-[#8697C4]">Overall Score</span>
-              <span className="font-bold text-[#3D52A0]">{player.overallScore}</span>
+              <span className="text-sm text-[var(--color-muted-foreground,#8697C4)]">Overall Score</span>
+              <span className="font-bold text-[var(--color-primary-deep)]">{player.overallScore}</span>
             </div>
-            <div className="h-2 bg-[#EDE8F5] rounded-full overflow-hidden">
+            <div className="h-2 bg-[var(--color-popover)] rounded-full overflow-hidden">
               <motion.div
                 initial={{ width: 0 }}
                 animate={{ width: `${player.overallScore}%` }}
                 transition={{ duration: 1, delay: index * 0.1 + 0.5 }}
-                className="h-full bg-linear-to-r from-[#3D52A0] to-[#7091E6]"
+                className="h-full bg-linear-to-r from-[var(--color-primary-deep)] to-[var(--color-primary-bright)]"
               />
             </div>
           </div>
@@ -79,19 +79,19 @@ export default function PlayerCard({ player, index }) {
           {/* Quick Stats */}
           <div className="grid grid-cols-3 gap-3 pt-4 border-t border-[#EDE8F5]">
             <div className="text-center">
-              <Trophy className="w-5 h-5 text-[#7091E6] mx-auto mb-1" />
-              <div className="font-bold text-[#1a1a2e] text-sm">{player.achievements}</div>
-              <div className="text-xs text-[#8697C4]">Achievements</div>
+              <Trophy className="w-5 h-5 text-[var(--color-primary)] mx-auto mb-1" />
+              <div className="font-bold text-[var(--color-foreground)] text-sm">{player.achievements}</div>
+              <div className="text-xs text-[var(--color-muted-foreground,#8697C4)]">Achievements</div>
             </div>
             <div className="text-center">
               <Target className="w-5 h-5 text-[#7091E6] mx-auto mb-1" />
-              <div className="font-bold text-[#1a1a2e] text-sm">{player.matchCount}</div>
-              <div className="text-xs text-[#8697C4]">Matches</div>
+              <div className="font-bold text-[var(--color-foreground)] text-sm">{player.matchCount}</div>
+              <div className="text-xs text-[var(--color-muted-foreground,#8697C4)]">Matches</div>
             </div>
             <div className="text-center">
               <Medal className="w-5 h-5 text-[#7091E6] mx-auto mb-1" />
-              <div className="font-bold text-[#1a1a2e] text-sm">{player.trainingHours}</div>
-              <div className="text-xs text-[#8697C4]">Training</div>
+              <div className="font-bold text-[var(--color-foreground)] text-sm">{player.trainingHours}</div>
+              <div className="text-xs text-[var(--color-muted-foreground,#8697C4)]">Training</div>
             </div>
           </div>
         </div>

@@ -113,7 +113,7 @@ export default function SportsEventsPage() {
 
   return (
     <ProtectedRoute>
-    <div className="min-h-screen pb-10 bg-[#fafbff]">
+    <div className="min-h-screen pb-10 bg-[var(--color-background)]">
       {/* Header */}
       <EventHeader searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
 
@@ -142,21 +142,21 @@ export default function SportsEventsPage() {
                    activeFilter === 'upcoming' ? 'Upcoming Events' :
                    activeFilter === 'registered' ? 'Your Registered Events' : 
                    'Saved Events'}
-                  <span className="ml-2 text-[#aebadd] font-normal text-sm sm:text-base">({filteredEvents.length})</span>
+                  <span className="ml-2 text-[var(--color-primary-light)] font-normal text-sm sm:text-base">({filteredEvents.length})</span>
                 </h2>
               </div>
 
               {loading ? (
                 <div className="text-center py-12">
-                  <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-[#4f46e5] border-r-transparent"></div>
-                  <p className="mt-4 text-[#8697C4]">Loading events...</p>
+                  <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-[var(--color-primary-deep)] border-r-transparent"></div>
+                  <p className="mt-4 text-[var(--color-primary-muted)]">Loading events...</p>
                 </div>
               ) : error ? (
                 <div className="text-center py-12">
                   <p className="text-red-500">{error}</p>
                   <button 
                     onClick={() => window.location.reload()}
-                    className="mt-4 px-4 py-2 bg-[#4f46e5] text-white rounded-lg hover:bg-[#4338ca]"
+                    className="mt-4 px-4 py-2 bg-linear-to-r from-[var(--color-primary-deep)] to-[var(--color-primary-bright)] text-white rounded-lg hover:shadow-lg"
                   >
                     Retry
                   </button>

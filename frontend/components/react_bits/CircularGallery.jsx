@@ -22,9 +22,19 @@ function autoBind(instance) {
   });
 }
 
-function createTextTexture(gl, text, font = 'bold 30px monospace', color = 'black') {
+function createTextTexture(gl, text, font = 'bold 30px monospace', color = null) {
   const canvas = document.createElement('canvas');
   const context = canvas.getContext('2d');
+  // Resolve CSS variable colors at runtime for canvas rendering
+  if ((typeof window !== 'undefined') && (!color || color.startsWith('var('))) {
+    try {
+      const styles = getComputedStyle(document.documentElement);
+      const resolved = styles.getPropertyValue('--color-foreground') || styles.getPropertyValue('--color-primary') || 'var(--color-foreground,#ffffff)';
+      color = (resolved || 'var(--color-foreground,#ffffff)').trim();
+    } catch (e) {
+      color = getComputedStyle(document.documentElement).getPropertyValue('--color-foreground')?.trim() || '#ffffff';
+    }
+  }
   context.font = font;
   const metrics = context.measureText(text);
   const textWidth = Math.ceil(metrics.width);
@@ -32,7 +42,7 @@ function createTextTexture(gl, text, font = 'bold 30px monospace', color = 'blac
   canvas.width = textWidth + 20;
   canvas.height = textHeight + 20;
   context.font = font;
-  context.fillStyle = color;
+  context.fillStyle = color || 'black';
   context.textBaseline = 'middle';
   context.textAlign = 'center';
   context.clearRect(0, 0, canvas.width, canvas.height);
@@ -43,7 +53,7 @@ function createTextTexture(gl, text, font = 'bold 30px monospace', color = 'blac
 }
 
 class Title {
-  constructor({ gl, plane, renderer, text, textColor = '#545050', font = '30px sans-serif' }) {
+  constructor({ gl, plane, renderer, text, textColor = null, font = '30px sans-serif' }) {
     autoBind(this);
     this.gl = gl;
     this.plane = plane;
@@ -275,7 +285,7 @@ class App {
     {
       items,
       bend,
-      textColor = '#ffffff',
+      textColor = null,
       borderRadius = 0,
       font = 'bold 30px Figtree',
       scrollSpeed = 2,
@@ -432,7 +442,7 @@ class App {
 export default function CircularGallery({
   items,
   bend = 3,
-  textColor = '#ffffff',
+  textColor = null,
   borderRadius = 0.05,
   font = 'bold 30px Figtree',
   scrollSpeed = 2,

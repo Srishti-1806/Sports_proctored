@@ -37,13 +37,40 @@ export const ZOOM_LEVELS = {
 
 // Marker Colors
 export const MARKER_COLORS = {
-  PRIMARY: '#3B82F6',
-  SUCCESS: '#10B981',
-  WARNING: '#F59E0B',
-  DANGER: '#EF4444',
-  INFO: '#06B6D4',
-  PURPLE: '#8B5CF6',
+  PRIMARY: 'var(--color-primary,#3B82F6)',
+  SUCCESS: 'var(--color-success,#10B981)',
+  WARNING: 'var(--color-warning,#F59E0B)',
+  DANGER: 'var(--color-danger,#EF4444)',
+  INFO: 'var(--color-info,#06B6D4)',
+  PURPLE: 'var(--color-purple,#8B5CF6)',
 };
+
+/**
+ * Read theme colors from CSS variables at runtime (client-only).
+ * Falls back to MARKER_COLORS when CSS variables are not available.
+ */
+export function getThemeColors() {
+  if (typeof window === 'undefined' || !window.getComputedStyle) {
+    return MARKER_COLORS;
+  }
+
+  const styles = getComputedStyle(document.documentElement);
+  const primary = styles.getPropertyValue('--color-primary').trim() || MARKER_COLORS.PRIMARY;
+  const success = styles.getPropertyValue('--color-success').trim() || MARKER_COLORS.SUCCESS;
+  const warning = styles.getPropertyValue('--color-warning').trim() || MARKER_COLORS.WARNING;
+  const danger = styles.getPropertyValue('--color-danger').trim() || MARKER_COLORS.DANGER;
+  const info = styles.getPropertyValue('--color-info').trim() || MARKER_COLORS.INFO;
+  const purple = styles.getPropertyValue('--color-purple').trim() || MARKER_COLORS.PURPLE;
+
+  return {
+    PRIMARY: primary || MARKER_COLORS.PRIMARY,
+    SUCCESS: success || MARKER_COLORS.SUCCESS,
+    WARNING: warning || MARKER_COLORS.WARNING,
+    DANGER: danger || MARKER_COLORS.DANGER,
+    INFO: info || MARKER_COLORS.INFO,
+    PURPLE: purple || MARKER_COLORS.PURPLE,
+  };
+}
 
 /**
  * Create a custom marker element
@@ -53,13 +80,15 @@ export const MARKER_COLORS = {
  * @param {string} options.icon - Optional icon/emoji
  * @returns {HTMLDivElement} Marker element
  */
-export function createMarkerElement({ color = MARKER_COLORS.PRIMARY, size = 32, icon = null }) {
+export function createMarkerElement({ color = null, size = 32, icon = null }) {
   const el = document.createElement('div');
+  const themeColors = (typeof window !== 'undefined') ? getThemeColors() : MARKER_COLORS;
+  const useColor = color || themeColors.PRIMARY;
   el.className = 'custom-marker';
   el.style.width = `${size}px`;
   el.style.height = `${size}px`;
   el.style.borderRadius = '50%';
-  el.style.backgroundColor = color;
+  el.style.backgroundColor = useColor;
   el.style.border = '3px solid white';
   el.style.boxShadow = '0 2px 4px rgba(0,0,0,0.3)';
   el.style.cursor = 'pointer';
@@ -100,13 +129,13 @@ export function createPopupContent({ title, subtitle, description, rating, revie
   return `
     <div style="padding: 12px; max-width: 250px;">
       <h3 style="font-weight: bold; margin-bottom: 4px; font-size: 16px;">${title}</h3>
-      ${subtitle ? `<p style="color: #666; font-size: 14px; margin-bottom: 8px;">${subtitle}</p>` : ''}
-      ${description ? `<p style="color: #444; font-size: 13px; margin-bottom: 8px; line-height: 1.4;">${description}</p>` : ''}
+      ${subtitle ? `<p style="color: var(--color-primary-muted); font-size: 14px; margin-bottom: 8px;">${subtitle}</p>` : ''}
+      ${description ? `<p style="color: var(--color-foreground); font-size: 13px; margin-bottom: 8px; line-height: 1.4;">${description}</p>` : ''}
       ${rating ? `
         <div style="display: flex; align-items: center; gap: 4px;">
-          <span style="color: #F59E0B;">★</span>
+          <span style="color: var(--color-warning);">★</span>
           <span style="font-weight: bold;">${rating}</span>
-          ${reviews ? `<span style="color: #666; font-size: 12px;">(${reviews} reviews)</span>` : ''}
+          ${reviews ? `<span style="color: var(--color-primary-muted); font-size: 12px;">(${reviews} reviews)</span>` : ''}
         </div>
       ` : ''}
     </div>

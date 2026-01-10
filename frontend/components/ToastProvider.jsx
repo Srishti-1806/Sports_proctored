@@ -31,7 +31,7 @@ export default function ToastProvider({ children }) {
 
       <div className="fixed top-6 right-6 z-50 flex flex-col items-end gap-3">
         {toasts.map((t) => (
-          <div key={t.id} className="max-w-sm w-full bg-white border border-gray-200 shadow-lg rounded-xl p-3 text-sm text-gray-800">
+          <div key={t.id} className="max-w-sm w-full bg-[var(--color-card)] border border-[var(--color-border)] shadow-lg rounded-xl p-3 text-sm text-[var(--color-foreground)]">
             {t.message}
           </div>
         ))}

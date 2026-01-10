@@ -18,6 +18,7 @@ import {
   LogOut,
   LogIn
 } from 'lucide-react'
+import ThemeToggle from './ThemeToggle'
 import { useAuth } from '../lib/context/AuthContext'
 
 export default function Navbar() {
@@ -51,22 +52,24 @@ export default function Navbar() {
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 glass backdrop-blur-lg">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 group">
-            <div
-              className="w-10 h-10 rounded-xl bg-linear-to-br from-[#3D52A0] to-[#7091E6] flex items-center justify-center"
-            >
-              <Trophy className="w-5 h-5 text-white" />
-            </div>
-            <span className="font-display font-bold text-xl gradient-text">
-              Sportlin
-            </span>
-          </Link>
+      <div className=" px-2 sm:px-4 lg:px-6">
+        <div className="hidden lg:grid grid-cols-[30%_45%_25%] items-center h-16 relative w-full">
+          <div className="col-start-1 flex items-center">
+            {/* Logo */}
+            <Link href="/" className="flex items-center gap-2 group">
+              <div
+                className="w-10 h-10 rounded-xl bg-linear-to-br from-[var(--color-primary-deep)] to-[var(--color-primary-bright)] flex items-center justify-center"
+              >
+                <Trophy className="w-5 h-5 text-white" />
+              </div>
+              <span className="font-display font-bold text-xl gradient-text">
+                Sportlin
+              </span>
+            </Link>
+          </div>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-1">
+          <div className="col-start-2 flex items-center justify-center gap-1">
+            {/* Desktop Navigation (centered) */}
             {navLinks.map((link) => {
               const isActive = pathname === link.href
               return (
@@ -74,12 +77,12 @@ export default function Navbar() {
                   <motion.div
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className={`group flex items-center gap-2 px-4 py-2 rounded-xl transition-colors duration-300 relative ${isActive ? 'bg-linear-to-r from-[#3D52A0] to-[#7091E6] text-white' : 'text-[#3D52A0]'}`}
+                    className={`group flex items-center gap-0.5 px-3 py-2 rounded-xl transition-colors duration-300 relative ${isActive ? 'bg-linear-to-r from-[var(--color-primary-deep)] to-[var(--color-primary-bright)] text-white' : 'text-[var(--color-primary)]'}`}
                   >
                     <link.icon className="w-4 h-4" />
                     <span className="font-medium text-sm">{link.label}</span>
                     {!isActive && (
-                      <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-linear-to-r from-[#3D52A0] to-[#7091E6] group-hover:w-full transition-all duration-300 ease-out"></span>
+                      <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-linear-to-r from-[var(--color-primary-deep)] to-[var(--color-primary-bright)] group-hover:w-full transition-all duration-300 ease-out"></span>
                     )}
                   </motion.div>
                 </Link>
@@ -87,21 +90,22 @@ export default function Navbar() {
             })}
           </div>
 
-          {/* CTA Button or User Menu */}
-          <div className="hidden md:flex items-center gap-3">
+          <div className="col-start-3 flex items-center justify-end gap-3">
+            {/* CTA Button or User Menu (right) */}
+            <ThemeToggle />
             {user ? (
               <>
                 {(() => {
                   const isProfileActive = pathname === '/profile'
                   return (
                     <Link href="/profile">
-                      <div className={`flex items-center gap-2 px-4 py-2 rounded-xl cursor-pointer transition-colors duration-300 relative ${isProfileActive ? 'bg-linear-to-r from-[#3D52A0] to-[#7091E6] text-white' : 'bg-[#EDE8F5] hover:bg-[#E8E6F8] text-[#3D52A0]'}`} aria-current={isProfileActive ? 'page' : undefined}>
-                        <User className={`w-4 h-4 ${isProfileActive ? 'text-white' : 'text-[#3D52A0]'}`} />
-                        <span className={`font-medium text-sm ${isProfileActive ? '' : 'text-[#3D52A0]'}`}>
+                      <div className={`group flex items-center gap-2 px-4 py-2 rounded-xl cursor-pointer transition-colors duration-300 relative ${isProfileActive ? 'bg-linear-to-r from-[var(--color-primary-deep)] to-[var(--color-primary-bright)] text-white' : 'bg-[var(--color-card)] hover:bg-[var(--color-primary-soft)] dark:hover:bg-[var(--color-popover)] text-[var(--color-foreground)]'}`} aria-current={isProfileActive ? 'page' : undefined}>
+                          <User className={`w-4 h-4 ${isProfileActive ? 'text-white' : 'text-[var(--color-foreground)]'}`} />
+                          <span className={`font-medium text-sm ${isProfileActive ? '' : 'text-[var(--color-foreground)]'}`}>
                           {user.user_metadata?.first_name || user.email}
                         </span>
                         {!isProfileActive && (
-                          <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-linear-to-r from-[#3D52A0] to-[#7091E6] group-hover:w-full transition-all duration-300 ease-out"></span>
+                          <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-linear-to-r from-[var(--color-primary-deep)] to-[var(--color-primary-bright)] group-hover:w-full transition-all duration-300 ease-out"></span>
                         )}
                       </div>
                     </Link>
@@ -112,7 +116,7 @@ export default function Navbar() {
                   whileTap={{ scale: isSigningOut ? 1 : 0.95 }}
                   onClick={handleSignOut}
                   disabled={isSigningOut}
-                  className={`flex items-center gap-2 px-5 py-2.5 rounded-xl bg-linear-to-r from-[#3D52A0] to-[#7091E6] text-white font-semibold text-sm shadow-lg shadow-[#7091E6]/30 transition-shadow duration-300 ${isSigningOut ? 'opacity-80 pointer-events-none' : 'hover:shadow-xl hover:shadow-[#7091E6]/40'}`}
+                  className={`flex items-center gap-2 px-5 py-2.5 rounded-xl bg-linear-to-r from-[var(--color-primary-deep)] to-[var(--color-primary-bright)] text-white font-semibold text-sm shadow-lg transition-shadow duration-300 ${isSigningOut ? 'opacity-80 pointer-events-none' : 'hover:shadow-xl'}`}
                 >
                   {isSigningOut ? (
                     <>
@@ -133,7 +137,7 @@ export default function Navbar() {
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white border-2 border-[#3D52A0] text-[#3D52A0] font-semibold text-sm hover:bg-[#EDE8F5] transition-colors duration-300"
+                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[var(--color-card)] border-2 border-[var(--color-primary)] text-[var(--color-primary)] font-semibold text-sm hover:bg-[var(--color-primary-soft)] transition-colors duration-300"
                   >
                     <LogIn className="w-4 h-4" />
                     Sign In
@@ -143,7 +147,7 @@ export default function Navbar() {
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-linear-to-r from-[#3D52A0] to-[#7091E6] text-white font-semibold text-sm shadow-lg shadow-[#7091E6]/30 hover:shadow-xl hover:shadow-[#7091E6]/40 transition-shadow duration-300"
+                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-linear-to-r from-[var(--color-primary-deep)] to-[var(--color-primary-bright)] text-white font-semibold text-sm shadow-lg hover:shadow-xl transition-shadow duration-300"
                   >
                     <Zap className="w-4 h-4" />
                     Get Started
@@ -153,13 +157,30 @@ export default function Navbar() {
             )}
           </div>
 
-          {/* Mobile Menu Button */}
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2 rounded-xl bg-[#EDE8F5] text-[#3D52A0]"
-          >
-            {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </button>
+        </div>
+
+        {/* Mobile Header: logo left, controls right */}
+        <div className="flex md:hidden items-center justify-between w-full">
+          <Link href="/" className="flex items-center gap-2 group">
+            <div
+              className="w-10 h-10 rounded-xl bg-linear-to-br from-[var(--color-primary-deep)] to-[var(--color-primary-bright)] flex items-center justify-center"
+            >
+              <Trophy className="w-5 h-5 text-white" />
+            </div>
+            <span className="font-display font-bold text-xl gradient-text">
+              Sportlin
+            </span>
+          </Link>
+
+          <div className="flex items-center gap-3">
+            <ThemeToggle />
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="md:hidden p-2 rounded-xl bg-[var(--color-primary-soft)] text-[var(--color-primary)]"
+            >
+              {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+          </div>
         </div>
       </div>
 
@@ -170,9 +191,12 @@ export default function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: '100dvh' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden overflow-hidden bg-white/10 border-t border-[#ADBBDA]/30"
+            className="md:hidden overflow-hidden bg-[var(--color-popover)]/10 border-t border-[var(--color-sidebar-border)]"
           >
             <div className="px-4 py-4 space-y-2">
+              <div className="flex items-center justify-end">
+                <ThemeToggle />
+              </div>
               {navLinks.map((link) => {
                 const isActive = pathname === link.href
                 return (
@@ -180,9 +204,9 @@ export default function Navbar() {
                     <motion.div
                       whileTap={{ scale: 0.98 }}
                       className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${
-                        isActive
-                          ? 'bg-linear-to-r from-[#3D52A0] to-[#7091E6] text-white'
-                          : 'text-[#3D52A0] hover:bg-[#EDE8F5]'
+                          isActive
+                          ? 'bg-linear-to-r from-[var(--color-primary-deep)] to-[var(--color-primary-bright)] text-white'
+                          : 'text-[var(--color-primary)] hover:bg-[var(--color-primary-soft)]'
                       }`}
                     >
                       <link.icon className="w-5 h-5" />
@@ -192,7 +216,7 @@ export default function Navbar() {
                 )
               })}
               {user && (
-                <div className="border-t border-[#ADBBDA]/30 my-3" />
+                <div className="border-t border-[var(--color-sidebar-border)] my-3" />
               )}
               {user ? (
                 <>
@@ -200,10 +224,10 @@ export default function Navbar() {
                     const isProfileActive = pathname === '/profile'
                     return (
                       <Link href="/profile" onClick={() => setIsOpen(false)}>
-                        <div className={`w-full flex items-center gap-3 px-5 py-3 mt-4 rounded-xl ${isProfileActive ? 'bg-linear-to-r from-[#3D52A0] to-[#7091E6] text-white' : 'bg-[#EDE8F5] hover:bg-[#E8E6F8] text-[#3D52A0]'}`} aria-current={isProfileActive ? 'page' : undefined}>
-                          <User className={`w-5 h-5 ${isProfileActive ? 'text-white' : 'text-[#3D52A0]'}`} />
+                        <div className={`w-full group flex items-center gap-3 px-5 py-3 mt-4 rounded-xl ${isProfileActive ? 'bg-linear-to-r from-[var(--color-primary-deep)] to-[var(--color-primary-bright)] text-white' : 'bg-[var(--color-card)] hover:bg-[var(--color-primary-soft)] dark:hover:bg-[var(--color-popover)] text-[var(--color-foreground)]'}`} aria-current={isProfileActive ? 'page' : undefined}>
+                          <User className={`w-5 h-5 ${isProfileActive ? 'text-white' : 'text-[var(--color-foreground)]'}`} />
                           <div className="flex-1 text-left">
-                            <span className={`font-medium ${isProfileActive ? '' : 'text-[#3D52A0]'}`}>
+                            <span className={`font-medium ${isProfileActive ? '' : 'text-[var(--color-foreground)]'}`}>
                               {user.user_metadata?.first_name || user.email}
                             </span>
                           </div>
@@ -215,7 +239,7 @@ export default function Navbar() {
                     whileTap={{ scale: isSigningOut ? 1 : 0.98 }}
                     onClick={handleSignOut}
                     disabled={isSigningOut}
-                    className={`w-full flex items-center justify-center gap-2 px-5 py-3 mt-3 rounded-xl bg-linear-to-r from-[#3D52A0] to-[#7091E6] text-white font-semibold shadow-lg ${isSigningOut ? 'opacity-80 pointer-events-none' : ''}`}
+                    className={`w-full flex items-center justify-center gap-2 px-5 py-3 mt-3 rounded-xl bg-linear-to-r from-[var(--color-primary-deep)] to-[var(--color-primary-bright)] text-white font-semibold shadow-lg ${isSigningOut ? 'opacity-80 pointer-events-none' : ''}`}
                   >
                     {isSigningOut ? (
                       <>
@@ -235,7 +259,7 @@ export default function Navbar() {
                   <Link href="/?redirected=true">
                     <motion.button
                       whileTap={{ scale: 0.98 }}
-                      className="w-full flex items-center justify-center gap-2 px-5 py-3 mt-4 rounded-xl bg-white border-2 border-[#3D52A0] text-[#3D52A0] font-semibold"
+                      className="w-full flex items-center justify-center gap-2 px-5 py-3 mt-4 rounded-xl bg-[var(--color-card)] border-2 border-[var(--color-primary)] text-[var(--color-primary)] font-semibold"
                     >
                       <LogIn className="w-4 h-4" />
                       Sign In
@@ -244,7 +268,7 @@ export default function Navbar() {
                   <Link href="/?signup=true">
                     <motion.button
                       whileTap={{ scale: 0.98 }}
-                      className="w-full flex items-center justify-center gap-2 mt-2 px-5 py-3 rounded-xl bg-linear-to-r from-[#3D52A0] to-[#7091E6] text-white font-semibold shadow-lg"
+                      className="w-full flex items-center justify-center gap-2 mt-2 px-5 py-3 rounded-xl bg-linear-to-r from-[var(--color-primary-deep)] to-[var(--color-primary-bright)] text-white font-semibold shadow-lg"
                     >
                       <Zap className="w-4 h-4" />
                       Get Started

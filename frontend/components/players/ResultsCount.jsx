@@ -6,7 +6,7 @@ export default function ResultsCount({ count }) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ delay: 0.2 }}
-      className="mb-6 text-[#8697C4]"
+      className="mb-6 text-[var(--color-muted-foreground,#8697C4)]"
     >
       Showing {count} player{count !== 1 ? 's' : ''}
     </motion.div>

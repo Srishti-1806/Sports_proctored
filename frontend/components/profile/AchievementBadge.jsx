@@ -10,7 +10,7 @@ export default function AchievementBadge({ data, onDelete }) {
 
   return (
     <>
-      <div className="relative bg-white rounded-xl p-4 shadow-md border border-[#EDE8F5] hover:shadow-lg transition-all group">
+      <div className="relative bg-[var(--color-card)] rounded-xl p-4 shadow-md border border-[var(--color-border)] hover:shadow-lg transition-all group">
         <button 
           onClick={onDelete} 
           className="absolute top-3 right-3 p-1.5 opacity-0 group-hover:opacity-100 hover:bg-red-50 rounded-lg transition-all z-10"
@@ -23,21 +23,21 @@ export default function AchievementBadge({ data, onDelete }) {
           <div className="w-[70%] flex flex-col justify-between">
             <div className="space-y-2.5">
               <div>
-                <p className="text-[10px] font-semibold text-[#8697C4] uppercase tracking-wide mb-0.5">Title</p>
-                <h4 className="font-bold text-base text-[#1a1a2e] pr-6">{data.title}</h4>
+                <p className="text-[10px] font-semibold text-[var(--color-muted-foreground,#8697C4)] uppercase tracking-wide mb-0.5">Title</p>
+                <h4 className="font-bold text-base text-[var(--color-foreground)] pr-6">{data.title}</h4>
               </div>
               
               {data.event && (
                 <div>
-                  <p className="text-[10px] font-semibold text-[#8697C4] uppercase tracking-wide mb-0.5">Event</p>
+                  <p className="text-[10px] font-semibold text-[var(--color-muted-foreground,#8697C4)] uppercase tracking-wide mb-0.5">Event</p>
                   <p className="text-sm font-medium text-amber-600">{data.event}</p>
                 </div>
               )}
               
               {data.year && (
                 <div>
-                  <p className="text-[10px] font-semibold text-[#8697C4] uppercase tracking-wide mb-0.5">Year</p>
-                  <p className="text-sm text-[#1a1a2e]">{data.year}</p>
+                  <p className="text-[10px] font-semibold text-[var(--color-muted-foreground,#8697C4)] uppercase tracking-wide mb-0.5">Year</p>
+                  <p className="text-sm text-[var(--color-foreground)]">{data.year}</p>
                 </div>
               )}
             </div>
@@ -84,7 +84,7 @@ export default function AchievementBadge({ data, onDelete }) {
           <div className="relative max-w-6xl w-full">
             <button 
               onClick={() => setShowImage(false)} 
-              className="absolute -top-12 right-0 p-2 bg-white rounded-lg hover:bg-gray-100 transition-colors"
+              className="absolute -top-12 right-0 p-2 bg-[var(--color-card)] rounded-lg hover:bg-[var(--color-popover)] transition-colors"
             >
               <X className="w-5 h-5" />
             </button>

@@ -294,7 +294,7 @@ export default function ChatPage() {
   }
 
   return (
-    <div className="fixed inset-0 top-16 bg-[#fafbff] flex overflow-hidden">
+    <div className="fixed inset-0 top-16 bg-[var(--color-background)] flex overflow-hidden text-[var(--color-foreground)]">
       {/* Mobile Sidebar Overlay */}
       <AnimatePresence>
         {isSidebarOpen && (
@@ -315,15 +315,15 @@ export default function ChatPage() {
           x: isSidebarOpen ? 0 : '-100%'
         }}
         transition={{ type: 'tween', duration: 0.3 }}
-        className="fixed lg:static inset-y-0 left-0 z-50 flex flex-col w-80 bg-white border-r border-[#EDE8F5] h-full lg:transform-none!">
+        className="fixed lg:static inset-y-0 left-0 z-50 flex flex-col w-80 bg-[var(--color-card)] border-r border-[var(--color-border)] h-full lg:transform-none!">
         {/* Sidebar Header */}
-        <div className="p-4 border-b border-[#EDE8F5] shrink-0">
+        <div className="p-4 border-b border-[var(--color-border)] shrink-0">
           {/* Close button for mobile */}
           <div className="flex items-center justify-between mb-3 lg:hidden">
-            <h3 className="font-bold text-[#1a1a2e]">Chat History</h3>
+            <h3 className="font-bold text-[var(--color-foreground)]">Chat History</h3>
             <button
               onClick={() => setIsSidebarOpen(false)}
-              className="p-2 rounded-xl hover:bg-[#EDE8F5] text-[#3D52A0] transition-colors"
+              className="p-2 rounded-xl hover:bg-[var(--color-popover)] text-[var(--color-primary-deep)] transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
@@ -333,7 +333,7 @@ export default function ChatPage() {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={startNewConversation}
-            className="w-full flex items-center justify-center gap-2 px-4 py-3 mt-5 md:mt-0 rounded-xl bg-linear-to-r from-[#3D52A0] to-[#7091E6] text-white font-semibold shadow-lg"
+            className="w-full flex items-center justify-center gap-2 px-4 py-3 mt-5 md:mt-0 rounded-xl bg-linear-to-r from-[var(--color-primary-deep)] to-[var(--color-primary-bright)] text-white font-semibold shadow-lg"
           >
             <Plus className="w-5 h-5" />
             New Conversation
@@ -342,16 +342,16 @@ export default function ChatPage() {
 
         {/* Conversation History */}
         <div className="flex-1 overflow-y-auto p-4">
-          <h3 className="text-xs font-semibold text-[#8697C4] uppercase tracking-wider mb-3">
+          <h3 className="text-xs font-semibold text-[var(--color-muted-foreground)] uppercase tracking-wider mb-3">
             Recent Chats
           </h3>
           
           {isLoadingConversations ? (
-            <div className="text-center text-[#8697C4] py-8">
+            <div className="text-center text-[var(--color-muted-foreground)] py-8">
               Loading chats...
             </div>
           ) : conversations.length === 0 ? (
-            <div className="text-center text-[#8697C4] py-8 text-sm">
+            <div className="text-center text-[var(--color-muted-foreground)] py-8 text-sm">
               No conversations yet.<br />Start chatting to save your history!
             </div>
           ) : (
@@ -361,17 +361,17 @@ export default function ChatPage() {
                   key={chat.id}
                   whileHover={{ x: 4 }}
                   onClick={() => loadConversation(chat.id)}
-                  className={`p-3 rounded-xl hover:bg-[#EDE8F5] cursor-pointer transition-colors group relative ${
-                    currentConversation?.id === chat.id ? 'bg-[#EDE8F5]' : ''
+                  className={`p-3 rounded-xl hover:bg-[var(--color-card)] cursor-pointer transition-colors group relative ${
+                    currentConversation?.id === chat.id ? 'bg-[var(--color-card)]' : ''
                   }`}
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex-1 min-w-0 pr-2">
-                      <h4 className="font-medium text-[#1a1a2e] truncate">{chat.title}</h4>
-                      <p className="text-sm text-[#8697C4] truncate">{chat.preview}</p>
+                      <h4 className="font-medium text-[var(--color-foreground)] truncate">{chat.title}</h4>
+                      <p className="text-sm text-[var(--color-muted-foreground)] truncate">{chat.preview}</p>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="text-xs text-[#ADBBDA]">{chat.date}</span>
+                      <span className="text-xs text-[var(--color-muted-foreground)]">{chat.date}</span>
                       <button
                         onClick={(e) => deleteConversation(chat.id, e)}
                         className="opacity-0 group-hover:opacity-100 p-1 hover:bg-red-100 rounded transition-all"
@@ -391,32 +391,32 @@ export default function ChatPage() {
       {/* Main Chat Area */}
       <div className="flex-1 flex flex-col h-full overflow-hidden">
         {/* Chat Header - Fixed */}
-        <div className="flex items-center justify-between px-4 sm:px-6 py-4 bg-white border-b border-[#EDE8F5] shrink-0">
+        <div className="flex items-center justify-between px-4 sm:px-6 py-4 bg-[var(--color-card)] border-b border-[var(--color-border)] shrink-0">
           {/* Left group: mobile button + title (keeps title left-aligned on phones) */}
           <div className="flex items-center">
             <button
               onClick={() => setIsSidebarOpen(true)}
-              className="lg:hidden rounded-xl hover:bg-[#EDE8F5] text-[#3D52A0] transition-colors mr-2"
+              className="lg:hidden rounded-xl hover:bg-[var(--color-popover)] text-[var(--color-primary-deep)] transition-colors mr-2"
               aria-label="Open chat history"
             >
               <MoreVertical className="w-6 h-6" />
             </button>
 
             <div className="flex items-center gap-2">
-              <div className="relative">
-                <div className="w-12 h-12 rounded-2xl bg-linear-to-br from-[#3D52A0] to-[#7091E6] flex items-center justify-center">
-                  <Bot className="w-6 h-6 text-white" />
+                <div className="relative">
+                  <div className="w-12 h-12 rounded-2xl bg-linear-to-br from-[var(--color-primary-deep)] to-[var(--color-primary-bright)] flex items-center justify-center">
+                    <Bot className="w-6 h-6 text-white" />
+                  </div>
+                </div>
+                <div className="min-w-0">
+                  <h2 className="font-display font-bold text-[var(--color-foreground)] text-sm sm:text-base truncate">Sportlin AI Coach</h2>
+                  <p className="text-xs sm:text-sm text-green-500 flex items-center gap-1">
+                    <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                    <span className="hidden sm:inline">Online & Ready to Help</span>
+                    <span className="sm:hidden">Online</span>
+                  </p>
                 </div>
               </div>
-              <div className="min-w-0">
-                <h2 className="font-display font-bold text-[#1a1a2e] text-sm sm:text-base truncate">Sportlin AI Coach</h2>
-                <p className="text-xs sm:text-sm text-green-500 flex items-center gap-1">
-                  <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                  <span className="hidden sm:inline">Online & Ready to Help</span>
-                  <span className="sm:hidden">Online</span>
-                </p>
-              </div>
-            </div>
           </div>
 
           {/* Right-side placeholder (desktop controls) */}
@@ -434,11 +434,11 @@ export default function ChatPage() {
               animate={{ opacity: 1, y: 0 }}
               className="max-w-3xl mx-auto"
             >
-              <div className="text-center mb-6 sm:mb-8 px-4">
-                <h1 className="font-display text-xl sm:text-2xl font-bold text-[#1a1a2e] mb-2">
-                  Your AI Sports Coach
+                <div className="text-center mb-6 sm:mb-8 px-4">
+                <h1 className="font-display text-xl sm:text-2xl font-bold text-[var(--color-foreground)] mb-2">
+                  {user?.user_metadata?.first_name ? `Hey, ${user.user_metadata.first_name} — ready to train? I’m here to help you improve.` : 'Hey — ready to train? I’m here to help you improve.'}
                 </h1>
-                <p className="text-sm sm:text-base text-[#8697C4]">
+                <p className="text-sm sm:text-base text-[var(--color-muted-foreground)]">
                   Get personalized training advice, nutrition tips, and performance insights
                 </p>
               </div>
@@ -453,19 +453,19 @@ export default function ChatPage() {
                     whileHover={{ scale: 1.05, y: -5 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={() => handleQuickAction(action.prompt)}
-                    className="p-3 sm:p-5 rounded-2xl bg-white border border-[#EDE8F5] hover:border-[#7091E6] hover:shadow-lg transition-all group"
+                    className="p-3 sm:p-5 rounded-2xl bg-[var(--color-card)] border border-[var(--color-border)] hover:border-[var(--color-primary-bright)] hover:shadow-lg transition-all group"
                   >
-                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-linear-to-br from-[#EDE8F5] to-[#ADBBDA] group-hover:from-[#3D52A0] group-hover:to-[#7091E6] flex items-center justify-center mb-2 sm:mb-3 transition-all">
-                      <action.icon className="w-5 h-5 sm:w-6 sm:h-6 text-[#3D52A0] group-hover:text-white transition-colors" />
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-linear-to-br from-[var(--color-popover)] to-[var(--color-border)] group-hover:from-[var(--color-primary-deep)] group-hover:to-[var(--color-primary-bright)] flex items-center justify-center mb-2 sm:mb-3 transition-all">
+                      <action.icon className="w-5 h-5 sm:w-6 sm:h-6 text-[var(--color-primary-deep)] group-hover:text-white transition-colors" />
                     </div>
-                    <span className="font-medium text-[#1a1a2e] text-xs sm:text-sm">{action.label}</span>
+                    <span className="font-medium text-[var(--color-foreground)] text-xs sm:text-sm">{action.label}</span>
                   </motion.button>
                 ))}
               </div>
 
-              <div className="p-4 sm:p-5 rounded-2xl bg-[#EDE8F5]/50 mx-2 sm:mx-0">
-                <h3 className="font-medium text-[#1a1a2e] mb-3 flex items-center gap-2 text-sm sm:text-base">
-                  <Lightbulb className="w-4 h-4 text-[#7091E6]" />
+              <div className="p-4 sm:p-5 rounded-2xl bg-[var(--color-card)] border border-[var(--color-border)] mx-2 sm:mx-0">
+                <h3 className="font-medium text-[var(--color-foreground)] mb-3 flex items-center gap-2 text-sm sm:text-base">
+                  <Lightbulb className="w-4 h-4 text-[var(--color-primary-bright)]" />
                   Try asking...
                 </h3>
                 <div className="flex flex-wrap gap-2">
@@ -473,7 +473,7 @@ export default function ChatPage() {
                     <button
                       key={index}
                       onClick={() => handleQuickAction(prompt)}
-                      className="px-3 sm:px-4 py-2 rounded-xl bg-white text-xs sm:text-sm text-[#3D52A0] hover:bg-[#7091E6] hover:text-white transition-colors"
+                      className="px-3 sm:px-4 py-2 rounded-xl bg-[var(--color-card)] text-xs sm:text-sm text-[var(--color-primary-deep)] hover:bg-linear-to-r hover:from-[var(--color-primary-deep)] hover:to-[var(--color-primary-bright)] hover:text-white transition-colors"
                     >
                       {prompt}
                     </button>
@@ -495,11 +495,11 @@ export default function ChatPage() {
                 {/* Avatar */}
                 <div className={`shrink-0 ${message.role === 'user' ? '' : ''}`}>
                   {message.role === 'assistant' ? (
-                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-linear-to-br from-[#3D52A0] to-[#7091E6] flex items-center justify-center">
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-linear-to-br from-[var(--color-primary-deep)] to-[var(--color-primary-bright)] flex items-center justify-center">
                       <Bot className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                     </div>
                   ) : (
-                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-linear-to-br from-[#8697C4] to-[#ADBBDA] flex items-center justify-center text-white font-bold">
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-linear-to-br from-[var(--color-primary-soft)] to-[var(--color-primary-light)] flex items-center justify-center text-white font-bold">
                       <User className="w-4 h-4 sm:w-5 sm:h-5" />
                     </div>
                   )}
@@ -510,8 +510,8 @@ export default function ChatPage() {
                   <div
                     className={`inline-block max-w-[90%] sm:max-w-[85%] p-3 sm:p-4 rounded-2xl text-sm sm:text-base ${
                       message.role === 'assistant'
-                        ? 'bg-white border border-[#EDE8F5] text-[#1a1a2e] rounded-tl-none'
-                        : 'bg-linear-to-r from-[#3D52A0] to-[#7091E6] text-white rounded-tr-none'
+                        ? 'bg-[var(--color-card)] border border-[var(--color-border)] text-[var(--color-foreground)] rounded-tl-none'
+                        : 'bg-linear-to-r from-[var(--color-primary-deep)] to-[var(--color-primary-bright)] text-white rounded-tr-none'
                     }`}
                   >
                     {message.role === 'assistant' ? (
@@ -523,14 +523,14 @@ export default function ChatPage() {
                   
                   {/* Message Actions */}
                   <div className={`flex items-center gap-2 mt-2 ${message.role === 'user' ? 'justify-end' : ''}`}>
-                    <span className="text-xs text-[#ADBBDA]">{formatTime(message.timestamp)}</span>
+                    <span className="text-xs text-[var(--color-muted-foreground)]">{formatTime(message.timestamp)}</span>
                     {message.role === 'assistant' && (
                       <button
-                        type="button"
-                        onClick={(e) => { e.stopPropagation(); handleCopy(message.content) }}
-                        className="p-1 rounded hover:bg-[#EDE8F5] text-[#ADBBDA] hover:text-[#3D52A0] transition-colors"
-                        title="Copy response"
-                      >
+                          type="button"
+                          onClick={(e) => { e.stopPropagation(); handleCopy(message.content) }}
+                          className="p-1 rounded hover:bg-[var(--color-card)] text-[var(--color-muted-foreground)] hover:text-[var(--color-primary-bright)] transition-colors"
+                          title="Copy response"
+                        >
                         <Copy className="w-4 h-4" />
                       </button>
                     )}
@@ -546,26 +546,26 @@ export default function ChatPage() {
                 animate={{ opacity: 1, y: 0 }}
                 className="flex gap-2 sm:gap-4"
               >
-                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-linear-to-br from-[#3D52A0] to-[#7091E6] flex items-center justify-center">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-linear-to-br from-[var(--color-primary-deep)] to-[var(--color-primary-bright)] flex items-center justify-center">
                   <Bot className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                   <Bot className="w-5 h-5 text-white" />
                 </div>
-                <div className="inline-block p-4 rounded-2xl rounded-tl-none bg-white border border-[#EDE8F5]">
+                <div className="inline-block p-4 rounded-2xl rounded-tl-none bg-[var(--color-card)] border border-[var(--color-border)]">
                   <div className="flex items-center gap-1">
                     <motion.div
                       animate={{ scale: [1, 1.2, 1] }}
                       transition={{ duration: 0.6, repeat: Infinity, delay: 0 }}
-                      className="w-2 h-2 rounded-full bg-[#7091E6]"
+                      className="w-2 h-2 rounded-full bg-[var(--color-primary-bright)]"
                     />
                     <motion.div
                       animate={{ scale: [1, 1.2, 1] }}
                       transition={{ duration: 0.6, repeat: Infinity, delay: 0.2 }}
-                      className="w-2 h-2 rounded-full bg-[#7091E6]"
+                      className="w-2 h-2 rounded-full bg-[var(--color-primary-bright)]"
                     />
                     <motion.div
                       animate={{ scale: [1, 1.2, 1] }}
                       transition={{ duration: 0.6, repeat: Infinity, delay: 0.4 }}
-                      className="w-2 h-2 rounded-full bg-[#7091E6]"
+                      className="w-2 h-2 rounded-full bg-[var(--color-primary-bright)]"
                     />
                   </div>
                 </div>
@@ -577,7 +577,7 @@ export default function ChatPage() {
         </div>
 
         {/* Input Area - Fixed */}
-        <div className="px-3 sm:px-4 py-3 sm:py-4 bg-white border-t border-[#EDE8F5] shrink-0">
+        <div className="px-3 sm:px-4 py-3 sm:py-4 bg-[var(--color-card)] border-t border-[var(--color-border)] shrink-0">
           <div className="max-w-3xl mx-auto">
             <form
               onSubmit={(e) => {
@@ -586,14 +586,14 @@ export default function ChatPage() {
               }}
               className="relative"
             >
-              <div className="flex items-center gap-2 sm:gap-3 p-2 rounded-2xl bg-[#EDE8F5]/50 border border-[#EDE8F5] focus-within:border-[#7091E6] focus-within:ring-2 focus-within:ring-[#7091E6]/20 transition-all">                
+              <div className="flex items-center gap-2 sm:gap-3 p-2 rounded-2xl bg-[var(--color-card)]/50 border border-[var(--color-border)] focus-within:border-[var(--color-primary-bright)] focus-within:ring-2 focus-within:ring-[var(--color-primary-bright)]/20 transition-all">                
                 <input
                   ref={inputRef}
                   type="text"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   placeholder="Ask about sports, training..."
-                  className="flex-1 bg-transparent outline-none text-[#1a1a2e] placeholder-[#8697C4] text-sm sm:text-base px-2"
+                  className="flex-1 bg-transparent outline-none text-[var(--color-foreground)] placeholder-[var(--color-muted-foreground)] text-sm sm:text-base px-2"
                 />
 
                 <motion.button
@@ -603,8 +603,8 @@ export default function ChatPage() {
                   whileTap={{ scale: 0.95 }}
                   className={`p-2 sm:p-3 rounded-xl transition-all ${
                     input.trim()
-                      ? 'bg-linear-to-r from-[#3D52A0] to-[#7091E6] text-white shadow-lg'
-                      : 'bg-[#ADBBDA]/30 text-[#ADBBDA]'
+                      ? 'bg-linear-to-r from-[var(--color-primary-deep)] to-[var(--color-primary-bright)] text-white shadow-lg'
+                      : 'bg-[var(--color-border)]/30 text-[var(--color-border)]'
                   }`}
                 >
                   <Send className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -612,7 +612,7 @@ export default function ChatPage() {
               </div>
             </form>
 
-            <p className="text-center text-xs text-[#ADBBDA] mt-2 sm:mt-3 px-2">
+            <p className="text-center text-xs text-[var(--color-muted-foreground)] mt-2 sm:mt-3 px-2">
               AI can make mistakes. Consider checking important information.
             </p>
           </div>

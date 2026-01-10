@@ -7,8 +7,8 @@ export default function TabsNavigation({ tabs, activeTab, setActiveTab }) {
           onClick={() => setActiveTab(tab.id)}
           className={`flex items-center gap-2 px-5 py-3 rounded-xl font-medium whitespace-nowrap transition-all ${
             activeTab === tab.id
-              ? 'bg-linear-to-r from-[#3D52A0] to-[#7091E6] text-white shadow-lg'
-              : 'bg-white text-[#8697C4] hover:text-[#3D52A0] hover:bg-[#EDE8F5]'
+              ? 'bg-linear-to-r from-[var(--color-primary-deep)] to-[var(--color-primary-bright)] text-white shadow-lg'
+              : 'bg-[var(--color-card)] text-[var(--color-muted,#8697C4)] hover:text-[var(--color-primary-deep)] hover:bg-[var(--color-popover)]'
           }`}
         >
           <tab.icon className="w-4 h-4" />

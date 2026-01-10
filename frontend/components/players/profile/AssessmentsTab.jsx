@@ -8,9 +8,9 @@ export default function AssessmentsTab({ assessmentScores }) {
       animate={{ opacity: 1, y: 0 }}
       className="space-y-6"
     >
-      <div className="p-6 rounded-2xl bg-white border border-[#EDE8F5]">
-        <h2 className="font-display text-xl font-bold text-[#1a1a2e] mb-6 flex items-center gap-2">
-          <Gauge className="w-5 h-5 text-[#7091E6]" />
+      <div className="p-6 rounded-2xl bg-[var(--color-card)] border border-[var(--color-border)]">
+        <h2 className="font-display text-xl font-bold text-[var(--color-foreground)] mb-6 flex items-center gap-2">
+          <Gauge className="w-5 h-5 text-[var(--color-primary)]" />
           Detailed Score Breakdown
         </h2>
         <div className="space-y-5">
@@ -21,11 +21,11 @@ export default function AssessmentsTab({ assessmentScores }) {
                   <div className={`w-8 h-8 rounded-lg bg-linear-to-br ${item.color} flex items-center justify-center`}>
                     <item.icon className="w-4 h-4 text-white" />
                   </div>
-                  <span className="font-medium text-[#1a1a2e]">{item.name}</span>
+                  <span className="font-medium text-[var(--color-foreground)]">{item.name}</span>
                 </div>
-                <span className="font-bold text-[#1a1a2e]">{item.score}/100</span>
+                <span className="font-bold text-[var(--color-foreground)]">{item.score}/100</span>
               </div>
-              <div className="h-3 rounded-full bg-[#EDE8F5] overflow-hidden">
+              <div className="h-3 rounded-full bg-[var(--color-popover)] overflow-hidden">
                 <motion.div
                   initial={{ width: 0 }}
                   animate={{ width: `${item.score}%` }}
@@ -39,9 +39,9 @@ export default function AssessmentsTab({ assessmentScores }) {
       </div>
 
       {/* Assessment History */}
-      <div className="p-6 rounded-2xl bg-white border border-[#EDE8F5]">
-        <h2 className="font-display text-xl font-bold text-[#1a1a2e] mb-4 flex items-center gap-2">
-          <Calendar className="w-5 h-5 text-[#7091E6]" />
+      <div className="p-6 rounded-2xl bg-[var(--color-card)] border border-[var(--color-border)]">
+        <h2 className="font-display text-xl font-bold text-[var(--color-foreground)] mb-4 flex items-center gap-2">
+          <Calendar className="w-5 h-5 text-[var(--color-primary)]" />
           Assessment History
         </h2>
         <div className="space-y-4">
@@ -51,18 +51,18 @@ export default function AssessmentsTab({ assessmentScores }) {
             { date: 'Oct 15, 2024', score: (assessmentScores.overall - 7).toFixed(1), change: '+2.8%' },
             { date: 'Sep 15, 2024', score: (assessmentScores.overall - 10).toFixed(1), change: '+4.0%' }
           ].map((item, index) => (
-            <div key={index} className="flex items-center justify-between p-4 rounded-xl bg-[#EDE8F5]/50 hover:bg-[#EDE8F5] transition-colors">
+            <div key={index} className="flex items-center justify-between p-4 rounded-xl bg-[var(--color-popover)]/50 hover:bg-[var(--color-popover)] transition-colors">
               <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center">
-                  <Gauge className="w-5 h-5 text-[#7091E6]" />
+                <div className="w-10 h-10 rounded-xl bg-[var(--color-card)] flex items-center justify-center">
+                  <Gauge className="w-5 h-5 text-[var(--color-primary)]" />
                 </div>
                 <div>
-                  <p className="font-medium text-[#1a1a2e]">{item.date}</p>
-                  <p className="text-sm text-[#8697C4]">Completed Assessment</p>
+                  <p className="font-medium text-[var(--color-foreground)]">{item.date}</p>
+                  <p className="text-sm text-[var(--color-muted,#8697C4)]">Completed Assessment</p>
                 </div>
               </div>
               <div className="text-right">
-                <p className="font-bold text-[#1a1a2e]">{item.score}</p>
+                <p className="font-bold text-[var(--color-foreground)]">{item.score}</p>
                 <p className="text-sm text-green-500">{item.change}</p>
               </div>
             </div>

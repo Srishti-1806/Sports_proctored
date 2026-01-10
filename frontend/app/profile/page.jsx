@@ -283,11 +283,11 @@ export default function ProfilePage() {
   }
 
   if (!user) return (
-    <div className="max-w-7xl mx-auto p-8 text-center text-[#8697C4]">Please sign in to view your profile.</div>
+    <div className="max-w-7xl mx-auto p-8 text-center text-[var(--color-primary-muted)]">Please sign in to view your profile.</div>
   )
 
   if (loading) return (
-    <div className="max-w-7xl mx-auto p-8 text-center text-[#8697C4]">Loading profile...</div>
+    <div className="max-w-7xl mx-auto p-8 text-center text-[var(--color-primary-muted)]">Loading profile...</div>
   )
 
   const isPlayer = user.user_metadata?.role === 'player'
@@ -296,7 +296,7 @@ export default function ProfilePage() {
     <div className="max-w-7xl mx-auto p-4 md:p-8 space-y-6">
       {/* Hero Section with Cover & Stats */}
       <div className="relative">
-        <div className="h-48 md:h-64 rounded-3xl bg-linear-to-br from-[#3D52A0] via-[#5B7CC9] to-[#7091E6] relative overflow-hidden">
+        <div className="h-48 md:h-64 rounded-3xl bg-linear-to-br from-[var(--color-primary-deep)] via-[var(--color-primary-deep)] to-[var(--color-primary-bright)] relative overflow-hidden">
           {profile?.coverPhoto && (
             <img src={profile.coverPhoto} alt="Cover" className="absolute inset-0 w-full h-full object-cover" />
           )}
@@ -326,10 +326,10 @@ export default function ProfilePage() {
 
         {/* Profile Info Card */}
         <div className="mt-10">
-          <div className="bg-white rounded-3xl shadow-xl border border-[#EDE8F5] p-6">
+          <div className="bg-[var(--color-card)] rounded-3xl shadow-xl border border-[var(--color-border)] p-6">
             <div className="flex flex-col md:flex-row gap-6 items-start">
               <div className="relative">
-                <div className="w-32 h-32 rounded-2xl bg-linear-to-br from-[#3D52A0] to-[#7091E6] flex items-center justify-center shadow-lg overflow-hidden">
+                <div className="w-32 h-32 rounded-2xl bg-linear-to-br from-[var(--color-primary-deep)] to-[var(--color-primary-bright)] flex items-center justify-center shadow-lg overflow-hidden">
                   {profile?.profilePicture ? (
                     <img src={profile.profilePicture} alt="Profile" className="w-full h-full object-cover" />
                   ) : (
@@ -337,11 +337,11 @@ export default function ProfilePage() {
                   )}
                 </div>
                 <input type="file" accept="image/*" onChange={handleProfilePictureUpload} className="hidden" id="profile-upload" disabled={uploadingProfile} />
-                <label htmlFor="profile-upload" className="absolute -bottom-2 -right-2 p-2 rounded-xl bg-white shadow-lg border-2 border-white cursor-pointer hover:bg-gray-50 transition-colors">
+                <label htmlFor="profile-upload" className="absolute -bottom-2 -right-2 p-2 rounded-xl bg-[var(--color-card)] shadow-lg border-2 border-[var(--color-border)] cursor-pointer hover:bg-[var(--color-primary-soft)] transition-colors">
                   {uploadingProfile ? (
-                    <div className="w-4 h-4 border-2 border-[#3D52A0] border-t-transparent rounded-full animate-spin" />
+                    <div className="w-4 h-4 border-2 border-[var(--color-primary-deep)] border-t-transparent rounded-full animate-spin" />
                   ) : (
-                    <Camera className="w-4 h-4 text-[#3D52A0]" />
+                    <Camera className="w-4 h-4 text-[var(--color-primary)]" />
                   )}
                 </label>
               </div>
@@ -349,28 +349,28 @@ export default function ProfilePage() {
               <div className="flex-1">
                 <div className="flex items-start justify-between">
                   <div>
-                    <h1 className="font-display text-3xl md:text-4xl font-bold text-[#1a1a2e] mb-2">
+                    <h1 className="font-display text-3xl md:text-4xl font-bold text-[var(--color-foreground)] mb-2">
                       {user.user_metadata?.first_name || 'Unknown'} {user.user_metadata?.last_name || ''}
                     </h1>
-                    <p className="text-xl text-[#7091E6] font-semibold mb-3">{profile?.position || 'Add your position'}</p>
+                    <p className="text-xl text-[var(--color-primary-bright)] font-semibold mb-3">{profile?.position || 'Add your position'}</p>
                     <div className="flex flex-wrap items-center gap-3">
                       {profile?.location && (
-                        <div className="flex items-center gap-1 text-sm text-[#8697C4]">
+                        <div className="flex items-center gap-1 text-sm text-[var(--color-primary-muted)]">
                           <MapPin className="w-4 h-4" />
                           {profile.location}
                         </div>
                       )}
-                      <div className="px-3 py-1 rounded-full bg-linear-to-r from-[#3D52A0] to-[#7091E6] text-white text-xs font-bold uppercase tracking-wide">
+                      <div className="px-3 py-1 rounded-full bg-linear-to-r from-[var(--color-primary-deep)] to-[var(--color-primary-bright)] text-white text-xs font-bold uppercase tracking-wide">
                         {user.user_metadata?.role || 'player'}
                       </div>
-                      <div className="flex items-center gap-1 text-sm text-[#8697C4]">
+                      <div className="flex items-center gap-1 text-sm text-[var(--color-primary-muted)]">
                         <Mail className="w-4 h-4" />
                         {user.email}
                       </div>
                     </div>
                   </div>
-                  <button onClick={() => openEdit('header', { position: profile?.position, location: profile?.location })} className="p-3 rounded-xl hover:bg-[#EDE8F5] transition-colors">
-                    <Pencil className="w-5 h-5 text-[#8697C4]" />
+                  <button onClick={() => openEdit('header', { position: profile?.position, location: profile?.location })} className="p-3 rounded-xl hover:bg-[var(--color-primary-soft)] transition-colors">
+                    <Pencil className="w-5 h-5 text-[var(--color-primary-muted)]" />
                   </button>
                 </div>
 

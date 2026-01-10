@@ -26,13 +26,13 @@ export default function EventDetailModal({ event, onClose }) {
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.9, opacity: 0 }}
           onClick={(e) => e.stopPropagation()}
-          className="relative w-full max-w-2xl bg-white rounded-2xl sm:rounded-3xl shadow-2xl max-h-[90vh] overflow-hidden flex flex-col"
+          className="relative w-full max-w-2xl bg-[var(--color-card)] rounded-2xl sm:rounded-3xl shadow-2xl max-h-[90vh] overflow-hidden flex flex-col"
         >
           {/* Header */}
-          <div className="shrink-0 p-4 sm:p-6 bg-linear-to-r from-[#3D52A0] to-[#7091E6] rounded-t-2xl sm:rounded-t-3xl">
+          <div className="shrink-0 p-4 sm:p-6 bg-linear-to-r from-[var(--color-primary-deep)] to-[var(--color-primary-bright)] rounded-t-2xl sm:rounded-t-3xl">
             <button
               onClick={onClose}
-              className="absolute top-3 right-3 sm:top-4 sm:right-4 p-1.5 sm:p-2 rounded-xl bg-white/10 hover:bg-white/20 transition-colors text-white z-10"
+              className="absolute top-3 right-3 sm:top-4 sm:right-4 p-1.5 sm:p-2 rounded-xl bg-[var(--color-popover)]/10 hover:bg-[var(--color-popover)]/20 transition-colors text-[var(--color-popover-foreground)] z-10"
             >
               <X className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
@@ -40,7 +40,7 @@ export default function EventDetailModal({ event, onClose }) {
               <span className={`px-2.5 sm:px-3 py-1 rounded-full ${sportColor} text-white text-xs sm:text-sm font-medium`}>
                 {event.sport || 'Sport'}
               </span>
-              <span className="px-2.5 sm:px-3 py-1 rounded-full bg-white/20 text-white text-xs sm:text-sm font-medium">
+              <span className="px-2.5 sm:px-3 py-1 rounded-full bg-[var(--color-popover)]/20 text-white text-xs sm:text-sm font-medium">
                 {event.type}
               </span>
             </div>
@@ -49,42 +49,42 @@ export default function EventDetailModal({ event, onClose }) {
           </div>
 
           {/* Content */}
-          <div className="p-4 sm:p-6 space-y-4 sm:space-y-6 overflow-y-auto scrollbar-thin scrollbar-thumb-[#ADBBDA] scrollbar-track-transparent hover:scrollbar-thumb-[#7091E6] scrollbar-thumb-rounded-full">
+          <div className="p-4 sm:p-6 space-y-4 sm:space-y-6 overflow-y-auto scrollbar-thin scrollbar-thumb-[var(--color-primary-light)] scrollbar-track-transparent hover:scrollbar-thumb-[var(--color-primary-bright)] scrollbar-thumb-rounded-full">
             {/* Quick Info */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-              <div className="p-3 sm:p-4 rounded-xl bg-[#EDE8F5]">
-                <div className="flex items-center gap-2 text-[#3D52A0] mb-1">
+              <div className="p-3 sm:p-4 rounded-xl bg-[var(--color-primary-soft)]">
+                <div className="flex items-center gap-2 text-[var(--color-primary)] mb-1">
                   <CalendarDays className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                   <span className="text-xs sm:text-sm font-medium">Date</span>
                 </div>
-                <p className="font-semibold text-[#1a1a2e] text-sm sm:text-base">{event.date}</p>
+                <p className="font-semibold text-[var(--color-foreground)] text-sm sm:text-base">{event.date}</p>
               </div>
-              <div className="p-3 sm:p-4 rounded-xl bg-[#EDE8F5]">
-                <div className="flex items-center gap-2 text-[#3D52A0] mb-1">
+              <div className="p-3 sm:p-4 rounded-xl bg-[var(--color-primary-soft)]">
+                <div className="flex items-center gap-2 text-[var(--color-primary)] mb-1">
                   <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                   <span className="text-xs sm:text-sm font-medium">Time</span>
                 </div>
-                <p className="font-semibold text-[#1a1a2e] text-sm sm:text-base">{event.time}</p>
+                <p className="font-semibold text-[var(--color-foreground)] text-sm sm:text-base">{event.time}</p>
               </div>
-              <div className="p-3 sm:p-4 rounded-xl bg-[#EDE8F5] sm:col-span-2">
-                <div className="flex items-center gap-2 text-[#3D52A0] mb-1">
+              <div className="p-3 sm:p-4 rounded-xl bg-[var(--color-primary-soft)] sm:col-span-2">
+                <div className="flex items-center gap-2 text-[var(--color-primary)] mb-1">
                   <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                   <span className="text-xs sm:text-sm font-medium">Location</span>
                 </div>
-                <p className="font-semibold text-[#1a1a2e] text-sm sm:text-base">{event.location}</p>
-                <p className="text-xs sm:text-sm text-[#8697C4]">{event.address}</p>
+                <p className="font-semibold text-[var(--color-foreground)] text-sm sm:text-base">{event.location}</p>
+                <p className="text-xs sm:text-sm text-[var(--color-primary-muted)]">{event.address}</p>
               </div>
-              <div className="p-3 sm:p-4 rounded-xl bg-[#EDE8F5] sm:col-span-2">
-                <div className="flex items-center gap-2 text-[#3D52A0] mb-1">
+              <div className="p-3 sm:p-4 rounded-xl bg-[var(--color-primary-soft)] sm:col-span-2">
+                <div className="flex items-center gap-2 text-[var(--color-primary)] mb-1">
                   <Users className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                   <span className="text-xs sm:text-sm font-medium">Participants</span>
                 </div>
-                <p className="font-semibold text-[#1a1a2e] text-sm sm:text-base">
+                <p className="font-semibold text-[var(--color-foreground)] text-sm sm:text-base">
                   {participants}/{maxParticipants}
                 </p>
-                <div className="mt-2 h-2 rounded-full bg-[#ADBBDA] overflow-hidden">
+                <div className="mt-2 h-2 rounded-full bg-[var(--color-primary-light)] overflow-hidden">
                   <div
-                    className="h-full rounded-full bg-linear-to-r from-[#3D52A0] to-[#7091E6]"
+                    className="h-full rounded-full bg-linear-to-r from-[var(--color-primary-deep)] to-[var(--color-primary-bright)]"
                     style={{ width: `${Math.min(100, Math.max(0, (participants / maxParticipants) * 100))}%` }}
                   />
                 </div>
@@ -93,14 +93,14 @@ export default function EventDetailModal({ event, onClose }) {
 
             {/* Description */}
             <div>
-              <h3 className="font-display font-bold text-[#1a1a2e] mb-2 text-sm sm:text-base">About This Event</h3>
-              <p className="text-[#8697C4] leading-relaxed text-xs sm:text-sm">{event.description}</p>
+              <h3 className="font-display font-bold text-[var(--color-foreground)] mb-2 text-sm sm:text-base">About This Event</h3>
+              <p className="text-[var(--color-primary-muted)] leading-relaxed text-xs sm:text-sm">{event.description}</p>
             </div>
 
             {/* Prizes */}
             <div>
-              <h3 className="font-display font-bold text-[#1a1a2e] mb-2 sm:mb-3 flex items-center gap-2 text-sm sm:text-base">
-                <Trophy className="w-4 h-4 sm:w-5 sm:h-5 text-[#7091E6]" />
+              <h3 className="font-display font-bold text-[var(--color-foreground)] mb-2 sm:mb-3 flex items-center gap-2 text-sm sm:text-base">
+                <Trophy className="w-4 h-4 sm:w-5 sm:h-5 text-[var(--color-primary-bright)]" />
                 Prizes & Rewards
               </h3>
               <div className="flex flex-wrap gap-2">
@@ -118,15 +118,15 @@ export default function EventDetailModal({ event, onClose }) {
 
             {/* Requirements */}
             <div>
-              <h3 className="font-display font-bold text-[#1a1a2e] mb-2 sm:mb-3 flex items-center gap-2 text-sm sm:text-base">
-                <Target className="w-4 h-4 sm:w-5 sm:h-5 text-[#7091E6]" />
+              <h3 className="font-display font-bold text-[var(--color-foreground)] mb-2 sm:mb-3 flex items-center gap-2 text-sm sm:text-base">
+                <Target className="w-4 h-4 sm:w-5 sm:h-5 text-[var(--color-primary-bright)]" />
                 Requirements
               </h3>
               <div className="flex flex-wrap gap-2">
                 {requirements.map((req, index) => (
                   <span 
                     key={index}
-                    className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl bg-[#EDE8F5] text-[#3D52A0] font-medium text-xs sm:text-sm whitespace-nowrap"
+                    className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl bg-[var(--color-primary-soft)] text-[var(--color-primary)] font-medium text-xs sm:text-sm whitespace-nowrap"
                   >
                     {req}
                   </span>
@@ -135,10 +135,10 @@ export default function EventDetailModal({ event, onClose }) {
             </div>
 
             {/* Fee */}
-            <div className="p-3 sm:p-4 rounded-xl bg-linear-to-r from-[#EDE8F5] to-[#ADBBDA]/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <div className="p-3 sm:p-4 rounded-xl bg-linear-to-r from-[var(--color-primary-soft)] to-[var(--color-primary-light)]/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
               <div>
-                <span className="text-[#8697C4] text-xs sm:text-sm">Registration Fee</span>
-                <p className="font-display text-xl sm:text-2xl font-bold text-[#3D52A0]">{event.fee}</p>
+                <span className="text-[var(--color-primary-muted)] text-xs sm:text-sm">Registration Fee</span>
+                <p className="font-display text-xl sm:text-2xl font-bold text-[var(--color-primary)]">{event.fee}</p>
               </div>
               {event.isRegistered ? (
                 <span className="flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-3 rounded-xl bg-green-500 text-white font-semibold text-sm sm:text-base whitespace-nowrap">
@@ -148,7 +148,7 @@ export default function EventDetailModal({ event, onClose }) {
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 rounded-xl bg-linear-to-r from-[#3D52A0] to-[#7091E6] text-white font-semibold shadow-lg text-sm sm:text-base whitespace-nowrap"
+                  className="flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 rounded-xl bg-linear-to-r from-[var(--color-primary-deep)] to-[var(--color-primary-bright)] text-white font-semibold shadow-lg text-sm sm:text-base whitespace-nowrap"
                 >
                   Register Now <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 </motion.button>
@@ -157,15 +157,15 @@ export default function EventDetailModal({ event, onClose }) {
 
             {/* Actions */}
             <div className="grid grid-cols-3 gap-2 sm:gap-3">
-              <button className="flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 sm:py-3 rounded-xl border border-[#ADBBDA] text-[#3D52A0] font-medium hover:bg-[#EDE8F5] transition-colors text-xs sm:text-sm">
-                <Bookmark className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${event.isSaved ? 'fill-[#3D52A0]' : ''}`} />
+              <button className="flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 sm:py-3 rounded-xl border border-[var(--color-border)] text-[var(--color-primary)] font-medium hover:bg-[var(--color-primary-soft)] transition-colors text-xs sm:text-sm">
+                <Bookmark className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${event.isSaved ? 'fill-[var(--color-primary)]' : ''}`} />
                 <span className="hidden sm:inline">{event.isSaved ? 'Saved' : 'Save'}</span>
               </button>
-              <button className="flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 sm:py-3 rounded-xl border border-[#ADBBDA] text-[#3D52A0] font-medium hover:bg-[#EDE8F5] transition-colors text-xs sm:text-sm">
+              <button className="flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 sm:py-3 rounded-xl border border-[var(--color-border)] text-[var(--color-primary)] font-medium hover:bg-[var(--color-primary-soft)] transition-colors text-xs sm:text-sm">
                 <Share2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 <span className="hidden sm:inline">Share</span>
               </button>
-              <button className="flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 sm:py-3 rounded-xl border border-[#ADBBDA] text-[#3D52A0] font-medium hover:bg-[#EDE8F5] transition-colors text-xs sm:text-sm">
+              <button className="flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 sm:py-3 rounded-xl border border-[var(--color-border)] text-[var(--color-primary)] font-medium hover:bg-[var(--color-primary-soft)] transition-colors text-xs sm:text-sm">
                 <ExternalLink className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 <span className="hidden sm:inline">Website</span>
               </button>

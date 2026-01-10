@@ -15,12 +15,12 @@ export default function PerformanceBar({ label, value, icon: Icon, color }) {
     <div>
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
-          {Icon && <Icon className="w-4 h-4 text-[#3D52A0]" />}
-          <span className="text-sm font-medium text-[#1a1a2e]">{label}</span>
+          {Icon && <Icon className="w-4 h-4 text-[var(--color-primary-bright)]" />}
+          <span className="text-sm font-medium text-[var(--color-foreground)]">{label}</span>
         </div>
-        <span className="text-sm font-bold text-[#3D52A0]">{value}%</span>
+        <span className="text-sm font-bold text-[var(--color-primary-bright)]">{value}%</span>
       </div>
-      <div className="h-2 bg-[#EDE8F5] rounded-full overflow-hidden">
+      <div className="h-2 bg-[var(--color-primary-light)] rounded-full overflow-hidden">
         <motion.div
           initial={{ width: 0 }}
           animate={{ width: `${value}%` }}

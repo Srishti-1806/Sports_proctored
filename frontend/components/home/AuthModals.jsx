@@ -103,21 +103,21 @@ export default function AuthModals({ showLogin, showSignup, onClose }) {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
-              className="relative w-full max-w-md p-8 rounded-3xl bg-white shadow-2xl"
+              className="relative w-full max-w-md p-8 rounded-3xl bg-[var(--color-card)] shadow-2xl"
             >
               <button
                 onClick={() => onClose()}
-                className="absolute top-4 right-4 p-2 rounded-xl hover:bg-[#EDE8F5] transition-colors"
+                className="absolute top-4 right-4 p-2 rounded-xl hover:bg-[var(--color-primary-soft)] transition-colors"
               >
-                <X className="w-5 h-5 text-[#8697C4]" />
+                <X className="w-5 h-5 text-[var(--color-primary-muted)]" />
               </button>
 
               <div className="text-center mb-8">
-                <div className="w-16 h-16 rounded-2xl bg-linear-to-br from-[#3D52A0] to-[#7091E6] flex items-center justify-center mx-auto mb-4">
+                <div className="w-16 h-16 rounded-2xl bg-linear-to-br from-[var(--color-primary-deep)] to-[var(--color-primary-bright)] flex items-center justify-center mx-auto mb-4">
                   <Trophy className="w-8 h-8 text-white" />
                 </div>
-                <h2 className="font-display text-2xl font-bold text-[#1a1a2e]">Welcome Back</h2>
-                <p className="text-[#8697C4] mt-2">Continue your athletic journey</p>
+                <h2 className="font-display text-2xl font-bold text-[var(--color-foreground)]">Welcome Back</h2>
+                <p className="text-[var(--color-primary-muted)] mt-2">Continue your athletic journey</p>
               </div>
 
               {error && (
@@ -129,30 +129,30 @@ export default function AuthModals({ showLogin, showSignup, onClose }) {
 
               <form onSubmit={handleLogin} className="space-y-5">
                 <div>
-                  <label className="block text-sm font-medium text-[#1a1a2e] mb-2">Email</label>
+                  <label className="block text-sm font-medium text-[var(--color-foreground)] mb-2">Email</label>
                   <div className="relative">
-                    <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[#8697C4]" />
+                    <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[var(--color-primary-muted)]" />
                     <input
                       type="email"
                       required
                       value={loginData.email}
                       onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
-                      className="w-full pl-12 pr-4 py-3 rounded-xl border border-[#ADBBDA] focus:border-[#7091E6] focus:ring-2 focus:ring-[#7091E6]/20 outline-none transition-all"
+                      className="w-full pl-12 pr-4 py-3 rounded-xl border border-[var(--color-border)] focus:border-[var(--color-primary-bright)] focus:ring-2 focus:ring-[var(--color-primary-bright)]/20 outline-none transition-all"
                       placeholder="you@example.com"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-[#1a1a2e] mb-2">Password</label>
+                  <label className="block text-sm font-medium text-[var(--color-foreground)] mb-2">Password</label>
                   <div className="relative">
-                    <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[#8697C4]" />
+                    <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[var(--color-primary-muted)]" />
                     <input
                       type={showPassword ? "text" : "password"}
                       required
                       value={loginData.password}
                       onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
-                      className="w-full pl-12 pr-12 py-3 rounded-xl border border-[#ADBBDA] focus:border-[#7091E6] focus:ring-2 focus:ring-[#7091E6]/20 outline-none transition-all"
+                      className="w-full pl-12 pr-12 py-3 rounded-xl border border-[var(--color-border)] focus:border-[var(--color-primary-bright)] focus:ring-2 focus:ring-[var(--color-primary-bright)]/20 outline-none transition-all"
                       placeholder="Enter password"
                     />
                     <button
@@ -161,9 +161,9 @@ export default function AuthModals({ showLogin, showSignup, onClose }) {
                       className="absolute right-4 top-1/2 transform -translate-y-1/2"
                     >
                       {showPassword ? (
-                        <EyeOff className="w-5 h-5 text-[#8697C4]" />
+                        <EyeOff className="w-5 h-5 text-[var(--color-primary-muted)]" />
                       ) : (
-                        <Eye className="w-5 h-5 text-[#8697C4]" />
+                        <Eye className="w-5 h-5 text-[var(--color-primary-muted)]" />
                       )}
                     </button>
                   </div>
@@ -174,17 +174,17 @@ export default function AuthModals({ showLogin, showSignup, onClose }) {
                   whileTap={{ scale: 0.98 }}
                   type="submit"
                   disabled={loading}
-                  className="w-full py-3 rounded-xl bg-linear-to-r from-[#3D52A0] to-[#7091E6] text-white font-semibold shadow-lg shadow-[#7091E6]/30 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full py-3 rounded-xl bg-linear-to-r from-[var(--color-primary-deep)] to-[var(--color-primary-bright)] text-white font-semibold shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {loading ? 'Signing In...' : 'Sign In'}
                 </motion.button>
               </form>
 
-              <p className="text-center text-[#8697C4] mt-6 text-sm">
+              <p className="text-center text-[var(--color-primary-muted)] mt-6 text-sm">
                 New to Sportlin?{' '}
                 <button
                   onClick={() => onClose('switchToSignup')}
-                  className="text-[#3D52A0] font-semibold hover:underline"
+                  className="text-[var(--color-primary)] font-semibold hover:underline"
                 >
                   Create account
                 </button>
@@ -209,22 +209,22 @@ export default function AuthModals({ showLogin, showSignup, onClose }) {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
-              className="relative w-full max-w-md rounded-3xl bg-white shadow-2xl max-h-[90vh] overflow-hidden"
+              className="relative w-full max-w-md rounded-3xl bg-[var(--color-card)] shadow-2xl max-h-[90vh] overflow-hidden"
             >
               <button
                 onClick={() => onClose()}
-                className="absolute top-4 right-4 p-2 rounded-xl hover:bg-[#EDE8F5] transition-colors"
+                className="absolute top-4 right-4 p-2 rounded-xl hover:bg-[var(--color-primary-soft)] transition-colors"
               >
-                <X className="w-5 h-5 text-[#8697C4]" />
+                <X className="w-5 h-5 text-[var(--color-primary-muted)]" />
               </button>
 
               <div className="p-8 overflow-y-auto max-h-[90vh]">
                 <div className="text-center mb-8">
-                  <div className="w-16 h-16 rounded-2xl bg-linear-to-br from-[#3D52A0] to-[#7091E6] flex items-center justify-center mx-auto mb-4">
+                  <div className="w-16 h-16 rounded-2xl bg-linear-to-br from-[var(--color-primary-deep)] to-[var(--color-primary-bright)] flex items-center justify-center mx-auto mb-4">
                     <Trophy className="w-8 h-8 text-white" />
                   </div>
-                  <h2 className="font-display text-2xl font-bold text-[#1a1a2e]">Join Sportlin</h2>
-                  <p className="text-[#8697C4] mt-2">Start your journey to greatness</p>
+                  <h2 className="font-display text-2xl font-bold text-[var(--color-foreground)]">Join Sportlin</h2>
+                  <p className="text-[var(--color-primary-muted)] mt-2">Start your journey to greatness</p>
                 </div>
 
                 {error && (
@@ -237,49 +237,49 @@ export default function AuthModals({ showLogin, showSignup, onClose }) {
                 <form onSubmit={handleSignup} className="space-y-5">
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-[#1a1a2e] mb-2">First Name</label>
+                      <label className="block text-sm font-medium text-[var(--color-foreground)] mb-2">First Name</label>
                       <input
                         type="text"
                         required
                         value={signupData.firstName}
                         onChange={(e) => setSignupData({ ...signupData, firstName: e.target.value })}
-                        className="w-full px-4 py-3 rounded-xl border border-[#ADBBDA] focus:border-[#7091E6] focus:ring-2 focus:ring-[#7091E6]/20 outline-none transition-all"
+                        className="w-full px-4 py-3 rounded-xl border border-[var(--color-border)] focus:border-[var(--color-primary-bright)] focus:ring-2 focus:ring-[var(--color-primary-bright)]/20 outline-none transition-all"
                         placeholder="John"
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-[#1a1a2e] mb-2">Last Name</label>
+                      <label className="block text-sm font-medium text-[var(--color-foreground)] mb-2">Last Name</label>
                       <input
                         type="text"
                         required
                         value={signupData.lastName}
                         onChange={(e) => setSignupData({ ...signupData, lastName: e.target.value })}
-                        className="w-full px-4 py-3 rounded-xl border border-[#ADBBDA] focus:border-[#7091E6] focus:ring-2 focus:ring-[#7091E6]/20 outline-none transition-all"
+                        className="w-full px-4 py-3 rounded-xl border border-[var(--color-border)] focus:border-[var(--color-primary-bright)] focus:ring-2 focus:ring-[var(--color-primary-bright)]/20 outline-none transition-all"
                         placeholder="Doe"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-[#1a1a2e] mb-2">Email</label>
+                      <label className="block text-sm font-medium text-[var(--color-foreground)] mb-2">Email</label>
                     <div className="relative">
-                      <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[#8697C4]" />
+                      <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[var(--color-primary-muted)]" />
                       <input
                         type="email"
                         required
                         value={signupData.email}
                         onChange={(e) => setSignupData({ ...signupData, email: e.target.value })}
-                        className="w-full pl-12 pr-4 py-3 rounded-xl border border-[#ADBBDA] focus:border-[#7091E6] focus:ring-2 focus:ring-[#7091E6]/20 outline-none transition-all"
+                        className="w-full pl-12 pr-4 py-3 rounded-xl border border-[var(--color-border)] focus:border-[var(--color-primary-bright)] focus:ring-2 focus:ring-[var(--color-primary-bright)]/20 outline-none transition-all"
                         placeholder="you@example.com"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-[#1a1a2e] mb-2">I am a</label>
+                    <label className="block text-sm font-medium text-[var(--color-foreground)] mb-2">I am a</label>
                     <div className="grid grid-cols-2 gap-4">
-                      <label className={`flex items-center justify-center gap-2 p-4 rounded-xl border-2 cursor-pointer hover:border-[#7091E6] transition-colors ${
-                        signupData.role === 'player' ? 'border-[#7091E6] bg-[#EDE8F5]' : 'border-[#ADBBDA]'
+                      <label className={`flex items-center justify-center gap-2 p-4 rounded-xl border-2 cursor-pointer hover:border-[var(--color-primary-bright)] transition-colors ${
+                        signupData.role === 'player' ? 'border-[var(--color-primary-bright)] bg-[var(--color-primary-soft)]' : 'border-[var(--color-border)]'
                       }`}>
                         <input 
                           type="radio" 
@@ -289,11 +289,11 @@ export default function AuthModals({ showLogin, showSignup, onClose }) {
                           onChange={(e) => setSignupData({ ...signupData, role: e.target.value })}
                           className="hidden" 
                         />
-                        <User className="w-5 h-5 text-[#3D52A0]" />
-                        <span className="font-medium text-[#1a1a2e]">Player</span>
+                        <User className="w-5 h-5 text-[var(--color-primary-deep)]" />
+                        <span className={`font-medium ${signupData.role === 'player' ? 'text-[var(--color-primary-deep)]' : 'text-[var(--color-foreground)]'}`}>Player</span>
                       </label>
-                      <label className={`flex items-center justify-center gap-2 p-4 rounded-xl border-2 cursor-pointer hover:border-[#7091E6] transition-colors ${
-                        signupData.role === 'coach' ? 'border-[#7091E6] bg-[#EDE8F5]' : 'border-[#ADBBDA]'
+                      <label className={`flex items-center justify-center gap-2 p-4 rounded-xl border-2 cursor-pointer hover:border-[var(--color-primary-bright)] transition-colors ${
+                        signupData.role === 'coach' ? 'border-[var(--color-primary-bright)] bg-[var(--color-primary-soft)]' : 'border-[var(--color-border)]'
                       }`}>
                         <input 
                           type="radio" 
@@ -303,22 +303,22 @@ export default function AuthModals({ showLogin, showSignup, onClose }) {
                           onChange={(e) => setSignupData({ ...signupData, role: e.target.value })}
                           className="hidden" 
                         />
-                        <Shield className="w-5 h-5 text-[#3D52A0]" />
-                        <span className="font-medium text-[#1a1a2e]">Coach</span>
+                        <Shield className="w-5 h-5 text-[var(--color-primary-deep)]" />
+                        <span className={`font-medium ${signupData.role === 'coach' ? 'text-[var(--color-primary-deep)]' : 'text-[var(--color-foreground)]'}`}>Coach</span>
                       </label>
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-[#1a1a2e] mb-2">Password</label>
+                    <label className="block text-sm font-medium text-[var(--color-foreground)] mb-2">Password</label>
                     <div className="relative">
-                      <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[#8697C4]" />
+                      <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[var(--color-primary-muted)]" />
                       <input
                         type={showPassword ? "text" : "password"}
                         required
                         value={signupData.password}
                         onChange={(e) => setSignupData({ ...signupData, password: e.target.value })}
-                        className="w-full pl-12 pr-12 py-3 rounded-xl border border-[#ADBBDA] focus:border-[#7091E6] focus:ring-2 focus:ring-[#7091E6]/20 outline-none transition-all"
+                        className="w-full pl-12 pr-12 py-3 rounded-xl border border-[var(--color-border)] focus:border-[var(--color-primary-bright)] focus:ring-2 focus:ring-[var(--color-primary-bright)]/20 outline-none transition-all"
                         placeholder="Create password"
                       />
                       <button
@@ -327,9 +327,9 @@ export default function AuthModals({ showLogin, showSignup, onClose }) {
                         className="absolute right-4 top-1/2 transform -translate-y-1/2"
                       >
                         {showPassword ? (
-                          <EyeOff className="w-5 h-5 text-[#8697C4]" />
+                          <EyeOff className="w-5 h-5 text-[var(--color-primary-muted)]" />
                         ) : (
-                          <Eye className="w-5 h-5 text-[#8697C4]" />
+                          <Eye className="w-5 h-5 text-[var(--color-primary-muted)]" />
                         )}
                       </button>
                     </div>
@@ -340,17 +340,17 @@ export default function AuthModals({ showLogin, showSignup, onClose }) {
                     whileTap={{ scale: 0.98 }}
                     type="submit"
                     disabled={loading}
-                    className="w-full py-3 rounded-xl bg-linear-to-r from-[#3D52A0] to-[#7091E6] text-white font-semibold shadow-lg shadow-[#7091E6]/30 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full py-3 rounded-xl bg-linear-to-r from-[var(--color-primary-deep)] to-[var(--color-primary-bright)] text-white font-semibold shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {loading ? 'Creating Account...' : 'Create Account'}
                   </motion.button>
                 </form>
 
-                <p className="text-center text-[#8697C4] mt-6 text-sm">
+                <p className="text-center text-[var(--color-primary-muted)] mt-6 text-sm">
                   Already have an account?{' '}
                   <button
                     onClick={() => onClose('switchToLogin')}
-                    className="text-[#3D52A0] font-semibold hover:underline"
+                    className="text-[var(--color-primary)] font-semibold hover:underline"
                   >
                     Sign in
                   </button>
