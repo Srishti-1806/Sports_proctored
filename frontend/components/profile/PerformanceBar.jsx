@@ -10,6 +10,8 @@ export default function PerformanceBar({ label, value, icon: Icon, color }) {
     purple: 'from-purple-500 to-pink-500',
     orange: 'from-orange-500 to-yellow-400'
   }
+  // Allow passing either a preset key (e.g. 'blue') or a raw Tailwind gradient string
+  const gradient = colors[color] || color || colors.blue
   
   return (
     <div>
@@ -25,7 +27,7 @@ export default function PerformanceBar({ label, value, icon: Icon, color }) {
           initial={{ width: 0 }}
           animate={{ width: `${value}%` }}
           transition={{ duration: 1, ease: "easeOut" }}
-          className={`h-full bg-linear-to-r ${colors[color]} rounded-full`}
+          className={`h-full bg-linear-to-r ${gradient} rounded-full`}
         />
       </div>
     </div>

@@ -1,5 +1,6 @@
 "use client"
 
+import { useState, useRef } from 'react'
 import { X, Download, Play, AlertCircle, Eye } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
@@ -7,11 +8,8 @@ import Link from 'next/link'
 export default function ProctorTestModal({ isOpen, onClose }) {
   if (!isOpen) return null
 
-  const handleDownload = () => {
-    // Placeholder for download functionality
-    console.log('Download test application')
-    alert('Test application download will start soon!')
-  }
+  const [playing, setPlaying] = useState(false)
+  const videoRef = useRef(null)
 
   return (
     <AnimatePresence>
@@ -66,20 +64,36 @@ export default function ProctorTestModal({ isOpen, onClose }) {
                   <h3 className="text-lg font-semibold text-foreground mb-3 flex items-center gap-2">
                     Watch Demo
                   </h3>
-                  <div className="relative w-full rounded-2xl overflow-hidden border-2 border-primary-soft group cursor-pointer hover:border-primary-bright transition-colors">
+                  <div className="relative w-full rounded-2xl overflow-hidden border-2 border-primary-soft transition-colors">
                     <div className="aspect-video sm:aspect-video bg-linear-to-br from-primary-soft to-primary-light/20 rounded-2xl overflow-hidden">
-                      {/* wrapper to preserve aspect ratio on all screens */}
+                      {playing ? (
+                        <video
+                          ref={videoRef}
+                          className="w-full h-full object-cover"
+                          controls
+                          playsInline
+                          autoPlay
+                        >
+                          <source src="/demo-video.mp4" type="video/mp4" />
+                        </video>
+                      ) : null}
                     </div>
-                    <div className="absolute inset-0 flex flex-col items-center justify-center">
-                      <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-popover/90 flex items-center justify-center shadow-xl group-hover:scale-105 transition-transform">
-                        <Play className="w-6 h-6 sm:w-7 sm:h-7 text-primary-bright ml-0.5" />
+
+                    {!playing && (
+                      <div
+                        onClick={() => {
+                          setPlaying(true)
+                          // small timeout to ensure ref is set before calling play
+                          setTimeout(() => videoRef.current?.play?.(), 50)
+                        }}
+                        className="absolute inset-0 flex flex-col items-center justify-center cursor-pointer"
+                      >
+                        <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-popover/90 flex items-center justify-center shadow-xl hover:scale-105 transition-transform">
+                          <Play className="w-6 h-6 sm:w-7 sm:h-7 text-primary-bright ml-0.5" />
+                        </div>
+                        <p className="mt-4 text-muted-foreground font-medium">Click to play demo video</p>
                       </div>
-                      <p className="mt-4 text-muted-foreground font-medium">Click to play demo video</p>
-                    </div>
-                    {/* Placeholder for actual video embed (hidden until implemented) */}
-                    <video className="hidden" controls>
-                      <source src="/demo-video.mp4" type="video/mp4" />
-                    </video>
+                    )}
                   </div>
                 </div>
 
@@ -100,6 +114,13 @@ export default function ProctorTestModal({ isOpen, onClose }) {
                   </div>
                 </div>
 
+                  {/* Name instruction: remind user to use exact profile name */}
+                  <div className="bg-card/50 border border-border rounded-xl p-3 mb-6">
+                    <p className="text-sm text-foreground/90">
+                      Please enter your full name exactly as it appears in your profile when starting the proctor test.
+                    </p>
+                  </div>
+
                 {/* Action Buttons */}
                 <div className="flex flex-col sm:flex-row gap-3">
                   <button
@@ -112,8 +133,8 @@ export default function ProctorTestModal({ isOpen, onClose }) {
                   <Link
                     // href="/Sports%20Proctor-0.0.1.msi"
                     // download="Sports Proctor-0.0.1.msi"
-                    href="https://drive.google.com/uc?export=download&id=1-0WkeIr3mVT4gns9Qxz6hOxJUo9tEmeD"
-                    download="https://drive.google.com/uc?export=download&id=1-0WkeIr3mVT4gns9Qxz6hOxJUo9tEmeD"
+                    href="https://drive.google.com/uc?export=download&id=1y-ihd7DvuAKeBApDMLxS0E6PF7MaTS5H"
+                    download="https://drive.google.com/uc?export=download&id=1y-ihd7DvuAKeBApDMLxS0E6PF7MaTS5H"
                     className="flex-1 px-4 py-2 bg-linear-to-r from-primary-deep to-primary-bright text-white rounded-xl font-semibold hover:shadow-xl hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
                   >
                     <Download className="w-5 h-5" />

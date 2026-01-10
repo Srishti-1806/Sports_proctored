@@ -30,6 +30,22 @@ export default function PlayerProfile({ profile, openEdit, deleteItem, user, hid
           setLatestProctor(data.score)
         } else {
           setLatestProctor(null)
+          // If the name-specific lookup didn't find anything, try fetching recent scores
+          // and match by name case-insensitively to handle formatting differences.
+          try {
+            const listRes = await fetch(`/api/proctor-scores?limit=500`)
+            const listData = await listRes.json()
+            if (listRes.ok && Array.isArray(listData.scores)) {
+              const target = String(profile.fullName).toLowerCase().trim()
+              const match = listData.scores.find(s => String(s.name || '').toLowerCase().trim() === target)
+              if (match) {
+                setLatestProctor({ id: match.id, name: match.name, score: match.score })
+                return
+              }
+            }
+          } catch (innerErr) {
+            console.error('Fallback fetch error', innerErr)
+          }
           if (!res.ok) setProctorError(data.error || 'Failed to fetch')
         }
       } catch (err) {
@@ -91,11 +107,11 @@ export default function PlayerProfile({ profile, openEdit, deleteItem, user, hid
 
                 <div className="relative mt-2 grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <div className="bg-popover/10 backdrop-blur-sm rounded-xl p-3 border border-border/20">
-                    <div className="text-2xl font-bold text-foreground dark:text-white">45min</div>
+                    <div className="text-2xl font-bold text-foreground dark:text-white">10 min</div>
                     <div className="text-xs text-primary-muted dark:text-white/70">Duration</div>
                   </div>
                   <div className="bg-popover/10 backdrop-blur-sm rounded-xl p-3 border border-border/20">
-                    <div className="text-2xl font-bold text-foreground dark:text-white">10+</div>
+                    <div className="text-2xl font-bold text-foreground dark:text-white">15</div>
                     <div className="text-xs text-primary-muted dark:text-white/70">Skills Tested</div>
                   </div>
                   <div className="bg-popover/10 backdrop-blur-sm rounded-xl p-3 border border-border/20">
@@ -114,7 +130,7 @@ export default function PlayerProfile({ profile, openEdit, deleteItem, user, hid
       {/* Latest Proctor Score Section */}
       <div className="bg-card rounded-3xl p-6 shadow-xl border border-border">
         <div className="flex items-center justify-between mb-3">
-          <h3 className="text-lg font-bold text-foreground">Latest Proctor Result</h3>
+          <h3 className="text-lg font-bold text-foreground">Proctor Test Assessment</h3>
         </div>
         {loadingProctor ? (
           <div className="text-sm text-primary-muted">Loading latest result...</div>

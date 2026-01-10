@@ -1,8 +1,36 @@
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { MapPin,Trophy,TrendingUp,Target,Flame,Medal } from 'lucide-react'
 
 export default function PlayerCard({ player, index }) {
+  const [proctorScore, setProctorScore] = useState(null)
+  const [proctorLoading, setProctorLoading] = useState(false)
+
+  useEffect(() => {
+    let mounted = true
+    async function fetchScore() {
+      if (!player?.name) return
+      setProctorLoading(true)
+      try {
+        const res = await fetch(`/api/proctor-scores?name=${encodeURIComponent(player.name)}`)
+        const data = await res.json()
+        if (!mounted) return
+        if (res.ok && data.found) {
+          setProctorScore(data.score.score)
+        } else {
+          setProctorScore(null)
+        }
+      } catch (err) {
+        console.error('Error fetching proctor score for', player.name, err)
+        if (mounted) setProctorScore(null)
+      } finally {
+        if (mounted) setProctorLoading(false)
+      }
+    }
+    fetchScore()
+    return () => { mounted = false }
+  }, [player?.name])
   return (
     <Link href={`/players/${player.id}`}>
       <motion.div
@@ -53,10 +81,21 @@ export default function PlayerCard({ player, index }) {
         {/* Player Stats */}
           <div className="p-6">
           {/* Improvement Badge */}
-          <div className="flex items-center justify-end mb-4">
-            <div className="flex items-center gap-1 text-green-600 text-sm font-semibold">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              {proctorScore !== null && (
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-card border border-border text-sm font-semibold">
+                  <span className="text-xs text-primary-muted">Proctor Test Score</span>
+                  <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-linear-to-r from-primary-deep to-primary-bright text-white text-sm font-bold">
+                    {proctorScore}
+                  </span>
+                </div>
+              )}
+            </div>
+
+            <div className="flex items-center gap-2 text-green-600 text-sm font-semibold">
               <TrendingUp className="w-4 h-4" />
-              {player.improvement}
+              <span>{player.improvement}</span>
             </div>
           </div>
 

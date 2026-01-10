@@ -28,6 +28,7 @@ export default function ProfilePage() {
         if (profiles && !error) {
           setProfile({
             id: profiles.id,
+            fullName: profiles.full_name || `${user.user_metadata?.first_name || ''} ${user.user_metadata?.last_name || ''}`,
             about: profiles.about || '',
             location: profiles.location || '',
             position: profiles.position || '',
@@ -49,6 +50,7 @@ export default function ProfilePage() {
         } else {
           setProfile({
             id: user.id,
+            fullName: `${user.user_metadata?.first_name || ''} ${user.user_metadata?.last_name || ''}`,
             about: '',
             location: '',
             position: '',

@@ -137,7 +137,7 @@ export default function Navbar() {
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-card border-2 border-primary text-primary font-semibold text-sm hover:bg-primary-soft transition-colors duration-300"
+                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-card border-2 border-primary text-primary dark:text-foreground font-semibold text-sm hover:bg-primary-soft dark:hover:bg-popover transition-colors duration-300"
                   >
                     <LogIn className="w-4 h-4" />
                     Sign In
@@ -160,7 +160,7 @@ export default function Navbar() {
         </div>
 
         {/* Mobile Header: logo left, controls right */}
-        <div className="flex md:hidden items-center justify-between w-full">
+        <div className="flex md:hidden items-center justify-between w-full py-2">
           <Link href="/" className="flex items-center gap-2 group">
             <div
               className="w-10 h-10 rounded-xl bg-linear-to-br from-primary-deep to-primary-bright flex items-center justify-center"
@@ -176,7 +176,7 @@ export default function Navbar() {
             <ThemeToggle />
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="md:hidden p-2 rounded-xl bg-primary-soft text-primary"
+              className="md:hidden p-2 rounded-xl bg-primary-soft text-primary dark:bg-popover dark:text-foreground hover:bg-primary-soft dark:hover:bg-popover transition-colors"
             >
               {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
@@ -193,10 +193,7 @@ export default function Navbar() {
             exit={{ opacity: 0, height: 0 }}
             className="md:hidden overflow-hidden bg-popover/10 border-t border-sidebar-border"
           >
-            <div className="px-4 py-4 space-y-2">
-              <div className="flex items-center justify-end">
-                <ThemeToggle />
-              </div>
+              <div className="px-4 py-4 space-y-2">
               {navLinks.map((link) => {
                 const isActive = pathname === link.href
                 return (
@@ -259,7 +256,7 @@ export default function Navbar() {
                   <Link href="/?redirected=true">
                     <motion.button
                       whileTap={{ scale: 0.98 }}
-                      className="w-full flex items-center justify-center gap-2 px-5 py-3 mt-4 rounded-xl bg-card border-2 border-primary text-primary font-semibold"
+                      className="w-full flex items-center justify-center gap-2 px-5 py-3 mt-4 rounded-xl bg-card border-2 border-primary text-primary dark:text-foreground font-semibold"
                     >
                       <LogIn className="w-4 h-4" />
                       Sign In

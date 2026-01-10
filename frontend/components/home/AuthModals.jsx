@@ -14,6 +14,7 @@ import {
   AlertCircle
 } from 'lucide-react'
 import { useAuth } from '../../lib/context/AuthContext'
+import { createClient } from '../../lib/supabase/client'
 import { useToast } from '../../components/ToastProvider'
 import { useRouter } from 'next/navigation'
 
@@ -62,9 +63,26 @@ export default function AuthModals({ showLogin, showSignup, onClose }) {
     e.preventDefault()
     setLoading(true)
     setError('')
+    // Ensure full name is unique
+    try {
+      const supabase = createClient()
+      const fullName = `${signupData.firstName.trim()} ${signupData.lastName.trim()}`
+      const { data: existing, error: fetchErr } = await supabase.from('profiles').select('id').ilike('full_name', fullName)
+      if (fetchErr) {
+        console.error('Error checking existing profiles:', fetchErr)
+      }
+      if (existing && existing.length > 0) {
+        setError('A user with this name already exists. Please use a different name.')
+        setLoading(false)
+        return
+      }
+
+    } catch (checkErr) {
+      console.error('Error checking name uniqueness:', checkErr)
+    }
 
     const { data, error: signUpError } = await signUp(
-      signupData.email, 
+      signupData.email,
       signupData.password,
       {
         first_name: signupData.firstName,
