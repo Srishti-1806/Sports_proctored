@@ -2,15 +2,19 @@
 
 import { useState, useEffect } from 'react'
 import { Bell, Calendar, CheckCircle, Bookmark } from 'lucide-react'
+import { useAuth } from '@/lib/context/AuthContext'
 import EventHeader from '@/components/sportsevents/EventHeader'
 import EventSidebar from '@/components/sportsevents/EventSidebar'
 import EventCard from '@/components/sportsevents/EventCard'
 import EventDetailModal from '@/components/sportsevents/EventDetailModal'
 import ProtectedRoute from '@/lib/components/ProtectedRoute'
+import { useToast } from '@/components/ToastProvider'
 
 // initial state values inlined; removed unused globals
-
+import sportsEvents from '@/components/sports_events.json'
 export default function SportsEventsPage() {
+  const { user, supabase } = useAuth()
+  const toast = useToast()
 
   const [activeFilter, setActiveFilter] = useState('all')
   const [activeSport, setActiveSport] = useState('all')
@@ -51,48 +55,133 @@ export default function SportsEventsPage() {
 
         const matches = Array.isArray(data.events) ? data.events : []
 
-        if (matches.length === 0) {
-          setError('No events found for India')
-          setEvents([])
-        } else {
-          const transformedEvents = matches.map((match) => ({
-            id: match.id,
-            title: match.title,
-            sport: match.sport,
-            date: match.date ? new Date(match.date).toLocaleDateString() : dateStr,
-            time: match.time ? new Date(match.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'TBD',
-            location: match.location || 'Venue TBD',
-            description: '',
-            image: '/api/placeholder/400/320',
-            organizer: '',
-            raw: match.raw || {}
-          }))
+        // If API returned no events, fall back to our bundled `sports_events.json`
+        const source = matches.length > 0 ? matches : sportsEvents
 
-            // compute sport categories from returned events
-            const sportsSet = new Map()
-            transformedEvents.forEach((ev) => {
-              const name = ev.sport || 'Various'
-              if (!sportsSet.has(name)) {
-                sportsSet.set(name, { id: sportsSet.size + 1, label: name, color: 'bg-blue-500' })
-              }
-            })
-            setSportCategories(Array.from(sportsSet.values()))
-
-          setEvents(transformedEvents)
-          setError(null)
-          console.debug('[SportsEventsPage] loaded events:', transformedEvents.length)
+        // fetch saved event ids from Supabase profile when user is available
+        let savedIds = []
+        try {
+          if (user && supabase) {
+            const { data: profile, error: profileErr } = await supabase.from('profiles').select('saved_events').eq('id', user.id).single()
+            if (!profileErr && profile && Array.isArray(profile.saved_events)) {
+              savedIds = profile.saved_events
+            }
+          }
+        } catch (e) {
+          console.error('Failed to load saved events from profile', e)
         }
+
+        const transformedEvents = source.map((match) => ({
+          id: match.id ?? match.event_id ?? `${match.event_name || match.title}`,
+          title: match.title || match.event_name || match.eventName || 'Event',
+          sport: match.sport || match.sport_name || 'Various',
+          date: match.start_date ? new Date(match.start_date).toLocaleDateString() : (match.date ? new Date(match.date).toLocaleDateString() : dateStr),
+          time: match.time ? new Date(match.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'TBD',
+          location: match.venue || match.location || 'Venue TBD',
+          description: match.details || match.description || '',
+          image: '/api/placeholder/400/320',
+          organizer: '',
+          raw: match,
+          isSaved: savedIds.includes(match.id ?? match.event_id ?? `${match.event_name || match.title}`)
+        }))
+
+        // compute sport categories from returned or fallback events
+        const sportsSet = new Map()
+        transformedEvents.forEach((ev) => {
+          const name = ev.sport || 'Various'
+          if (!sportsSet.has(name)) {
+            sportsSet.set(name, { id: sportsSet.size + 1, label: name, color: 'bg-blue-500' })
+          }
+        })
+        setSportCategories(Array.from(sportsSet.values()))
+
+        setEvents(transformedEvents)
+        setError(null)
+        console.debug('[SportsEventsPage] loaded events:', transformedEvents.length)
       } catch (err) {
         console.error('Error fetching events:', err)
-        setError('Failed to load events')
-        setEvents([])
+        // On fetch error, use bundled `sports_events.json` so page remains useful
+        let savedIds = []
+        try {
+          if (user && supabase) {
+            const { data: profile, error: profileErr } = await supabase.from('profiles').select('saved_events').eq('id', user.id).single()
+            if (!profileErr && profile && Array.isArray(profile.saved_events)) {
+              savedIds = profile.saved_events
+            }
+          }
+        } catch (e) {
+          console.error('Failed to load saved events from profile', e)
+        }
+
+        const transformedFallback = sportsEvents.map((match) => ({
+          id: match.id ?? `${match.event_name}`,
+          title: match.event_name,
+          sport: match.sport || 'Various',
+          date: match.start_date ? new Date(match.start_date).toLocaleDateString() : dateStr,
+          time: 'TBD',
+          location: match.venue || 'Venue TBD',
+          description: match.details || '',
+          image: '/api/placeholder/400/320',
+          organizer: '',
+          raw: match,
+          isSaved: savedIds.includes(match.id ?? `${match.event_name}`)
+        }))
+
+        const sportsSet = new Map()
+        transformedFallback.forEach((ev) => {
+          const name = ev.sport || 'Various'
+          if (!sportsSet.has(name)) {
+            sportsSet.set(name, { id: sportsSet.size + 1, label: name, color: 'bg-blue-500' })
+          }
+        })
+        setSportCategories(Array.from(sportsSet.values()))
+
+        setEvents(transformedFallback)
+        setError(null)
       } finally {
         setLoading(false)
       }
     }
 
     fetchEvents()
-  }, [activeSport, activeFilter])
+  }, [activeSport, activeFilter, user, supabase])
+
+  // Toggle save state for an event and persist to Supabase profile
+  const toggleSave = async (id) => {
+    // optimistic UI update
+    const nextEvents = events.map((ev) => ev.id === id ? { ...ev, isSaved: !ev.isSaved } : ev)
+    setEvents(nextEvents)
+    setSelectedEvent((prev) => (prev && prev.id === id ? { ...prev, isSaved: !prev.isSaved } : prev))
+
+    if (!user || !supabase) {
+      // revert optimistic update
+      setEvents((prev) => prev.map((ev) => ev.id === id ? { ...ev, isSaved: !ev.isSaved } : ev))
+      setSelectedEvent((prev) => (prev && prev.id === id ? { ...prev, isSaved: !prev.isSaved } : prev))
+      toast?.show('Please sign in to save events')
+      return
+    }
+
+    try {
+      // compute new saved IDs from the updated events state
+      const savedIds = nextEvents.filter(e => e.isSaved).map(e => e.id)
+
+      const dbProfile = { id: user.id, saved_events: savedIds }
+      const { data, error } = await supabase.from('profiles').upsert(dbProfile)
+      if (error) {
+        // log detailed supabase error
+        console.error('Supabase upsert error:', JSON.stringify(error))
+        throw error
+      }
+      toast?.show('Event saved')
+    } catch (e) {
+      // ensure error details are visible in console
+      try { console.error('Failed to persist saved events to Supabase', e, e?.message ?? JSON.stringify(e)) } catch (_) { console.error('Failed to persist saved events to Supabase', e) }
+      // revert optimistic update
+      setEvents((prev) => prev.map((ev) => ev.id === id ? { ...ev, isSaved: !ev.isSaved } : ev))
+      setSelectedEvent((prev) => (prev && prev.id === id ? { ...prev, isSaved: !prev.isSaved } : prev))
+      toast?.show('Failed to save event')
+    }
+  }
 
   const filteredEvents = events.filter(event => {
     // Filter by status (registered, saved, etc.)
@@ -186,6 +275,7 @@ export default function SportsEventsPage() {
       <EventDetailModal 
         event={selectedEvent}
         onClose={() => setSelectedEvent(null)}
+        onToggleSave={toggleSave}
       />
     </div>
     </ProtectedRoute>

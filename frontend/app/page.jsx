@@ -11,28 +11,54 @@ import FeaturesSection from '../components/home/FeaturesSection'
 import CTASection from '../components/home/CTASection'
 import AuthModals from '../components/home/AuthModals'
 
-function SearchParamsHandler({ setShowLogin, setShowSignup, setShowAuthAlert, user }) {
+function SearchParamsHandler({ setShowLogin, setShowSignup, setShowAuthAlert, user, loading }) {
   const searchParams = useSearchParams()
 
   useEffect(() => {
-    // Don't show modals if user is already authenticated
-    if (user) return
-    
+    // Wait until auth loading finishes to avoid showing modals while session is being resolved
+    if (loading) return
+
+    // If user is authenticated, ensure any auth UI is closed and clear params
+    if (user) {
+      setShowLogin(false)
+      setShowSignup(false)
+      setShowAuthAlert(false)
+      // remove auth-related query params
+      if (typeof window !== 'undefined') {
+        const url = new URL(window.location.href)
+        url.searchParams.delete('redirected')
+        url.searchParams.delete('signup')
+        window.history.replaceState(null, '', url.toString())
+      }
+      return
+    }
+
     // Check if user was redirected due to auth requirement
     if (searchParams.get('redirected') === 'true') {
       setShowAuthAlert(true)
       setShowLogin(true)
-      
+
       // Hide alert after 5 seconds
-      setTimeout(() => {
-        setShowAuthAlert(false)
-      }, 5000)
+      setTimeout(() => setShowAuthAlert(false), 5000)
+
+      // remove redirected param so it doesn't re-trigger on reload
+      if (typeof window !== 'undefined') {
+        const url = new URL(window.location.href)
+        url.searchParams.delete('redirected')
+        window.history.replaceState(null, '', url.toString())
+      }
     }
+
     // Open signup modal if requested via query param
     if (searchParams.get('signup') === 'true') {
       setShowSignup(true)
+      if (typeof window !== 'undefined') {
+        const url = new URL(window.location.href)
+        url.searchParams.delete('signup')
+        window.history.replaceState(null, '', url.toString())
+      }
     }
-  }, [searchParams, setShowLogin, setShowSignup, setShowAuthAlert, user])
+  }, [searchParams, setShowLogin, setShowSignup, setShowAuthAlert, user, loading])
 
   return null
 }
@@ -43,7 +69,7 @@ export default function HomePage() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
   const [showAuthAlert, setShowAuthAlert] = useState(false)
   const containerRef = useRef(null)
-  const { user } = useAuth()
+  const { user, loading } = useAuth()
   
   const { scrollYProgress } = useScroll()
   const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.95])
@@ -80,6 +106,7 @@ export default function HomePage() {
           setShowSignup={setShowSignup}
           setShowAuthAlert={setShowAuthAlert}
           user={user}
+          loading={loading}
         />
       </Suspense>
 

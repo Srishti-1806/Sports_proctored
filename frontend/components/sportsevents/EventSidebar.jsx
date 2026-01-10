@@ -28,14 +28,14 @@ export default function EventSidebar({
             <button
               key={filter.id}
               onClick={() => setActiveFilter(filter.id)}
-              className={`w-full flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 rounded-xl transition-all text-sm sm:text-base ${
+              className={`group w-full flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 rounded-xl transition-all text-sm sm:text-base ${
                   activeFilter === filter.id
                     ? 'bg-linear-to-r from-primary-deep to-primary-bright text-white'
-                    : 'hover:bg-primary-soft text-primary-muted'
+                    : 'hover:bg-primary-soft text-primary-muted dark:bg-transparent dark:text-popover-foreground dark:hover:bg-popover dark:hover:text-white'
               }`}
             >
-              <filter.icon className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
-              <span className="font-medium truncate">{filter.label}</span>
+              <filter.icon className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 group-hover:text-white dark:group-hover:text-white" />
+              <span className="font-medium truncate group-hover:text-white dark:group-hover:text-white">{filter.label}</span>
             </button>
           ))}
         </div>
@@ -55,10 +55,10 @@ export default function EventSidebar({
         <div className="flex flex-wrap gap-2">
           <button
             onClick={() => setActiveSport('all')}
-            className={`flex items-center gap-2 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-lg transition-colors text-xs sm:text-sm font-medium ${
+            className={`flex items-center gap-2 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-lg transition-all duration-200 ease-in-out text-xs sm:text-sm font-medium ${
               activeSport === 'all'
-                ? 'bg-linear-to-r from-primary-deep to-primary-bright text-white'
-                : 'bg-primary-soft text-primary hover:bg-primary-light'
+                ? 'bg-linear-to-r from-primary-deep to-primary-bright text-white shadow-md'
+                : 'bg-primary-soft text-primary hover:bg-primary-deep hover:text-white hover:shadow-md dark:bg-transparent dark:text-popover-foreground dark:hover:bg-primary-deep/60 dark:hover:text-white'
             }`}
           >
             <span className="whitespace-nowrap">All Sports</span>
@@ -67,10 +67,10 @@ export default function EventSidebar({
             <button
               key={sport.id}
               onClick={() => setActiveSport(sport.label)}
-              className={`px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-lg transition-colors text-xs sm:text-sm font-medium whitespace-nowrap ${
+              className={`px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-lg transition-all duration-200 ease-in-out text-xs sm:text-sm font-medium whitespace-nowrap ${
                 activeSport === sport.label
-                  ? 'bg-linear-to-r from-primary-deep to-primary-bright text-white'
-                  : 'bg-primary-soft text-primary hover:bg-primary-light'
+                  ? 'bg-linear-to-r from-primary-deep to-primary-bright text-white shadow-md'
+                  : 'bg-primary-soft text-primary hover:bg-primary-deep hover:text-white hover:shadow-md dark:bg-transparent dark:text-popover-foreground dark:hover:bg-primary-deep/60 dark:hover:text-white'
               }`}
             >
               {sport.label}
