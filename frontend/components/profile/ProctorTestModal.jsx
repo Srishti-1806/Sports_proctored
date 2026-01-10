@@ -28,15 +28,15 @@ export default function ProctorTestModal({ isOpen, onClose }) {
 
           {/* Modal */}
               <div className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none">
-            <motion.div
+              <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               transition={{ type: "spring", duration: 0.5 }}
-              className="bg-[var(--color-card)] rounded-3xl shadow-2xl pointer-events-auto overflow-hidden w-[60dvw] h-[90dvh] border border-[var(--color-border)]"
+              className="bg-card rounded-3xl shadow-2xl pointer-events-auto overflow-hidden w-full max-w-lg sm:max-w-2xl md:max-w-4xl lg:max-w-5xl max-h-[90vh] border border-border"
             >
               {/* Header */}
-              <div className="relative bg-linear-to-br from-[var(--color-primary-deep)] to-[var(--color-primary-bright)] p-4">
+              <div className="relative bg-linear-to-br from-primary-deep to-primary-bright p-4">
                 <button
                   onClick={onClose}
                   className="absolute top-4 right-4 p-2 hover:bg-white/20 rounded-xl transition-colors"
@@ -45,14 +45,14 @@ export default function ProctorTestModal({ isOpen, onClose }) {
                 </button>
 
                 <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-[var(--color-popover)]/20 backdrop-blur-sm flex items-center justify-center shrink-0">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-popover/20 backdrop-blur-sm flex items-center justify-center shrink-0">
                     <Eye className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                   </div>
                   <div>
                     <h2 className="text-xl sm:text-2xl font-bold text-white">
                       Proctored Skills Assessment
                     </h2>
-                    <p className="text-[var(--color-primary-light)] text-sm sm:text-base">
+                    <p className="text-primary-light text-sm sm:text-base">
                       Take your performance evaluation to the next level
                     </p>
                   </div>
@@ -60,21 +60,24 @@ export default function ProctorTestModal({ isOpen, onClose }) {
               </div>
 
               {/* Content */}
-              <div className="p-6 sm:p-8 overflow-y-auto max-h-[80dvh]">
+              <div className="p-4 sm:p-6 overflow-y-auto max-h-[80vh]">
                 {/* Video Demo Section */}
                 <div className="mb-6">
-                  <h3 className="text-lg font-semibold text-[var(--color-foreground)] mb-3 flex items-center gap-2">
+                  <h3 className="text-lg font-semibold text-foreground mb-3 flex items-center gap-2">
                     Watch Demo
                   </h3>
-                  <div className="relative aspect-video bg-linear-to-br from-[var(--color-primary-soft)] to-[var(--color-primary-light)]/20 rounded-2xl overflow-hidden border-2 border-[var(--color-primary-soft)] group cursor-pointer hover:border-[var(--color-primary-bright)] transition-colors">
-                    <div className="absolute inset-0 flex flex-col items-center justify-center">
-                        <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[var(--color-popover)]/90 flex items-center justify-center shadow-xl group-hover:scale-105 transition-transform">
-                        <Play className="w-6 h-6 sm:w-7 sm:h-7 text-[var(--color-primary-bright)] ml-0.5" />
-                      </div>
-                      <p className="mt-4 text-[var(--color-muted-foreground,#8697C4)] font-medium">Click to play demo video</p>
+                  <div className="relative w-full rounded-2xl overflow-hidden border-2 border-primary-soft group cursor-pointer hover:border-primary-bright transition-colors">
+                    <div className="aspect-video sm:aspect-video bg-linear-to-br from-primary-soft to-primary-light/20 rounded-2xl overflow-hidden">
+                      {/* wrapper to preserve aspect ratio on all screens */}
                     </div>
-                    {/* Placeholder for actual video embed */}
-                    <video className="w-full h-full object-cover hidden" controls>
+                    <div className="absolute inset-0 flex flex-col items-center justify-center">
+                      <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-popover/90 flex items-center justify-center shadow-xl group-hover:scale-105 transition-transform">
+                        <Play className="w-6 h-6 sm:w-7 sm:h-7 text-primary-bright ml-0.5" />
+                      </div>
+                      <p className="mt-4 text-muted-foreground font-medium">Click to play demo video</p>
+                    </div>
+                    {/* Placeholder for actual video embed (hidden until implemented) */}
+                    <video className="hidden" controls>
                       <source src="/demo-video.mp4" type="video/mp4" />
                     </video>
                   </div>
@@ -101,7 +104,7 @@ export default function ProctorTestModal({ isOpen, onClose }) {
                 <div className="flex flex-col sm:flex-row gap-3">
                   <button
                     onClick={onClose}
-                    className="flex-1 px-4 py-2 border-2 border-[var(--color-border)] text-[var(--color-muted-foreground,#8697C4)] rounded-xl font-semibold hover:bg-[var(--color-primary-soft)] dark:hover:bg-[var(--color-popover)] transition-colors"
+                    className="flex-1 px-4 py-2 border-2 border-border text-muted-foreground rounded-xl font-semibold hover:bg-primary-soft dark:hover:bg-popover transition-colors"
                   >
                     Cancel
                   </button>
@@ -109,16 +112,16 @@ export default function ProctorTestModal({ isOpen, onClose }) {
                   <Link
                     // href="/Sports%20Proctor-0.0.1.msi"
                     // download="Sports Proctor-0.0.1.msi"
-                    href="https://drive.google.com/uc?export=download&id=1tbXyepq8uW1T_KEXEaB2py_E--Q9-8A8"
-                    download="https://drive.google.com/uc?export=download&id=1tbXyepq8uW1T_KEXEaB2py_E--Q9-8A8"
-                    className="flex-1 px-4 py-2 bg-linear-to-r from-[var(--color-primary-deep)] to-[var(--color-primary-bright)] text-white rounded-xl font-semibold hover:shadow-xl hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
+                    href="https://drive.google.com/uc?export=download&id=1-0WkeIr3mVT4gns9Qxz6hOxJUo9tEmeD"
+                    download="https://drive.google.com/uc?export=download&id=1-0WkeIr3mVT4gns9Qxz6hOxJUo9tEmeD"
+                    className="flex-1 px-4 py-2 bg-linear-to-r from-primary-deep to-primary-bright text-white rounded-xl font-semibold hover:shadow-xl hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
                   >
                     <Download className="w-5 h-5" />
                     Download Test App
                   </Link>
                 </div>
 
-                <p className="text-center text-xs text-[var(--color-muted-foreground,#8697C4)] mt-4">
+                <p className="text-center text-xs text-muted-foreground mt-4">
                   By downloading, you agree to our testing terms and conditions
                 </p>
               </div>

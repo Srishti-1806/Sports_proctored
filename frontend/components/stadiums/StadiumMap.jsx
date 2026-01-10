@@ -14,12 +14,12 @@ const StadiumMap = ({ accessToken, venues, selectedVenue, onVenueSelect }) => {
   const themeColors = (typeof window !== 'undefined' && window.getComputedStyle)
     ? getThemeColors()
     : {
-        PRIMARY: 'var(--color-primary,#3B82F6)',
-        SUCCESS: 'var(--color-success,#10B981)',
-        WARNING: 'var(--color-warning,#F59E0B)',
-        DANGER: 'var(--color-danger,#EF4444)',
-        INFO: 'var(--color-info,#06B6D4)',
-        PURPLE: 'var(--color-purple,#8B5CF6)'
+        PRIMARY: 'varprimary',
+        SUCCESS: 'varsuccess',
+        WARNING: 'varwarning',
+        DANGER: 'vardanger',
+        INFO: 'varinfo',
+        PURPLE: 'varpurple'
       };
 
   useEffect(() => {
@@ -141,7 +141,7 @@ const StadiumMap = ({ accessToken, venues, selectedVenue, onVenueSelect }) => {
             new mapboxgl.Popup({ offset: 25 }).setHTML(`
               <div style="padding: 8px;">
                 <h3 style="font-weight: bold; margin-bottom: 4px;">Your Location</h3>
-                <p style="color: var(--color-primary-muted); font-size: 12px; line-height: 1.4;">${address}</p>
+                <p style="color: varprimary-muted; font-size: 12px; line-height: 1.4;">${address}</p>
               </div>
             `)
           )
@@ -154,7 +154,7 @@ const StadiumMap = ({ accessToken, venues, selectedVenue, onVenueSelect }) => {
             new mapboxgl.Popup({ offset: 25 }).setHTML(`
               <div style="padding: 8px;">
                 <h3 style="font-weight: bold; margin-bottom: 4px;"> Your Location</h3>
-                <p style="color: var(--color-primary-muted); font-size: 12px;">Current position</p>
+                <p style="color: varprimary-muted; font-size: 12px;">Current position</p>
               </div>
             `)
           )
@@ -212,11 +212,11 @@ const StadiumMap = ({ accessToken, venues, selectedVenue, onVenueSelect }) => {
           new mapboxgl.Popup({ offset: 25 }).setHTML(`
             <div style="padding: 8px;">
               <h3 style="font-weight: bold; margin-bottom: 4px;">${venue.name}</h3>
-              <p style="color: var(--color-primary-muted); font-size: 14px;">${venue.type}</p>
-              <p style="color: var(--color-primary-muted); font-size: 12px; margin-top: 4px;">${venue.distance} away</p>
+              <p style="color: varprimary-muted; font-size: 14px;">${venue.type}</p>
+              <p style="color: varprimary-muted; font-size: 12px; margin-top: 4px;">${venue.distance} away</p>
               ${venue.sports && venue.sports.length > 0 ? `
                 <div style="margin-top: 8px;">
-                  <span style="color: var(--color-success); font-size: 12px;"> ${venue.sports.join(', ')}</span>
+                  <span style="color: varsuccess; font-size: 12px;"> ${venue.sports.join(', ')}</span>
                 </div>
               ` : ''}
             </div>
@@ -258,11 +258,11 @@ const StadiumMap = ({ accessToken, venues, selectedVenue, onVenueSelect }) => {
           height: 32px !important;
           padding: 0 !important;
           line-height: 32px !important;
-          color: var(--color-primary-muted) !important;
+          color: varprimary-muted !important;
         }
         .mapboxgl-popup-close-button:hover {
-          background-color: var(--color-card) !important;
-          color: var(--color-foreground) !important;
+          background-color: varcard !important;
+          color: varforeground !important;
         }
       `}</style>
       <div

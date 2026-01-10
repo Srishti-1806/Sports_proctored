@@ -82,11 +82,11 @@ export default function PlayersPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[var(--color-background)] pt-24 pb-12">
+      <div className="min-h-screen bg-background pt-24 pb-12">
         <div className="max-w-350 mx-auto px-4 sm:px-6 lg:px-8">
           <PlayersHeader />
           <div className="flex items-center justify-center py-20">
-            <Loader2 className="w-12 h-12 text-[var(--color-primary-bright)] animate-spin" />
+            <Loader2 className="w-12 h-12 text-primary-bright animate-spin" />
           </div>
         </div>
       </div>
@@ -95,20 +95,20 @@ export default function PlayersPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-[var(--color-background)] pt-24 pb-12">
+      <div className="min-h-screen bg-background pt-24 pb-12">
         <div className="max-w-350 mx-auto px-4 sm:px-6 lg:px-8">
           <PlayersHeader />
           <div className="text-center py-16">
             <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <span className="text-4xl">⚠️</span>
             </div>
-            <h3 className="font-display text-2xl font-bold text-[var(--color-foreground)] mb-2">
+            <h3 className="font-display text-2xl font-bold text-foreground mb-2">
               Error loading players
             </h3>
-            <p className="text-[var(--color-muted-foreground,#8697C4)] mb-4">{error}</p>
+            <p className="text-muted-foreground mb-4">{error}</p>
             <button
               onClick={fetchPlayers}
-              className="px-6 py-3 bg-linear-to-r from-[var(--color-primary-deep)] to-[var(--color-primary-bright)] text-white rounded-xl hover:shadow-lg transition-all"
+              className="px-6 py-3 bg-linear-to-r from-primary-deep to-primary-bright text-white rounded-xl hover:shadow-lg transition-all"
             >
               Try Again
             </button>
@@ -119,7 +119,7 @@ export default function PlayersPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[var(--color-background)] pt-24 pb-12">
+    <div className="min-h-screen bg-background pt-24 pb-12">
       <div className="max-w-350 mx-auto px-4 sm:px-6 lg:px-8">
         
         <PlayersHeader />

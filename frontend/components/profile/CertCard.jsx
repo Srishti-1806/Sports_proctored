@@ -10,7 +10,7 @@ export default function CertCard({ data, onDelete }) {
 
   return (
     <>
-      <div className="relative bg-[var(--color-card)] rounded-xl p-4 shadow-md border border-[var(--color-border)] hover:shadow-lg transition-all group">
+      <div className="relative bg-card rounded-xl p-4 shadow-md border border-border hover:shadow-lg transition-all group">
         <button 
           onClick={onDelete} 
           className="absolute top-3 right-3 p-1.5 opacity-0 group-hover:opacity-100 hover:bg-red-50 rounded-lg transition-all z-10"
@@ -23,19 +23,19 @@ export default function CertCard({ data, onDelete }) {
           <div className="w-[70%] flex flex-col justify-between">
             <div className="space-y-2.5">
               <div>
-                <p className="text-[10px] font-semibold text-[var(--color-muted-foreground,#8697C4)] uppercase tracking-wide mb-0.5">Name</p>
-                <h4 className="font-bold text-base text-[var(--color-foreground)] pr-6">{data.name}</h4>
+                <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide mb-0.5">Name</p>
+                <h4 className="font-bold text-base text-foreground pr-6">{data.name}</h4>
               </div>
               
               <div>
-                <p className="text-[10px] font-semibold text-[var(--color-muted-foreground,#8697C4)] uppercase tracking-wide mb-0.5">Organization</p>
+                <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide mb-0.5">Organization</p>
                 <p className="text-sm font-medium text-blue-600">{data.issuer}</p>
               </div>
               
               {data.year && (
                 <div>
-                  <p className="text-[10px] font-semibold text-[var(--color-muted-foreground,#8697C4)] uppercase tracking-wide mb-0.5">Issue Year</p>
-                  <p className="text-sm text-[var(--color-foreground)]">{data.year}</p>
+                  <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide mb-0.5">Issue Year</p>
+                  <p className="text-sm text-foreground">{data.year}</p>
                 </div>
               )}
             </div>
@@ -82,7 +82,7 @@ export default function CertCard({ data, onDelete }) {
           <div className="relative max-w-6xl w-full">
             <button 
               onClick={() => setShowImage(false)} 
-              className="absolute -top-12 right-0 p-2 bg-[var(--color-card)] rounded-lg hover:bg-[var(--color-popover)] transition-colors"
+              className="absolute -top-12 right-0 p-2 bg-card rounded-lg hover:bg-popover transition-colors"
             >
               <X className="w-5 h-5" />
             </button>

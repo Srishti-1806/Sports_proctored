@@ -32,7 +32,7 @@ const galleryItems = [
 
 export default function FeaturesSection() {
   return (
-    <section className="py-24 px-4 sm:px-6 lg:px-8 bg-[var(--color-background)]">
+    <section className="py-24 px-4 sm:px-6 lg:px-8 bg-background">
       <div className="max-w-350 mx-auto">
         
         <motion.div
@@ -41,7 +41,7 @@ export default function FeaturesSection() {
           viewport={{ once: true }}
           className=""
         >
-          <h2 className="font-display text-6xl lg:text-7xl font-bold text-[var(--color-foreground)]">
+          <h2 className="font-display text-6xl lg:text-7xl font-bold text-foreground">
             Key Strengths
           </h2>
         </motion.div>
@@ -50,7 +50,7 @@ export default function FeaturesSection() {
           <CircularGallery 
             items={galleryItems}
             bend={-0.5} 
-            textColor={'var(--color-foreground)'} 
+            textColor={'varforeground'} 
             borderRadius={0.05} 
             scrollEase={0.02}
             autoScrollSpeed={0.1}

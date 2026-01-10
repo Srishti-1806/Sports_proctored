@@ -393,9 +393,9 @@ export default function StadiumsPage() {
   })
 
   return (
-    <div className="min-h-screen bg-[var(--color-background)]">
+    <div className="min-h-screen bg-background">
       {/* Header */}
-      <div className="bg-linear-to-r from-[var(--color-primary-deep)] to-[var(--color-primary-bright)] pt-4 pb-3 sm:pt-6 sm:pb-4">
+      <div className="bg-linear-to-r from-primary-deep to-primary-bright pt-4 pb-3 sm:pt-6 sm:pb-4">
         <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -408,13 +408,13 @@ export default function StadiumsPage() {
             {/* Search Bar */}
               <div className="flex gap-2 sm:gap-3">
               <div className="relative flex-1">
-                <Search className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-[var(--color-primary-muted)]" />
+                <Search className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-primary-muted" />
                 <input
                   type="text"
                   placeholder="Search venues..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-2.5 sm:py-3 rounded-lg sm:rounded-xl bg-[var(--color-card)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-bright)] text-sm sm:text-base text-[var(--color-foreground)]"
+                  className="w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-2.5 sm:py-3 rounded-lg sm:rounded-xl bg-card focus:outline-none focus:ring-2 focus:ring-primary-bright text-sm sm:text-base text-foreground"
                 />
               </div>
             </div>
@@ -443,13 +443,13 @@ export default function StadiumsPage() {
                     />
                   </div>
                 ) : (
-                  <div className="w-full h-full bg-linear-to-br from-[var(--color-primary-soft)] to-[var(--color-primary-light)] flex items-center justify-center">
+                  <div className="w-full h-full bg-linear-to-br from-primary-soft to-primary-light flex items-center justify-center">
                     <div className="text-center p-4 sm:p-8">
-                      <MapPin className="w-12 h-12 sm:w-16 sm:h-16 text-[var(--color-primary-bright)] mx-auto mb-3 sm:mb-4" />
-                      <h3 className="text-lg sm:text-xl font-bold text-[var(--color-primary)] mb-2">
+                      <MapPin className="w-12 h-12 sm:w-16 sm:h-16 text-primary-bright mx-auto mb-3 sm:mb-4" />
+                      <h3 className="text-lg sm:text-xl font-bold text-primary mb-2">
                         Map Loading...
                       </h3>
-                      <p className="text-xs sm:text-sm text-[var(--color-primary-muted)]">
+                      <p className="text-xs sm:text-sm text-primary-muted">
                         Please ensure Mapbox token is configured
                       </p>
                     </div>
@@ -457,10 +457,10 @@ export default function StadiumsPage() {
                 )}
 
                 {/* Map Legend Overlay */}
-                <div className="absolute bottom-3 left-3 sm:bottom-4 sm:left-4 px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl bg-[var(--color-card)]/90 backdrop-blur-sm shadow-lg z-10 pointer-events-none">
+                <div className="absolute bottom-3 left-3 sm:bottom-4 sm:left-4 px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl bg-card/90 backdrop-blur-sm shadow-lg z-10 pointer-events-none">
                   <div className="flex items-center gap-1.5 sm:gap-2">
-                    <MapPin className="w-3 h-3 sm:w-4 sm:h-4 text-[var(--color-primary-bright)]" />
-                    <span className="text-xs sm:text-sm font-medium text-[var(--color-foreground)]">
+                    <MapPin className="w-3 h-3 sm:w-4 sm:h-4 text-primary-bright" />
+                    <span className="text-xs sm:text-sm font-medium text-foreground">
                       {filteredVenues.length} venues
                     </span>
                   </div>
@@ -479,8 +479,8 @@ export default function StadiumsPage() {
                   onClick={() => setActiveFilter(filter.id)}
                   className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg sm:rounded-xl text-sm sm:text-base font-medium whitespace-nowrap transition-all ${
                     activeFilter === filter.id
-                      ? 'bg-linear-to-r from-[var(--color-primary-deep)] to-[var(--color-primary-bright)] text-white shadow-lg'
-                      : 'bg-[var(--color-card)] text-[var(--color-muted-foreground)] border border-[var(--color-border)] hover:border-[var(--color-primary-bright)] hover:shadow-lg'
+                      ? 'bg-linear-to-r from-primary-deep to-primary-bright text-white shadow-lg'
+                      : 'bg-card text-muted-foreground border border-border hover:border-primary-bright hover:shadow-lg'
                   }`}
                 >
                   <filter.icon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
@@ -491,12 +491,12 @@ export default function StadiumsPage() {
 
             {/* Results Count */}
             <div className="mb-3 sm:mb-4">
-              <p className="text-xs sm:text-sm text-[var(--color-primary-muted)]">
+              <p className="text-xs sm:text-sm text-primary-muted">
                 {loading ? (
                   <span>Loading venues...</span>
                 ) : (
                   <>
-                    <span className="font-semibold text-[var(--color-foreground)]">{filteredVenues.length}</span> found nearby
+                    <span className="font-semibold text-foreground">{filteredVenues.length}</span> found nearby
                   </>
                 )}
               </p>
@@ -507,14 +507,14 @@ export default function StadiumsPage() {
               {loading ? (
                 <div className="flex items-center justify-center py-12">
                   <div className="text-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--color-primary-deep)] mx-auto mb-4"></div>
-                    <p className="text-[var(--color-primary-muted)]">Finding venues near you...</p>
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-deep mx-auto mb-4"></div>
+                    <p className="text-primary-muted">Finding venues near you...</p>
                   </div>
                 </div>
               ) : filteredVenues.length === 0 ? (
                 <div className="text-center py-12">
-                  <MapPin className="w-12 h-12 text-[var(--color-primary-muted)] mx-auto mb-4" />
-                  <p className="text-[var(--color-primary-muted)]">No venues found</p>
+                  <MapPin className="w-12 h-12 text-primary-muted mx-auto mb-4" />
+                  <p className="text-primary-muted">No venues found</p>
                 </div>
               ) : (
                 filteredVenues.map((venue, index) => (
@@ -524,34 +524,34 @@ export default function StadiumsPage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.05 }}
                   onClick={() => setSelectedVenue(venue)}
-                  className={`p-3 sm:p-4 rounded-lg sm:rounded-xl bg-[var(--color-card)] border hover:shadow-lg hover:border-[var(--color-primary-bright)] transition-all cursor-pointer group ${
-                    selectedVenue?.id === venue.id ? 'border-[var(--color-primary-bright)] shadow-md' : 'border-[var(--color-border)]'
+                  className={`p-3 sm:p-4 rounded-lg sm:rounded-xl bg-card border hover:shadow-lg hover:border-primary-bright transition-all cursor-pointer group ${
+                    selectedVenue?.id === venue.id ? 'border-primary-bright shadow-md' : 'border-border'
                   }`}
                 >
                   <div className="flex items-center gap-3 sm:gap-4">
                     {/* Icon */}
-                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-linear-to-br from-[var(--color-primary-soft)] to-[var(--color-primary-light)] flex items-center justify-center shrink-0">
-                      <venue.typeIcon className="w-5 h-5 sm:w-6 sm:h-6 text-[var(--color-primary-bright)]" />
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-linear-to-br from-primary-soft to-primary-light flex items-center justify-center shrink-0">
+                      <venue.typeIcon className="w-5 h-5 sm:w-6 sm:h-6 text-primary-bright" />
                     </div>
 
                     {/* Content */}
                     <div className="flex-1 min-w-0">
-                      <h3 className="text-sm sm:text-base font-bold text-[var(--color-foreground)] group-hover:text-[var(--color-primary-bright)] transition-colors mb-1">
+                      <h3 className="text-sm sm:text-base font-bold text-foreground group-hover:text-primary-bright transition-colors mb-1">
                         {venue.name}
                       </h3>
                       
-                      <p className="text-xs sm:text-sm text-[var(--color-muted-foreground)] mb-1.5 sm:mb-2 line-clamp-2">
+                      <p className="text-xs sm:text-sm text-muted-foreground mb-1.5 sm:mb-2 line-clamp-2">
                         {venue.address}
                       </p>
 
-                      <div className="flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-xs text-[var(--color-muted-foreground)]">
+                      <div className="flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-xs text-muted-foreground">
                         <span>{venue.distance}</span>
                         <span>•</span>
                         <span className="truncate">{venue.type}</span>
                       </div>
                     </div>
 
-                    <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-[var(--color-border)] group-hover:text-[var(--color-primary-bright)] group-hover:translate-x-1 transition-all shrink-0" />
+                    <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-border group-hover:text-primary-bright group-hover:translate-x-1 transition-all shrink-0" />
                   </div>
                 </motion.div>
               )))}
@@ -575,11 +575,11 @@ export default function StadiumsPage() {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.96, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
-              className="relative w-full h-full sm:h-auto max-w-none sm:max-w-2xl md:max-w-3xl lg:max-w-4xl bg-[var(--color-card)] rounded-none sm:rounded-xl shadow-2xl my-0 sm:my-6 flex flex-col overflow-hidden"
+              className="relative w-full h-full sm:h-auto max-w-none sm:max-w-2xl md:max-w-3xl lg:max-w-4xl bg-card rounded-none sm:rounded-xl shadow-2xl my-0 sm:my-6 flex flex-col overflow-hidden"
               style={{ maxHeight: '100vh' }}
             >
               {/* Header Image */}
-              <div className="relative h-32 sm:h-40 md:h-48 bg-linear-to-br from-[var(--color-primary-deep)] to-[var(--color-primary-bright)] rounded-t-none sm:rounded-t-xl shrink-0">
+              <div className="relative h-32 sm:h-40 md:h-48 bg-linear-to-br from-primary-deep to-primary-bright rounded-t-none sm:rounded-t-xl shrink-0">
                 <div className="absolute inset-0 flex items-center justify-center">
                   <selectedVenue.typeIcon className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 text-white/30" />
                 </div>
@@ -609,42 +609,42 @@ export default function StadiumsPage() {
               </div>
 
               {/* Content - Scrollable Area */}
-              <div className="p-3 sm:p-4 md:p-6 space-y-3 sm:space-y-4 md:space-y-6 overflow-y-auto overflow-x-hidden flex-1 scrollbar-thin scrollbar-thumb-[var(--color-primary-soft)] scrollbar-track-[var(--color-border)] hover:scrollbar-thumb-[var(--color-primary-bright)]">
+              <div className="p-3 sm:p-4 md:p-6 space-y-3 sm:space-y-4 md:space-y-6 overflow-y-auto overflow-x-hidden flex-1 scrollbar-thin scrollbar-thumb-primary-soft scrollbar-track-border hover:scrollbar-thumb-primary-bright">
                 {/* Quick Info */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 md:gap-4">
-                  <div className="p-2.5 sm:p-3 md:p-4 rounded-lg sm:rounded-xl bg-[var(--color-card)] min-w-0">
-                    <div className="flex items-center gap-1.5 sm:gap-2 text-[var(--color-primary-bright)] mb-1">
+                  <div className="p-2.5 sm:p-3 md:p-4 rounded-lg sm:rounded-xl bg-card min-w-0">
+                    <div className="flex items-center gap-1.5 sm:gap-2 text-primary-bright mb-1">
                       <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
                       <span className="text-xs sm:text-sm font-medium">Hours</span>
                     </div>
-                    <p className="text-xs sm:text-sm md:text-base font-semibold text-[var(--color-foreground)] wrap-break-word">{selectedVenue.hours}</p>
+                    <p className="text-xs sm:text-sm md:text-base font-semibold text-foreground wrap-break-word">{selectedVenue.hours}</p>
                     <span className={`text-[10px] sm:text-xs ${selectedVenue.isOpen ? 'text-green-600' : 'text-red-500'}`}>
                       {selectedVenue.isOpen ? 'Currently Open' : 'Currently Closed'}
                     </span>
                   </div>
-                  <div className="p-2.5 sm:p-3 md:p-4 rounded-lg sm:rounded-xl bg-[var(--color-card)] min-w-0">
-                    <div className="flex items-center gap-1.5 sm:gap-2 text-[var(--color-primary-bright)] mb-1">
+                  <div className="p-2.5 sm:p-3 md:p-4 rounded-lg sm:rounded-xl bg-card min-w-0">
+                    <div className="flex items-center gap-1.5 sm:gap-2 text-primary-bright mb-1">
                       <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
                       <span className="text-xs sm:text-sm font-medium">Location</span>
                     </div>
-                    <p className="text-[10px] sm:text-xs md:text-sm font-semibold text-[var(--color-foreground)] wrap-break-word">{selectedVenue.address}</p>
+                    <p className="text-[10px] sm:text-xs md:text-sm font-semibold text-foreground wrap-break-word">{selectedVenue.address}</p>
                   </div>
                 </div>
 
                 {/* Description */}
                 <div className="min-w-0">
-                  <h3 className="font-display text-sm sm:text-base font-bold text-[var(--color-foreground)] mb-1.5 sm:mb-2">About</h3>
-                  <p className="text-xs sm:text-sm text-[var(--color-muted-foreground)] leading-relaxed wrap-break-word">{selectedVenue.description}</p>
+                  <h3 className="font-display text-sm sm:text-base font-bold text-foreground mb-1.5 sm:mb-2">About</h3>
+                  <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed wrap-break-word">{selectedVenue.description}</p>
                 </div>
 
                 {/* Sports */}
                 <div className="min-w-0">
-                  <h3 className="font-display text-sm sm:text-base font-bold text-[var(--color-foreground)] mb-2 sm:mb-3">Available Sports</h3>
+                  <h3 className="font-display text-sm sm:text-base font-bold text-foreground mb-2 sm:mb-3">Available Sports</h3>
                   <div className="flex flex-wrap gap-1.5 sm:gap-2">
                     {selectedVenue.sports.map((sport) => (
                       <span 
                         key={sport}
-                        className="px-2.5 py-1.5 sm:px-3 sm:py-2 md:px-4 rounded-lg sm:rounded-xl bg-linear-to-r from-[var(--color-primary-deep)] to-[var(--color-primary-bright)] text-white font-medium text-xs sm:text-sm wrap-break-word"
+                        className="px-2.5 py-1.5 sm:px-3 sm:py-2 md:px-4 rounded-lg sm:rounded-xl bg-linear-to-r from-primary-deep to-primary-bright text-white font-medium text-xs sm:text-sm wrap-break-word"
                       >
                         {sport}
                       </span>
@@ -654,12 +654,12 @@ export default function StadiumsPage() {
 
                 {/* Amenities */}
                 <div className="min-w-0">
-                  <h3 className="font-display text-sm sm:text-base font-bold text-[var(--color-foreground)] mb-2 sm:mb-3">Amenities</h3>
+                  <h3 className="font-display text-sm sm:text-base font-bold text-foreground mb-2 sm:mb-3">Amenities</h3>
                   <div className="flex flex-wrap gap-1.5 sm:gap-2">
                     {selectedVenue.amenities.map((amenity) => (
                       <span 
                         key={amenity}
-                        className="flex items-center gap-1 px-2 py-1.5 sm:px-2.5 sm:py-2 md:px-3 rounded-lg sm:rounded-xl bg-[var(--color-card)] text-[var(--color-primary-bright)] text-xs sm:text-sm wrap-break-word"
+                        className="flex items-center gap-1 px-2 py-1.5 sm:px-2.5 sm:py-2 md:px-3 rounded-lg sm:rounded-xl bg-card text-primary-bright text-xs sm:text-sm wrap-break-word"
                       >
                         <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 shrink-0" /> 
                         <span className="wrap-break-word">{amenity}</span>
@@ -672,24 +672,24 @@ export default function StadiumsPage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 md:gap-4">
                   <a 
                     href={`tel:${selectedVenue.phone}`}
-                    className="flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3 md:p-4 rounded-lg sm:rounded-xl bg-[var(--color-card)] hover:bg-[var(--color-primary-soft)]/50 transition-colors min-w-0"
+                    className="flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3 md:p-4 rounded-lg sm:rounded-xl bg-card hover:bg-primary-soft/50 transition-colors min-w-0"
                   >
-                    <Phone className="w-4 h-4 sm:w-5 sm:h-5 text-[var(--color-primary-bright)] shrink-0" />
+                    <Phone className="w-4 h-4 sm:w-5 sm:h-5 text-primary-bright shrink-0" />
                     <div className="min-w-0 flex-1">
-                      <p className="text-[10px] sm:text-xs text-[var(--color-muted-foreground)]">Phone</p>
-                      <p className="text-xs sm:text-sm font-medium text-[var(--color-foreground)] truncate">{selectedVenue.phone}</p>
+                      <p className="text-[10px] sm:text-xs text-muted-foreground">Phone</p>
+                      <p className="text-xs sm:text-sm font-medium text-foreground truncate">{selectedVenue.phone}</p>
                     </div>
                   </a>
                   <a 
                     href={`https://${selectedVenue.website}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3 md:p-4 rounded-lg sm:rounded-xl bg-[var(--color-card)] hover:bg-[var(--color-primary-soft)]/50 transition-colors min-w-0"
+                    className="flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3 md:p-4 rounded-lg sm:rounded-xl bg-card hover:bg-primary-soft/50 transition-colors min-w-0"
                   >
-                    <Globe className="w-4 h-4 sm:w-5 sm:h-5 text-[var(--color-primary-bright)] shrink-0" />
+                    <Globe className="w-4 h-4 sm:w-5 sm:h-5 text-primary-bright shrink-0" />
                     <div className="min-w-0 flex-1">
-                      <p className="text-[10px] sm:text-xs text-[var(--color-muted-foreground)]">Website</p>
-                      <p className="text-xs sm:text-sm font-medium text-[var(--color-foreground)] truncate">{selectedVenue.website}</p>
+                      <p className="text-[10px] sm:text-xs text-muted-foreground">Website</p>
+                      <p className="text-xs sm:text-sm font-medium text-foreground truncate">{selectedVenue.website}</p>
                     </div>
                   </a>
                 </div>
@@ -702,7 +702,7 @@ export default function StadiumsPage() {
                     rel="noopener noreferrer"
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    className="flex-1 flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 md:px-6 py-2.5 sm:py-3 md:py-4 rounded-lg sm:rounded-xl bg-linear-to-r from-[var(--color-primary-deep)] to-[var(--color-primary-bright)] text-white text-xs sm:text-sm md:text-base font-semibold shadow-lg min-w-0"
+                    className="flex-1 flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 md:px-6 py-2.5 sm:py-3 md:py-4 rounded-lg sm:rounded-xl bg-linear-to-r from-primary-deep to-primary-bright text-white text-xs sm:text-sm md:text-base font-semibold shadow-lg min-w-0"
                   >
                     <Navigation className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
                     <span className="hidden sm:inline truncate">Get Directions</span>
@@ -736,7 +736,7 @@ export default function StadiumsPage() {
                     }}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className="p-2.5 sm:p-3 md:p-4 rounded-lg sm:rounded-xl border border-[var(--color-border)] text-[var(--color-primary-bright)] hover:bg-[var(--color-card)] transition-colors shrink-0"
+                    className="p-2.5 sm:p-3 md:p-4 rounded-lg sm:rounded-xl border border-border text-primary-bright hover:bg-card transition-colors shrink-0"
                   >
                     <Share2 className="w-4 h-4 sm:w-5 sm:h-5" />
                   </motion.button>

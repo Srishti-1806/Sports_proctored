@@ -25,12 +25,7 @@ export const playersDatabase = {
     bio: 'Dedicated basketball player with a passion for excellence. Currently training to reach professional level. Focused on improving court vision and defensive capabilities. Training with elite coaches and consistently improving performance metrics.',
     assessmentScores: {
       overall: 87.5,
-      breakdown: [
-        { name: 'Speed & Agility', score: 92, icon: Zap, color: 'from-blue-500 to-cyan-400' },
-        { name: 'Strength', score: 85, icon: Dumbbell, color: 'from-red-500 to-orange-400' },
-        { name: 'Endurance', score: 88, icon: Activity, color: 'from-green-500 to-emerald-400' },
-        { name: 'Technique', score: 84, icon: Target, color: 'from-purple-500 to-pink-400' },
-        { name: 'Game IQ', score: 90, icon: BarChart3, color: 'from-[var(--color-primary-deep)] to-[var(--color-primary-bright)]' },
+      breakdown: primary-deep to-primary-bright' },
         { name: 'Mental Toughness', score: 86, icon: Shield, color: 'from-amber-500 to-yellow-400' },
       ],
       lastAssessment: 'Dec 15, 2024',
@@ -89,12 +84,7 @@ export const playersDatabase = {
     bio: 'Elite badminton player with exceptional footwork and strategic gameplay. State champion with national ambitions. Specialized in singles play with aggressive net game and powerful smashes.',
     assessmentScores: {
       overall: 91.2,
-      breakdown: [
-        { name: 'Speed & Agility', score: 95, icon: Zap, color: 'from-blue-500 to-cyan-400' },
-        { name: 'Strength', score: 88, icon: Dumbbell, color: 'from-red-500 to-orange-400' },
-        { name: 'Endurance', score: 92, icon: Activity, color: 'from-green-500 to-emerald-400' },
-        { name: 'Technique', score: 93, icon: Target, color: 'from-purple-500 to-pink-400' },
-        { name: 'Game IQ', score: 89, icon: BarChart3, color: 'from-[var(--color-primary-deep)] to-[var(--color-primary-bright)]' },
+      breakdown: primary-deep to-primary-bright' },
         { name: 'Mental Toughness', score: 90, icon: Shield, color: 'from-amber-500 to-yellow-400' },
       ],
       lastAssessment: 'Dec 18, 2024',
@@ -147,12 +137,7 @@ export const playersDatabase = {
     bio: 'Dynamic striker with exceptional goal-scoring ability. Former youth academy player with professional aspirations. Known for pace, positioning, and clinical finishing in the box.',
     assessmentScores: {
       overall: 85.8,
-      breakdown: [
-        { name: 'Speed & Agility', score: 91, icon: Zap, color: 'from-blue-500 to-cyan-400' },
-        { name: 'Strength', score: 83, icon: Dumbbell, color: 'from-red-500 to-orange-400' },
-        { name: 'Endurance', score: 87, icon: Activity, color: 'from-green-500 to-emerald-400' },
-        { name: 'Technique', score: 84, icon: Target, color: 'from-purple-500 to-pink-400' },
-        { name: 'Game IQ', score: 85, icon: BarChart3, color: 'from-[var(--color-primary-deep)] to-[var(--color-primary-bright)]' },
+      breakdown: primary-deep to-primary-bright' },
         { name: 'Mental Toughness', score: 85, icon: Shield, color: 'from-amber-500 to-yellow-400' },
       ],
       lastAssessment: 'Dec 12, 2024',
@@ -263,12 +248,7 @@ export const playersDatabase = {
     bio: 'Promising tennis player with powerful serves and strong baseline game. Junior circuit veteran with professional circuit ambitions. Known for mental toughness and clutch performances in tight matches.',
     assessmentScores: {
       overall: 88.1,
-      breakdown: [
-        { name: 'Speed & Agility', score: 89, icon: Zap, color: 'from-blue-500 to-cyan-400' },
-        { name: 'Strength', score: 87, icon: Dumbbell, color: 'from-red-500 to-orange-400' },
-        { name: 'Endurance', score: 90, icon: Activity, color: 'from-green-500 to-emerald-400' },
-        { name: 'Technique', score: 88, icon: Target, color: 'from-purple-500 to-pink-400' },
-        { name: 'Game IQ', score: 87, icon: BarChart3, color: 'from-[var(--color-primary-deep)] to-[var(--color-primary-bright)]' },
+      breakdown: primary-deep to-primary-bright' },
         { name: 'Mental Toughness', score: 88, icon: Shield, color: 'from-amber-500 to-yellow-400' },
       ],
       lastAssessment: 'Dec 16, 2024',
@@ -321,12 +301,7 @@ export const playersDatabase = {
     bio: 'Young swimming prodigy with exceptional freestyle technique. Multiple national records holder with international competition experience. Focused on Olympic qualification and breaking Asian records.',
     assessmentScores: {
       overall: 90.3,
-      breakdown: [
-        { name: 'Speed & Agility', score: 92, icon: Zap, color: 'from-blue-500 to-cyan-400' },
-        { name: 'Strength', score: 88, icon: Dumbbell, color: 'from-red-500 to-orange-400' },
-        { name: 'Endurance', score: 94, icon: Activity, color: 'from-green-500 to-emerald-400' },
-        { name: 'Technique', score: 93, icon: Target, color: 'from-purple-500 to-pink-400' },
-        { name: 'Game IQ', score: 87, icon: BarChart3, color: 'from-[var(--color-primary-deep)] to-[var(--color-primary-bright)]' },
+      breakdown: primary-deep to-primary-bright' },
         { name: 'Mental Toughness', score: 88, icon: Shield, color: 'from-amber-500 to-yellow-400' },
       ],
       lastAssessment: 'Dec 22, 2024',

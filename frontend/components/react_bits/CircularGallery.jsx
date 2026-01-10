@@ -29,8 +29,8 @@ function createTextTexture(gl, text, font = 'bold 30px monospace', color = null)
   if ((typeof window !== 'undefined') && (!color || color.startsWith('var('))) {
     try {
       const styles = getComputedStyle(document.documentElement);
-      const resolved = styles.getPropertyValue('--color-foreground') || styles.getPropertyValue('--color-primary') || 'var(--color-foreground,#ffffff)';
-      color = (resolved || 'var(--color-foreground,#ffffff)').trim();
+      const resolved = styles.getPropertyValue('--color-foreground') || styles.getPropertyValue('--color-primary') || 'varforeground';
+      color = (resolved || 'varforeground').trim();
     } catch (e) {
       color = getComputedStyle(document.documentElement).getPropertyValue('--color-foreground')?.trim() || '#ffffff';
     }

@@ -14,35 +14,35 @@ export default function CoachProfile({ profile, openEdit, deleteItem, user }) {
   return (
     <>
       {/* About Section */}
-      <div className="bg-[var(--color-card)] rounded-3xl p-8 shadow-xl border border-[var(--color-border)]">
+      <div className="bg-card rounded-3xl p-8 shadow-xl border border-border">
         <div className="flex justify-between items-center mb-6">
           <div className="flex items-center gap-3">
-            <div className="p-3 bg-linear-to-br from-[var(--color-primary-bright)/20] to-[var(--color-primary-deep)/10] rounded-xl">
-              <Pencil className="w-5 h-5 text-[var(--color-primary-bright)]" />
+            <div className="p-3 bg-linear-to-br from-primary-bright/20 to-primary-deep/10 rounded-xl">
+              <Pencil className="w-5 h-5 text-primary-bright" />
             </div>
-            <h2 className="text-2xl font-bold text-[var(--color-primary-bright)]">About</h2>
+            <h2 className="text-2xl font-bold text-primary-bright">About</h2>
           </div>
           {user && (
-            <button onClick={() => openEdit('about', { value: profile?.about || '' })} className="p-2 hover:bg-[var(--color-popover)] rounded-xl transition-colors">
-              <Pencil className="w-5 h-5 text-[var(--color-muted-foreground,#8697C4)]" />
+            <button onClick={() => openEdit('about', { value: profile?.about || '' })} className="p-2 hover:bg-popover rounded-xl transition-colors">
+              <Pencil className="w-5 h-5 text-muted-foreground" />
             </button>
           )}
         </div>
-        <p className="text-[var(--color-muted-foreground,#8697C4)] leading-relaxed">{profile?.about || (user ? 'No bio yet. Add one to tell your story!' : "This coach hasn't added a bio yet.")}</p>
+        <p className="text-muted-foreground leading-relaxed">{profile?.about || (user ? 'No bio yet. Add one to tell your story!' : "This coach hasn't added a bio yet.")}</p>
       </div>
 
       {/* Athletic Stats */}
-      <div className="bg-[var(--color-card)] rounded-3xl p-8 shadow-xl border border-[var(--color-border)]">
+      <div className="bg-card rounded-3xl p-8 shadow-xl border border-border">
         <div className="flex justify-between items-center mb-6">
           <div className="flex items-center gap-3">
-            <div className="p-3 bg-linear-to-br from-[var(--color-primary-bright)/20] to-[var(--color-primary-deep)/10] rounded-xl">
-              <TrendingUp className="w-5 h-5 text-[var(--color-primary-bright)]" />
+            <div className="p-3 bg-linear-to-br from-primary-bright/20 to-primary-deep/10 rounded-xl">
+              <TrendingUp className="w-5 h-5 text-primary-bright" />
             </div>
-            <h2 className="text-2xl font-bold text-[var(--color-primary-bright)]">Coaching Profile</h2>
+            <h2 className="text-2xl font-bold text-primary-bright">Coaching Profile</h2>
           </div>
           {user && (
-            <button onClick={() => openEdit('athleticStats', { value: profile?.athleticStats || {} })} className="p-2 hover:bg-[var(--color-popover)] rounded-xl transition-colors">
-              <Pencil className="w-5 h-5 text-[var(--color-muted-foreground,#8697C4)]" />
+            <button onClick={() => openEdit('athleticStats', { value: profile?.athleticStats || {} })} className="p-2 hover:bg-popover rounded-xl transition-colors">
+              <Pencil className="w-5 h-5 text-muted-foreground" />
             </button>
           )}
         </div>
@@ -55,17 +55,17 @@ export default function CoachProfile({ profile, openEdit, deleteItem, user }) {
       </div>
 
       {/* Physical Stats */}
-      <div className="bg-[var(--color-card)] rounded-3xl p-8 shadow-xl border border-[var(--color-border)]">
+      <div className="bg-card rounded-3xl p-8 shadow-xl border border-border">
         <div className="flex justify-between items-center mb-6">
           <div className="flex items-center gap-3">
-            <div className="p-3 bg-linear-to-br from-[var(--color-primary-bright)/20] to-[var(--color-primary-deep)/10] rounded-xl">
-              <TrendingUp className="w-5 h-5 text-[var(--color-primary-bright)]" />
+            <div className="p-3 bg-linear-to-br from-primary-bright/20 to-primary-deep/10 rounded-xl">
+              <TrendingUp className="w-5 h-5 text-primary-bright" />
             </div>
-            <h2 className="text-2xl font-bold text-[var(--color-primary-bright)]">Coaching Effectiveness</h2>
+            <h2 className="text-2xl font-bold text-primary-bright">Coaching Effectiveness</h2>
           </div>
           {user && (
-              <button onClick={() => openEdit('physicalStats', { value: profile?.physicalStats || {} })} className="p-2 hover:bg-[var(--color-popover)] rounded-xl transition-colors">
-              <Pencil className="w-5 h-5 text-[var(--color-muted-foreground,#8697C4)]" />
+              <button onClick={() => openEdit('physicalStats', { value: profile?.physicalStats || {} })} className="p-2 hover:bg-popover rounded-xl transition-colors">
+              <Pencil className="w-5 h-5 text-muted-foreground" />
             </button>
           )}
         </div>
@@ -79,21 +79,21 @@ export default function CoachProfile({ profile, openEdit, deleteItem, user }) {
       </div>
 
       {/* Certifications */}
-      <div className="bg-[var(--color-card)] rounded-3xl p-8 shadow-xl border border-[var(--color-border)]">
+      <div className="bg-card rounded-3xl p-8 shadow-xl border border-border">
         <div className="flex justify-between items-center mb-6">
           <div className="flex items-center gap-3">
-            <div className="p-3 bg-linear-to-br from-[var(--color-primary-bright)/20] to-[var(--color-primary-deep)/10] rounded-xl">
-              <Award className="w-5 h-5 text-[var(--color-primary-bright)]" />
+            <div className="p-3 bg-linear-to-br from-primary-bright/20 to-primary-deep/10 rounded-xl">
+              <Award className="w-5 h-5 text-primary-bright" />
             </div>
-            <h2 className="text-2xl font-bold text-[var(--color-primary-bright)]">Certifications</h2>
+            <h2 className="text-2xl font-bold text-primary-bright">Certifications</h2>
           </div>
           {user && (
             <div className="flex items-center gap-2">
-              <button onClick={() => openEdit('certifications', { item: { name: '', issuer: '', year: '' } })} className="hidden md:flex items-center gap-2 px-4 py-2 bg-linear-to-br from-[var(--color-primary-deep)] to-[var(--color-primary-bright)] text-white rounded-xl hover:opacity-90 transition-opacity">
+              <button onClick={() => openEdit('certifications', { item: { name: '', issuer: '', year: '' } })} className="hidden md:flex items-center gap-2 px-4 py-2 bg-linear-to-br from-primary-deep to-primary-bright text-white rounded-xl hover:opacity-90 transition-opacity">
                 <Plus className="w-4 h-4" />
                 <span>Add Certification</span>
               </button>
-              <button onClick={() => openEdit('certifications', { item: { name: '', issuer: '', year: '' } })} className="md:hidden p-2 bg-linear-to-br from-[var(--color-primary-deep)] to-[var(--color-primary-bright)] text-white rounded-lg shadow-md">
+              <button onClick={() => openEdit('certifications', { item: { name: '', issuer: '', year: '' } })} className="md:hidden p-2 bg-linear-to-br from-primary-deep to-primary-bright text-white rounded-lg shadow-md">
                 <Plus className="w-4 h-4" />
               </button>
             </div>
@@ -111,21 +111,21 @@ export default function CoachProfile({ profile, openEdit, deleteItem, user }) {
       </div>
 
       {/* Training Schedule */}
-      <div className="bg-[var(--color-card)] rounded-3xl p-8 shadow-xl border border-[var(--color-border)]">
+      <div className="bg-card rounded-3xl p-8 shadow-xl border border-border">
         <div className="flex justify-between items-center mb-6">
           <div className="flex items-center gap-3">
-            <div className="p-3 bg-linear-to-br from-[var(--color-primary-bright)]/20 to-[var(--color-primary-deep)]/10 rounded-xl">
-              <Calendar className="w-5 h-5 text-[var(--color-primary-bright)]" />
+            <div className="p-3 bg-linear-to-br from-primary-bright/20 to-primary-deep/10 rounded-xl">
+              <Calendar className="w-5 h-5 text-primary-bright" />
             </div>
-            <h2 className="text-2xl font-bold text-[var(--color-primary-bright)]">Training Programs</h2>
+            <h2 className="text-2xl font-bold text-primary-bright">Training Programs</h2>
           </div>
           {user && (
             <div className="flex items-center gap-2">
-              <button onClick={() => openEdit('trainingSchedule', { item: { name: '', duration: '', intensity: 'medium', frequency: '' } })} className="hidden md:flex items-center gap-2 px-4 py-2 bg-linear-to-br from-[var(--color-primary-deep)] to-[var(--color-primary-bright)] text-white rounded-xl hover:opacity-90 transition-opacity">
+              <button onClick={() => openEdit('trainingSchedule', { item: { name: '', duration: '', intensity: 'medium', frequency: '' } })} className="hidden md:flex items-center gap-2 px-4 py-2 bg-linear-to-br from-primary-deep to-primary-bright text-white rounded-xl hover:opacity-90 transition-opacity">
                 <Plus className="w-4 h-4" />
                 <span>Add Program</span>
               </button>
-              <button onClick={() => openEdit('trainingSchedule', { item: { name: '', duration: '', intensity: 'medium', frequency: '' } })} className="md:hidden p-2 bg-linear-to-br from-[var(--color-primary-deep)] to-[var(--color-primary-bright)] text-white rounded-lg shadow-md">
+              <button onClick={() => openEdit('trainingSchedule', { item: { name: '', duration: '', intensity: 'medium', frequency: '' } })} className="md:hidden p-2 bg-linear-to-br from-primary-deep to-primary-bright text-white rounded-lg shadow-md">
                 <Plus className="w-4 h-4" />
               </button>
             </div>
@@ -143,21 +143,21 @@ export default function CoachProfile({ profile, openEdit, deleteItem, user }) {
       </div>
 
       {/* Video Highlights */}
-      <div className="bg-[var(--color-card)] rounded-3xl p-8 shadow-xl border border-[var(--color-border)]">
+      <div className="bg-card rounded-3xl p-8 shadow-xl border border-border">
         <div className="flex justify-between items-center mb-6">
           <div className="flex items-center gap-3">
-            <div className="p-3 bg-linear-to-br from-[var(--color-primary-bright)]/20 to-[var(--color-primary-deep)]/10 rounded-xl">
-              <Video className="w-5 h-5 text-[var(--color-primary-bright)]" />
+            <div className="p-3 bg-linear-to-br from-primary-bright/20 to-primary-deep/10 rounded-xl">
+              <Video className="w-5 h-5 text-primary-bright" />
             </div>
-            <h2 className="text-2xl font-bold text-[var(--color-primary-bright)]">Coaching Highlights</h2>
+            <h2 className="text-2xl font-bold text-primary-bright">Coaching Highlights</h2>
           </div>
           {user && (
             <div className="flex items-center gap-2">
-              <button onClick={() => openEdit('videoHighlights', { item: { title: '', url: '', description: '' } })} className="hidden md:flex items-center gap-2 px-4 py-2 bg-linear-to-br from-[var(--color-primary-deep)] to-[var(--color-primary-bright)] text-white rounded-xl hover:opacity-90 transition-opacity">
+              <button onClick={() => openEdit('videoHighlights', { item: { title: '', url: '', description: '' } })} className="hidden md:flex items-center gap-2 px-4 py-2 bg-linear-to-br from-primary-deep to-primary-bright text-white rounded-xl hover:opacity-90 transition-opacity">
                 <Plus className="w-4 h-4" />
                 <span>Add Video</span>
               </button>
-              <button onClick={() => openEdit('videoHighlights', { item: { title: '', url: '', description: '' } })} className="md:hidden p-2 bg-linear-to-br from-[var(--color-primary-deep)] to-[var(--color-primary-bright)] text-white rounded-lg shadow-md">
+              <button onClick={() => openEdit('videoHighlights', { item: { title: '', url: '', description: '' } })} className="md:hidden p-2 bg-linear-to-br from-primary-deep to-primary-bright text-white rounded-lg shadow-md">
                 <Plus className="w-4 h-4" />
               </button>
             </div>
@@ -175,21 +175,21 @@ export default function CoachProfile({ profile, openEdit, deleteItem, user }) {
       </div>
 
       {/* Achievements */}
-      <div className="bg-[var(--color-card)] rounded-3xl p-8 shadow-xl border border-[var(--color-border)]">
+      <div className="bg-card rounded-3xl p-8 shadow-xl border border-border">
         <div className="flex justify-between items-center mb-6">
           <div className="flex items-center gap-3">
-            <div className="p-3 bg-linear-to-br from-[var(--color-primary-bright)]/20 to-[var(--color-primary-deep)]/10 rounded-xl">
-              <Trophy className="w-5 h-5 text-[var(--color-primary-bright)]" />
+            <div className="p-3 bg-linear-to-br from-primary-bright/20 to-primary-deep/10 rounded-xl">
+              <Trophy className="w-5 h-5 text-primary-bright" />
             </div>
-            <h2 className="text-2xl font-bold text-[var(--color-primary-bright)]">Coaching Achievements</h2>
+            <h2 className="text-2xl font-bold text-primary-bright">Coaching Achievements</h2>
           </div>
           {user && (
             <div className="flex items-center gap-2">
-              <button onClick={() => openEdit('achievements', { item: { title: '', year: '' } })} className="hidden md:flex items-center gap-2 px-4 py-2 bg-linear-to-br from-[var(--color-primary-deep)] to-[var(--color-primary-bright)] text-white rounded-xl hover:opacity-90 transition-opacity">
+              <button onClick={() => openEdit('achievements', { item: { title: '', year: '' } })} className="hidden md:flex items-center gap-2 px-4 py-2 bg-linear-to-br from-primary-deep to-primary-bright text-white rounded-xl hover:opacity-90 transition-opacity">
                 <Plus className="w-4 h-4" />
                 <span>Add Achievement</span>
               </button>
-              <button onClick={() => openEdit('achievements', { item: { title: '', year: '' } })} className="md:hidden p-2 bg-linear-to-br from-[var(--color-primary-deep)] to-[var(--color-primary-bright)] text-white rounded-lg shadow-md">
+              <button onClick={() => openEdit('achievements', { item: { title: '', year: '' } })} className="md:hidden p-2 bg-linear-to-br from-primary-deep to-primary-bright text-white rounded-lg shadow-md">
                 <Plus className="w-4 h-4" />
               </button>
             </div>
@@ -207,21 +207,21 @@ export default function CoachProfile({ profile, openEdit, deleteItem, user }) {
       </div>
 
       {/* Teams (Coaching History) */}
-      <div className="bg-[var(--color-card)] rounded-3xl p-8 shadow-xl border border-[var(--color-border)]">
+      <div className="bg-card rounded-3xl p-8 shadow-xl border border-border">
         <div className="flex justify-between items-center mb-6">
           <div className="flex items-center gap-3">
-            <div className="p-3 bg-linear-to-br from-[var(--color-primary-bright)]/20 to-[var(--color-primary-deep)]/10 rounded-xl">
-              <Trophy className="w-5 h-5 text-[var(--color-primary-bright)]" />
+            <div className="p-3 bg-linear-to-br from-primary-bright/20 to-primary-deep/10 rounded-xl">
+              <Trophy className="w-5 h-5 text-primary-bright" />
             </div>
-            <h2 className="text-2xl font-bold text-[var(--color-primary-bright)]">Coaching History</h2>
+            <h2 className="text-2xl font-bold text-primary-bright">Coaching History</h2>
           </div>
           {user && (
             <div className="flex items-center gap-2">
-              <button onClick={() => openEdit('teams', { item: { name: '', startYear: '', endYear: '' } })} className="hidden md:flex items-center gap-2 px-4 py-2 bg-linear-to-br from-[var(--color-primary-deep)] to-[var(--color-primary-bright)] text-white rounded-xl hover:opacity-90 transition-opacity">
+              <button onClick={() => openEdit('teams', { item: { name: '', startYear: '', endYear: '' } })} className="hidden md:flex items-center gap-2 px-4 py-2 bg-linear-to-br from-primary-deep to-primary-bright text-white rounded-xl hover:opacity-90 transition-opacity">
                 <Plus className="w-4 h-4" />
                 <span>Add Team</span>
               </button>
-              <button onClick={() => openEdit('teams', { item: { name: '', startYear: '', endYear: '' } })} className="md:hidden p-2 bg-linear-to-br from-[var(--color-primary-deep)] to-[var(--color-primary-bright)] text-white rounded-lg shadow-md">
+              <button onClick={() => openEdit('teams', { item: { name: '', startYear: '', endYear: '' } })} className="md:hidden p-2 bg-linear-to-br from-primary-deep to-primary-bright text-white rounded-lg shadow-md">
                 <Plus className="w-4 h-4" />
               </button>
             </div>

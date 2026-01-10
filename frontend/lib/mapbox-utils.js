@@ -37,12 +37,12 @@ export const ZOOM_LEVELS = {
 
 // Marker Colors
 export const MARKER_COLORS = {
-  PRIMARY: 'var(--color-primary,#3B82F6)',
-  SUCCESS: 'var(--color-success,#10B981)',
-  WARNING: 'var(--color-warning,#F59E0B)',
-  DANGER: 'var(--color-danger,#EF4444)',
-  INFO: 'var(--color-info,#06B6D4)',
-  PURPLE: 'var(--color-purple,#8B5CF6)',
+  PRIMARY: 'varprimary',
+  SUCCESS: 'varsuccess',
+  WARNING: 'varwarning',
+  DANGER: 'vardanger',
+  INFO: 'varinfo',
+  PURPLE: 'varpurple',
 };
 
 /**
@@ -129,13 +129,13 @@ export function createPopupContent({ title, subtitle, description, rating, revie
   return `
     <div style="padding: 12px; max-width: 250px;">
       <h3 style="font-weight: bold; margin-bottom: 4px; font-size: 16px;">${title}</h3>
-      ${subtitle ? `<p style="color: var(--color-primary-muted); font-size: 14px; margin-bottom: 8px;">${subtitle}</p>` : ''}
-      ${description ? `<p style="color: var(--color-foreground); font-size: 13px; margin-bottom: 8px; line-height: 1.4;">${description}</p>` : ''}
+      ${subtitle ? `<p style="color: varprimary-muted; font-size: 14px; margin-bottom: 8px;">${subtitle}</p>` : ''}
+      ${description ? `<p style="color: varforeground; font-size: 13px; margin-bottom: 8px; line-height: 1.4;">${description}</p>` : ''}
       ${rating ? `
         <div style="display: flex; align-items: center; gap: 4px;">
-          <span style="color: var(--color-warning);">★</span>
+          <span style="color: varwarning;">★</span>
           <span style="font-weight: bold;">${rating}</span>
-          ${reviews ? `<span style="color: var(--color-primary-muted); font-size: 12px;">(${reviews} reviews)</span>` : ''}
+          ${reviews ? `<span style="color: varprimary-muted; font-size: 12px;">(${reviews} reviews)</span>` : ''}
         </div>
       ` : ''}
     </div>

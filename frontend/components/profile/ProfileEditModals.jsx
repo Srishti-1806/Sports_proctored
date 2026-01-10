@@ -60,7 +60,7 @@ export default function ProfileEditModals({
                 type="text"
                 value={sectionData.position || ''}
                 onChange={(e) => setSectionData({ ...sectionData, position: e.target.value })}
-                className="w-full px-4 py-2 rounded-xl border border-[var(--color-border)] focus:border-[var(--color-primary-bright)] focus:ring-2 focus:ring-[var(--color-primary-bright)]/20 outline-none"
+                className="w-full px-4 py-2 rounded-xl border border-border focus:border-primary-bright focus:ring-2 focus:ring-primary-bright/20 outline-none"
                 placeholder="e.g., Professional Athlete, Point Guard, Head Coach"
               />
             </div>
@@ -70,7 +70,7 @@ export default function ProfileEditModals({
                 type="text"
                 value={sectionData.location || ''}
                 onChange={(e) => setSectionData({ ...sectionData, location: e.target.value })}
-                className="w-full px-4 py-2 rounded-xl border border-[var(--color-border)] focus:border-[var(--color-primary-bright)] focus:ring-2 focus:ring-[var(--color-primary-bright)]/20 outline-none"
+                className="w-full px-4 py-2 rounded-xl border border-border focus:border-primary-bright focus:ring-2 focus:ring-primary-bright/20 outline-none"
                 placeholder="e.g., Mumbai, India"
               />
             </div>
@@ -89,7 +89,7 @@ export default function ProfileEditModals({
             value={sectionData.value || ''}
             onChange={(e) => setSectionData({ ...sectionData, value: e.target.value })}
             rows={6}
-            className="w-full px-4 py-2 rounded-xl border border-[var(--color-border)] focus:border-[var(--color-primary-bright)] focus:ring-2 focus:ring-[var(--color-primary-bright)]/20 outline-none"
+            className="w-full px-4 py-2 rounded-xl border border-border focus:border-primary-bright focus:ring-2 focus:ring-primary-bright/20 outline-none"
             placeholder="Share your athletic journey, goals, and what makes you unique..."
           />
         </EditModal>
@@ -112,7 +112,7 @@ export default function ProfileEditModals({
                   type="text"
                   value={sectionData.value?.height || ''}
                   onChange={(e) => setSectionData({ ...sectionData, value: { ...sectionData.value, height: e.target.value } })}
-                  className="w-full px-4 py-2 rounded-xl border border-[var(--color-border)] focus:border-[var(--color-primary-bright)] outline-none"
+                  className="w-full px-4 py-2 rounded-xl border border-border focus:border-primary-bright outline-none"
                   placeholder={user?.user_metadata?.role === 'player' ? "e.g., 6'2\"" : "e.g., Strength Training"}
                 />
               </div>
@@ -124,7 +124,7 @@ export default function ProfileEditModals({
                   type="text"
                   value={sectionData.value?.weight || ''}
                   onChange={(e) => setSectionData({ ...sectionData, value: { ...sectionData.value, weight: e.target.value } })}
-                  className="w-full px-4 py-2 rounded-xl border border-[var(--color-border)] focus:border-[var(--color-primary-bright)] outline-none"
+                  className="w-full px-4 py-2 rounded-xl border border-border focus:border-primary-bright outline-none"
                   placeholder={user?.user_metadata?.role === 'player' ? "e.g., 180 lbs" : "e.g., Advanced"}
                 />
               </div>
@@ -138,7 +138,7 @@ export default function ProfileEditModals({
                   type="text"
                   value={sectionData.value?.age || ''}
                   onChange={(e) => setSectionData({ ...sectionData, value: { ...sectionData.value, age: e.target.value } })}
-                  className="w-full px-4 py-2 rounded-xl border border-[var(--color-border)] focus:border-[var(--color-primary-bright)] outline-none"
+                  className="w-full px-4 py-2 rounded-xl border border-border focus:border-primary-bright outline-none"
                   placeholder={user?.user_metadata?.role === 'player' ? "e.g., 24" : "e.g., 10 years"}
                 />
               </div>
@@ -148,7 +148,7 @@ export default function ProfileEditModals({
                   type="text"
                   value={sectionData.value?.primarySport || ''}
                   onChange={(e) => setSectionData({ ...sectionData, value: { ...sectionData.value, primarySport: e.target.value } })}
-                  className="w-full px-4 py-2 rounded-xl border border-[var(--color-border)] focus:border-[var(--color-primary-bright)] outline-none"
+                  className="w-full px-4 py-2 rounded-xl border border-border focus:border-primary-bright outline-none"
                   placeholder="e.g., Basketball"
                 />
               </div>
@@ -177,7 +177,7 @@ export default function ProfileEditModals({
                     onChange={(e) => setSectionData({ ...sectionData, value: { ...sectionData.value, [stat]: parseInt(e.target.value) } })}
                     className="w-full"
                   />
-                  <div className="text-right text-sm font-bold text-[var(--color-primary-bright)]">{sectionData.value?.[stat] || 0}</div>
+                  <div className="text-right text-sm font-bold text-primary-bright">{sectionData.value?.[stat] || 0}</div>
                 </div>
               ))
             ) : (
@@ -198,7 +198,7 @@ export default function ProfileEditModals({
                     onChange={(e) => setSectionData({ ...sectionData, value: { ...sectionData.value, [key]: parseInt(e.target.value) } })}
                     className="w-full"
                   />
-                  <div className="text-right text-sm font-bold text-[var(--color-primary-bright)]">{sectionData.value?.[key] || 0}</div>
+                  <div className="text-right text-sm font-bold text-primary-bright">{sectionData.value?.[key] || 0}</div>
                 </div>
               ))
             )}
@@ -219,13 +219,13 @@ export default function ProfileEditModals({
               placeholder="Opponent"
               value={sectionData.item?.opponent || ''}
               onChange={(e) => setSectionData({ ...sectionData, item: { ...sectionData.item, opponent: e.target.value } })}
-                  className="w-full px-4 py-2 rounded-xl border border-[var(--color-border)] focus:border-[var(--color-primary-bright)] outline-none"
+                  className="w-full px-4 py-2 rounded-xl border border-border focus:border-primary-bright outline-none"
             />
             <div className="grid grid-cols-2 gap-4">
               <select
                 value={sectionData.item?.result || 'win'}
                 onChange={(e) => setSectionData({ ...sectionData, item: { ...sectionData.item, result: e.target.value } })}
-                className="w-full px-4 py-2 rounded-xl border border-[var(--color-border)] focus:border-[var(--color-primary-bright)] outline-none"
+                className="w-full px-4 py-2 rounded-xl border border-border focus:border-primary-bright outline-none"
               >
                 <option value="win">Win</option>
                 <option value="loss">Loss</option>
@@ -236,21 +236,21 @@ export default function ProfileEditModals({
                 placeholder="Score (e.g., 3-2)"
                 value={sectionData.item?.score || ''}
                 onChange={(e) => setSectionData({ ...sectionData, item: { ...sectionData.item, score: e.target.value } })}
-                className="w-full px-4 py-2 rounded-xl border border-[var(--color-border)] focus:border-[var(--color-primary-bright)] outline-none"
+                className="w-full px-4 py-2 rounded-xl border border-border focus:border-primary-bright outline-none"
               />
             </div>
             <input
               type="date"
               value={sectionData.item?.date || ''}
               onChange={(e) => setSectionData({ ...sectionData, item: { ...sectionData.item, date: e.target.value } })}
-              className="w-full px-4 py-2 rounded-xl border border-[var(--color-border)] focus:border-[var(--color-primary-bright)] outline-none"
+              className="w-full px-4 py-2 rounded-xl border border-border focus:border-primary-bright outline-none"
             />
             <textarea
               placeholder="Your performance details..."
               value={sectionData.item?.performance || ''}
               onChange={(e) => setSectionData({ ...sectionData, item: { ...sectionData.item, performance: e.target.value } })}
               rows={2}
-              className="w-full px-4 py-2 rounded-xl border border-[var(--color-border)] focus:border-[var(--color-primary-bright)] outline-none"
+              className="w-full px-4 py-2 rounded-xl border border-border focus:border-primary-bright outline-none"
             />
           </div>
         </EditModal>
@@ -273,7 +273,7 @@ export default function ProfileEditModals({
               placeholder={user?.user_metadata?.role === 'player' ? "Exercise Name" : "Program Name"}
               value={sectionData.item?.name || ''}
               onChange={(e) => setSectionData({ ...sectionData, item: { ...sectionData.item, name: e.target.value } })}
-              className="w-full px-4 py-2 rounded-xl border border-[var(--color-border)] focus:border-[var(--color-primary-bright)] outline-none"
+              className="w-full px-4 py-2 rounded-xl border border-border focus:border-primary-bright outline-none"
             />
             <div className="grid grid-cols-2 gap-4">
               <input
@@ -281,12 +281,12 @@ export default function ProfileEditModals({
                 placeholder={user?.user_metadata?.role === 'player' ? "Duration (e.g., 45 min)" : "Duration (e.g., 8 weeks)"}
                 value={sectionData.item?.duration || ''}
                 onChange={(e) => setSectionData({ ...sectionData, item: { ...sectionData.item, duration: e.target.value } })}
-                className="w-full px-4 py-2 rounded-xl border border-[var(--color-border)] focus:border-[var(--color-primary-bright)] outline-none"
+                className="w-full px-4 py-2 rounded-xl border border-border focus:border-primary-bright outline-none"
               />
               <select
                 value={sectionData.item?.intensity || 'medium'}
                 onChange={(e) => setSectionData({ ...sectionData, item: { ...sectionData.item, intensity: e.target.value } })}
-                className="w-full px-4 py-2 rounded-xl border border-[var(--color-border)] focus:border-[var(--color-primary-bright)] outline-none"
+                className="w-full px-4 py-2 rounded-xl border border-border focus:border-primary-bright outline-none"
               >
                 <option value="low">{user?.user_metadata?.role === 'player' ? 'Low' : 'Beginner'}</option>
                 <option value="medium">{user?.user_metadata?.role === 'player' ? 'Medium' : 'Intermediate'}</option>
@@ -298,7 +298,7 @@ export default function ProfileEditModals({
               placeholder={user?.user_metadata?.role === 'player' ? "Day/Frequency (e.g., Mon, Wed, Fri)" : "Schedule (e.g., 3x per week)"}
               value={sectionData.item?.frequency || ''}
               onChange={(e) => setSectionData({ ...sectionData, item: { ...sectionData.item, frequency: e.target.value } })}
-              className="w-full px-4 py-2 rounded-xl border border-[var(--color-border)] focus:border-[var(--color-primary-bright)] outline-none"
+              className="w-full px-4 py-2 rounded-xl border border-border focus:border-primary-bright outline-none"
             />
           </div>
         </EditModal>
@@ -317,21 +317,21 @@ export default function ProfileEditModals({
               placeholder="Video Title"
               value={sectionData.item?.title || ''}
               onChange={(e) => setSectionData({ ...sectionData, item: { ...sectionData.item, title: e.target.value } })}
-              className="w-full px-4 py-2 rounded-xl border border-[var(--color-border)] focus:border-[var(--color-primary-bright)] outline-none"
+              className="w-full px-4 py-2 rounded-xl border border-border focus:border-primary-bright outline-none"
             />
             <input
               type="text"
               placeholder="Video URL (YouTube, Vimeo, etc.)"
               value={sectionData.item?.url || ''}
               onChange={(e) => setSectionData({ ...sectionData, item: { ...sectionData.item, url: e.target.value } })}
-              className="w-full px-4 py-2 rounded-xl border border-[var(--color-border)] focus:border-[var(--color-primary-bright)] outline-none"
+              className="w-full px-4 py-2 rounded-xl border border-border focus:border-primary-bright outline-none"
             />
             <textarea
               placeholder="Description"
               value={sectionData.item?.description || ''}
               onChange={(e) => setSectionData({ ...sectionData, item: { ...sectionData.item, description: e.target.value } })}
               rows={2}
-              className="w-full px-4 py-2 rounded-xl border border-[var(--color-border)] focus:border-[var(--color-primary-bright)] outline-none"
+              className="w-full px-4 py-2 rounded-xl border border-border focus:border-primary-bright outline-none"
             />
           </div>
         </EditModal>
@@ -372,14 +372,14 @@ export default function ProfileEditModals({
               placeholder="Achievement Title (e.g., State Champion 2023)"
               value={sectionData.item?.title || ''}
               onChange={(e) => setSectionData({ ...sectionData, item: { ...sectionData.item, title: e.target.value } })}
-              className="w-full px-4 py-2 rounded-xl border border-[var(--color-border)] focus:border-[var(--color-primary-bright)] outline-none"
+              className="w-full px-4 py-2 rounded-xl border border-border focus:border-primary-bright outline-none"
             />
             <input
               type="text"
               placeholder="Event/Competition Name"
               value={sectionData.item?.event || ''}
               onChange={(e) => setSectionData({ ...sectionData, item: { ...sectionData.item, event: e.target.value } })}
-              className="w-full px-4 py-2 rounded-xl border border-[var(--color-border)] focus:border-[var(--color-primary-bright)] outline-none"
+              className="w-full px-4 py-2 rounded-xl border border-border focus:border-primary-bright outline-none"
             />
             <input
               type="text"
@@ -390,7 +390,7 @@ export default function ProfileEditModals({
                 setSectionData({ ...sectionData, item: { ...sectionData.item, year: value } })
               }}
               maxLength="4"
-              className="w-full px-4 py-2 rounded-xl border border-[var(--color-border)] focus:border-[var(--color-primary-bright)] outline-none"
+              className="w-full px-4 py-2 rounded-xl border border-border focus:border-primary-bright outline-none"
             />
             <div>
               <label className="block text-sm font-medium mb-2">Achievement Photo (Optional)</label>
@@ -409,12 +409,12 @@ export default function ProfileEditModals({
                 />
                 <label
                   htmlFor="achievement-upload"
-                  className="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-xl border-2 border-dashed border-[var(--color-border)] hover:border-[var(--color-primary-bright)] bg-[var(--color-primary-soft)]/30 hover:bg-[var(--color-primary-soft)]/50 cursor-pointer transition-colors group"
+                  className="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-xl border-2 border-dashed border-border hover:border-primary-bright bg-primary-soft/30 hover:bg-primary-soft/50 cursor-pointer transition-colors group"
                 >
-                  <svg className="w-5 h-5 text-[var(--color-muted-foreground)] group-hover:text-[var(--color-primary-bright)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-5 h-5 text-muted-foreground group-hover:text-primary-bright" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                   </svg>
-                  <span className="text-sm font-medium text-[var(--color-muted-foreground)] group-hover:text-[var(--color-primary-bright)]">
+                  <span className="text-sm font-medium text-muted-foreground group-hover:text-primary-bright">
                     {sectionData.achievementFile ? sectionData.achievementFile.name : 'Upload Achievement Photo'}
                   </span>
                 </label>
@@ -424,7 +424,7 @@ export default function ProfileEditModals({
                   <img 
                     src={sectionData.achievementFile ? URL.createObjectURL(sectionData.achievementFile) : sectionData.item.achievementImage} 
                     alt="Achievement Preview" 
-                    className="w-full h-40 object-cover rounded-xl border border-[var(--color-border)]"
+                    className="w-full h-40 object-cover rounded-xl border border-border"
                   />
                 </div>
               )}
@@ -446,7 +446,7 @@ export default function ProfileEditModals({
               placeholder="Team Name"
               value={sectionData.item?.name || ''}
               onChange={(e) => setSectionData({ ...sectionData, item: { ...sectionData.item, name: e.target.value } })}
-              className="w-full px-4 py-2 rounded-xl border border-[var(--color-border)] focus:border-[var(--color-primary-bright)] outline-none"
+              className="w-full px-4 py-2 rounded-xl border border-border focus:border-primary-bright outline-none"
             />
             <div className="grid grid-cols-2 gap-4">
               <input
@@ -458,7 +458,7 @@ export default function ProfileEditModals({
                   setSectionData({ ...sectionData, item: { ...sectionData.item, startYear: value } })
                 }}
                 maxLength="4"
-                className="w-full px-4 py-2 rounded-xl border border-[var(--color-border)] focus:border-[var(--color-primary-bright)] outline-none"
+                className="w-full px-4 py-2 rounded-xl border border-border focus:border-primary-bright outline-none"
               />
               <input
                 type="text"
@@ -469,7 +469,7 @@ export default function ProfileEditModals({
                   setSectionData({ ...sectionData, item: { ...sectionData.item, endYear: value } })
                 }}
                 maxLength="4"
-                className="w-full px-4 py-2 rounded-xl border border-[var(--color-border)] focus:border-[var(--color-primary-bright)] outline-none"
+                className="w-full px-4 py-2 rounded-xl border border-border focus:border-primary-bright outline-none"
               />
             </div>
           </div>
@@ -511,14 +511,14 @@ export default function ProfileEditModals({
               placeholder="Certification Name"
               value={sectionData.item?.name || ''}
               onChange={(e) => setSectionData({ ...sectionData, item: { ...sectionData.item, name: e.target.value } })}
-              className="w-full px-4 py-2 rounded-xl border border-[var(--color-border)] focus:border-[var(--color-primary-bright)] outline-none"
+              className="w-full px-4 py-2 rounded-xl border border-border focus:border-primary-bright outline-none"
             />
             <input
               type="text"
               placeholder="Issuing Organization"
               value={sectionData.item?.issuer || ''}
               onChange={(e) => setSectionData({ ...sectionData, item: { ...sectionData.item, issuer: e.target.value } })}
-              className="w-full px-4 py-2 rounded-xl border border-[var(--color-border)] focus:border-[var(--color-primary-bright)] outline-none"
+              className="w-full px-4 py-2 rounded-xl border border-border focus:border-primary-bright outline-none"
             />
             <input
               type="text"
@@ -529,7 +529,7 @@ export default function ProfileEditModals({
                 setSectionData({ ...sectionData, item: { ...sectionData.item, year: value } })
               }}
               maxLength="4"
-              className="w-full px-4 py-2 rounded-xl border border-[var(--color-border)] focus:border-[var(--color-primary-bright)] outline-none"
+              className="w-full px-4 py-2 rounded-xl border border-border focus:border-primary-bright outline-none"
             />
             <div>
               <label className="block text-sm font-medium mb-2">Certificate Image (Optional)</label>
@@ -548,12 +548,12 @@ export default function ProfileEditModals({
                 />
                 <label
                   htmlFor="cert-upload"
-                  className="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-xl border-2 border-dashed border-[var(--color-border)] hover:border-[var(--color-primary-bright)] bg-[var(--color-primary-soft)]/30 hover:bg-[var(--color-primary-soft)]/50 cursor-pointer transition-colors group"
+                  className="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-xl border-2 border-dashed border-border hover:border-primary-bright bg-primary-soft/30 hover:bg-primary-soft/50 cursor-pointer transition-colors group"
                 >
-                  <svg className="w-5 h-5 text-[var(--color-muted-foreground)] group-hover:text-[var(--color-primary-bright)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-5 h-5 text-muted-foreground group-hover:text-primary-bright" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                   </svg>
-                  <span className="text-sm font-medium text-[var(--color-muted-foreground)] group-hover:text-[var(--color-primary-bright)]">
+                  <span className="text-sm font-medium text-muted-foreground group-hover:text-primary-bright">
                     {sectionData.certificateFile ? sectionData.certificateFile.name : 'Upload Certificate Image'}
                   </span>
                 </label>
@@ -563,7 +563,7 @@ export default function ProfileEditModals({
                   <img 
                     src={sectionData.certificateFile ? URL.createObjectURL(sectionData.certificateFile) : sectionData.item.certificateImage} 
                     alt="Certificate Preview" 
-                    className="w-full h-40 object-cover rounded-xl border border-[var(--color-border)]" 
+                    className="w-full h-40 object-cover rounded-xl border border-border" 
                   />
                 </div>
               )}

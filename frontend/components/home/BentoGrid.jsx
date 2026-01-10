@@ -46,7 +46,7 @@ export default function BentoGrid({ onSignupClick, onLoginClick }) {
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.1 }}
         whileHover={{ scale: 1.02 }}
-        className="col-span-12 lg:col-span-5 row-span-2 rounded-[24px] bg-linear-to-br from-[var(--color-primary-deep)] to-[var(--color-primary-bright)] p-6 relative overflow-hidden group cursor-pointer"
+        className="col-span-12 lg:col-span-5 row-span-2 rounded-[24px] bg-linear-to-br from-primary-deep to-primary-bright p-6 relative overflow-hidden group cursor-pointer"
         onClick={handleProfileClick}
       >
         <div className="relative h-full flex flex-col justify-between">
@@ -58,7 +58,7 @@ export default function BentoGrid({ onSignupClick, onLoginClick }) {
               Find Your Coach
               <br />Across India
             </h2>
-            <p className="text-[var(--color-primary-light)] text-sm sm:text-base mb-4">
+            <p className="text-primary-light text-sm sm:text-base mb-4">
               Browse coaches nationwide. Build your sports career.
             </p>
           </div>
@@ -90,21 +90,21 @@ export default function BentoGrid({ onSignupClick, onLoginClick }) {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
-          className="col-span-6 lg:col-span-3 row-span-2 rounded-[24px] bg-[var(--color-card)] border border-[var(--color-border)] p-4 relative overflow-hidden group hover:border-[var(--color-primary-bright)] transition-colors duration-300"
+          className="col-span-6 lg:col-span-3 row-span-2 rounded-[24px] bg-card border border-border p-4 relative overflow-hidden group hover:border-primary-bright transition-colors duration-300"
       >
         <div className="flex flex-col h-full justify-between">
           <div className="flex items-center justify-between mb-3">
-            <div className="w-10 h-10 rounded-xl bg-[var(--color-primary-soft)] flex items-center justify-center">
-              <TrendingUp className="w-5 h-5 text-[var(--color-primary-deep)]" />
+            <div className="w-10 h-10 rounded-xl bg-primary-soft flex items-center justify-center">
+              <TrendingUp className="w-5 h-5 text-primary-deep" />
             </div>
-            <div className="text-xs text-[var(--color-primary-muted)] font-medium">LIVE</div>
+            <div className="text-xs text-primary-muted font-medium">LIVE</div>
           </div>
           
           <div>
-            <div className="font-display text-2xl sm:text-3xl md:text-4xl font-bold text-[var(--color-foreground)] mb-1">
+            <div className="font-display text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-1">
               25K+
             </div>
-            <div className="text-[var(--color-primary-muted)] text-xs sm:text-sm">Players Connected</div>
+            <div className="text-primary-muted text-xs sm:text-sm">Players Connected</div>
           </div>
 
           <div className="flex items-center gap-2 text-xs text-green-600 bg-green-50 px-2 py-1 rounded-lg w-fit">
@@ -119,12 +119,12 @@ export default function BentoGrid({ onSignupClick, onLoginClick }) {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.25 }}
-        className="col-span-6 lg:col-span-4 row-span-2 rounded-[24px] bg-[var(--color-card)] p-5 relative overflow-hidden border border-[var(--color-border)] hover:border-[var(--color-primary-bright)] transition-colors duration-300"
+        className="col-span-6 lg:col-span-4 row-span-2 rounded-[24px] bg-card p-5 relative overflow-hidden border border-border hover:border-primary-bright transition-colors duration-300"
       >
         <div className="relative flex flex-col h-full justify-between">
           <div>
-            <Activity className="w-7 h-7 text-[var(--color-primary-bright)] mb-3" />
-            <h3 className="font-display text-lg sm:text-xl md:text-2xl font-bold text-[var(--color-foreground)] mb-2">
+            <Activity className="w-7 h-7 text-primary-bright mb-3" />
+            <h3 className="font-display text-lg sm:text-xl md:text-2xl font-bold text-foreground mb-2">
               Standardized
               <br />Assessment
             </h3>
@@ -138,11 +138,11 @@ export default function BentoGrid({ onSignupClick, onLoginClick }) {
                   initial={{ height: 0 }}
                   animate={{ height: `${height}%` }}
                   transition={{ delay: 0.3 + i * 0.1 }}
-                  className="w-1.5 bg-linear-to-t from-[var(--color-primary-bright)] to-[var(--color-primary-light)] rounded-full"
+                  className="w-1.5 bg-linear-to-t from-primary-bright to-primary-light rounded-full"
                 />
               ))}
             </div>
-            <div className="text-[var(--color-primary-bright)] font-display text-2xl font-bold">94%</div>
+            <div className="text-primary-bright font-display text-2xl font-bold">94%</div>
           </div>
         </div>
       </motion.div>
@@ -153,7 +153,7 @@ export default function BentoGrid({ onSignupClick, onLoginClick }) {
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 0.3 }}
         whileHover={{ scale: 1.02 }}
-        className="col-span-12 lg:col-span-4 row-span-1 rounded-[32px] bg-[var(--color-primary-soft)] p-6 relative overflow-hidden group cursor-pointer"
+        className="col-span-12 lg:col-span-4 row-span-1 rounded-[32px] bg-primary-soft p-6 relative overflow-hidden group cursor-pointer"
         onClick={handleGetStartedClick}
       >
         <div className="flex items-center justify-between h-full">
@@ -165,7 +165,7 @@ export default function BentoGrid({ onSignupClick, onLoginClick }) {
           </div>
           <motion.div
             whileHover={{ x: 5 }}
-            className="w-12 h-12 rounded-2xl bg-linear-to-br from-[var(--color-primary-deep)] to-[var(--color-primary-bright)] flex items-center justify-center"
+            className="w-12 h-12 rounded-2xl bg-linear-to-br from-primary-deep to-primary-bright flex items-center justify-center"
           >
             <ArrowRight className="w-6 h-6 text-white" />
           </motion.div>
@@ -177,13 +177,13 @@ export default function BentoGrid({ onSignupClick, onLoginClick }) {
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 0.35 }}
-        className="col-span-6 lg:col-span-3 row-span-2 rounded-[32px] bg-[var(--color-card)] border border-[var(--color-border)] p-6 hover:border-[var(--color-primary-bright)] transition-colors duration-300"
+        className="col-span-6 lg:col-span-3 row-span-2 rounded-[32px] bg-card border border-border p-6 hover:border-primary-bright transition-colors duration-300"
       >
-        <MapPin className="w-8 h-8 text-[var(--color-primary-bright)] mb-4" />
-        <h3 className="font-display text-lg sm:text-xl md:text-2xl font-bold text-[var(--color-foreground)] mb-2">
+        <MapPin className="w-8 h-8 text-primary-bright mb-4" />
+        <h3 className="font-display text-lg sm:text-xl md:text-2xl font-bold text-foreground mb-2">
           Find Venues
         </h3>
-        <p className="text-[var(--color-primary-muted)] text-xs sm:text-sm mb-4">
+        <p className="text-primary-muted text-xs sm:text-sm mb-4">
           450+ facilities across India
         </p>
 
@@ -194,10 +194,10 @@ export default function BentoGrid({ onSignupClick, onLoginClick }) {
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.5 + i * 0.1 }}
-              className="group flex items-center justify-between p-2 rounded-lg hover:bg-[var(--color-primary-soft)] transition-colors"
+              className="group flex items-center justify-between p-2 rounded-lg hover:bg-primary-soft transition-colors"
             >
-              <span className="text-sm font-medium text-[var(--color-foreground)] group-hover:text-[var(--color-primary-deep)]">{city}</span>
-              <span className="text-xs text-[var(--color-primary-muted)] group-hover:text-[var(--color-primary-deep)]">{count}+</span>
+              <span className="text-sm font-medium text-foreground group-hover:text-primary-deep">{city}</span>
+              <span className="text-xs text-primary-muted group-hover:text-primary-deep">{count}+</span>
             </motion.div>
           ))}
         </div>
@@ -208,9 +208,9 @@ export default function BentoGrid({ onSignupClick, onLoginClick }) {
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.4 }}
-        className="col-span-6 lg:col-span-5 row-span-2 rounded-[24px] bg-linear-to-br from-[var(--color-primary-deep)] to-[var(--color-primary-light)] p-5 relative overflow-hidden"
+        className="col-span-6 lg:col-span-5 row-span-2 rounded-[24px] bg-linear-to-br from-primary-deep to-primary-light p-5 relative overflow-hidden"
       >
-        <div className="absolute -top-8 -right-8 w-32 h-32 border-2 border-[var(--color-border)] rounded-full" />
+        <div className="absolute -top-8 -right-8 w-32 h-32 border-2 border-border rounded-full" />
         
         <div className="relative flex flex-col h-full justify-between">
           <div>
@@ -240,16 +240,16 @@ export default function BentoGrid({ onSignupClick, onLoginClick }) {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.45 }}
-        className="col-span-6 lg:col-span-4 row-span-1 rounded-[24px] bg-[var(--color-card)] border border-[var(--color-border)] p-4 hover:border-[var(--color-primary-bright)] transition-colors duration-300"
+        className="col-span-6 lg:col-span-4 row-span-1 rounded-[24px] bg-card border border-border p-4 hover:border-primary-bright transition-colors duration-300"
       >
         <div className="flex items-center justify-between h-full">
             <div>
             <div className="font-display text-2xl sm:text-3xl font-bold gradient-text mb-1">
               96%
             </div>
-            <div className="text-[var(--color-primary-muted)] text-xs">Success Rate</div>
+            <div className="text-primary-muted text-xs">Success Rate</div>
           </div>
-          <Award className="w-10 h-10 text-[var(--color-primary-bright)]" />
+          <Award className="w-10 h-10 text-primary-bright" />
         </div>
       </motion.div>
 

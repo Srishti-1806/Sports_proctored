@@ -12,7 +12,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="antialiased min-h-screen bg-[var(--color-background)] text-[var(--color-foreground)]">
+      <body className="antialiased min-h-screen bg-background text-foreground">
         <ThemeProvider
           attribute="class"
           enableSystem={true}

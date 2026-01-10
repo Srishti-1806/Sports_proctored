@@ -65,7 +65,7 @@
 
 .markdown-preview li::marker,
 .markdown-content li::marker {
-  color: var(--color-foreground);
+  color: varforeground;
   opacity: 0.95;
 }
 
@@ -73,5 +73,5 @@
 .markdown-content blockquote {
   margin: 1em 0;
   padding-left: 1em;
-  border-left: 4px solid var(--color-border);
+  border-left: 4px solid varborder;
 }

@@ -71,7 +71,7 @@ export default function HomePage() {
   }
 
   return (
-    <div className="overflow-hidden bg-[var(--color-background)]" ref={containerRef}>
+    <div className="overflow-hidden bg-background" ref={containerRef}>
       
       {/* Search Params Handler */}
       <Suspense fallback={null}>
@@ -86,13 +86,13 @@ export default function HomePage() {
       {/* Auth Required Alert */}
       {showAuthAlert && (
         <div className="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 animate-in slide-in-from-top px-4 w-full max-w-md">
-          <div className="flex items-center gap-3 px-4 sm:px-6 py-3 sm:py-4 rounded-xl sm:rounded-2xl bg-[var(--color-card)] shadow-2xl border border-[var(--color-border)]">
+          <div className="flex items-center gap-3 px-4 sm:px-6 py-3 sm:py-4 rounded-xl sm:rounded-2xl bg-card shadow-2xl border border-border">
             <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-linear-to-br from-[#3D52A0] to-[#7091E6] flex items-center justify-center shrink-0">
               <AlertCircle className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
             </div>
             <div className="min-w-0 flex-1">
-              <p className="font-semibold text-sm sm:text-base text-[var(--color-foreground)] truncate">Authentication Required</p>
-              <p className="text-xs sm:text-sm text-[var(--color-muted-foreground,#8697C4)] truncate">Please sign in to access this page</p>
+              <p className="font-semibold text-sm sm:text-base text-foreground truncate">Authentication Required</p>
+              <p className="text-xs sm:text-sm text-muted-foreground truncate">Please sign in to access this page</p>
             </div>
           </div>
         </div>
