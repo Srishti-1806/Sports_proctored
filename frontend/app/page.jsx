@@ -70,10 +70,6 @@ export default function HomePage() {
   const [showAuthAlert, setShowAuthAlert] = useState(false)
   const containerRef = useRef(null)
   const { user, loading } = useAuth()
-  
-  const { scrollYProgress } = useScroll()
-  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.95])
-  const opacity = useTransform(scrollYProgress, [0, 0.3], [1, 0.8])
 
   useEffect(() => {
     const handleMouseMove = (e) => {
