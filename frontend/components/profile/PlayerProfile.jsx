@@ -18,6 +18,8 @@ export default function PlayerProfile({ profile, openEdit, deleteItem, user, hid
   const [loadingProctor, setLoadingProctor] = useState(false)
   const [proctorError, setProctorError] = useState(null)
 
+  const canEdit = user && profile && user.id === profile.id
+
   useEffect(() => {
     async function fetchLatest() {
       if (!profile || !profile.fullName) return
@@ -230,7 +232,7 @@ export default function PlayerProfile({ profile, openEdit, deleteItem, user, hid
                   </div>
                   <h2 className="text-2xl font-bold text-primary-bright">Match History</h2>
                 </div>
-                {user && (
+                {canEdit && (
                   <button onClick={() => openEdit('matchHistory', { item: {} })} className="p-2 hover:bg-primary-soft dark:hover:bg-popover rounded-xl transition-colors">
                     <Plus className="w-5 h-5 text-muted-foreground" />
                   </button>
@@ -242,9 +244,9 @@ export default function PlayerProfile({ profile, openEdit, deleteItem, user, hid
                     <MatchCard
                       key={index}
                       data={match}
-                      onEdit={user ? () => openEdit('matchHistory', { item: match, index }) : undefined}
-                      onDelete={user ? () => deleteItem('matchHistory', index) : undefined}
-                      showControls={!!user}
+                      onEdit={canEdit ? () => openEdit('matchHistory', { item: match, index }) : undefined}
+                      onDelete={canEdit ? () => deleteItem('matchHistory', index) : undefined}
+                      showControls={canEdit}
                     />
                   ))}
                 </div>
@@ -274,7 +276,7 @@ export default function PlayerProfile({ profile, openEdit, deleteItem, user, hid
               {profile?.trainingSchedule && profile.trainingSchedule.length > 0 ? (
                 <div className="grid gap-4">
                   {profile.trainingSchedule.map((training, index) => (
-                    <TrainingCard key={index} training={training} onEdit={user ? () => openEdit('trainingSchedule', { item: training, index }) : undefined} onDelete={user ? () => deleteItem('trainingSchedule', index) : undefined} />
+                    <TrainingCard key={index} training={training} onEdit={canEdit ? () => openEdit('trainingSchedule', { item: training, index }) : undefined} onDelete={canEdit ? () => deleteItem('trainingSchedule', index) : undefined} showControls={canEdit} />
                   ))}
                 </div>
               ) : (
@@ -300,7 +302,7 @@ export default function PlayerProfile({ profile, openEdit, deleteItem, user, hid
               {profile?.videoHighlights && profile.videoHighlights.length > 0 ? (
                 <div className="grid md:grid-cols-2 gap-4">
                   {profile.videoHighlights.map((video, index) => (
-                    <VideoCard key={index} video={video} onEdit={user ? () => openEdit('videoHighlights', { item: video, index }) : undefined} onDelete={user ? () => deleteItem('videoHighlights', index) : undefined} />
+                    <VideoCard key={index} video={video} onEdit={canEdit ? () => openEdit('videoHighlights', { item: video, index }) : undefined} onDelete={canEdit ? () => deleteItem('videoHighlights', index) : undefined} showControls={canEdit} />
                   ))}
                 </div>
               ) : (
@@ -329,7 +331,7 @@ export default function PlayerProfile({ profile, openEdit, deleteItem, user, hid
               {profile?.achievements && profile.achievements.length > 0 ? (
                 <div className="space-y-4">
                   {profile.achievements.map((achievement, index) => (
-                    <AchievementBadge key={index} data={achievement} onEdit={user ? () => openEdit('achievements', { item: achievement, index }) : undefined} onDelete={user ? () => deleteItem('achievements', index) : undefined} />
+                    <AchievementBadge key={index} data={achievement} onEdit={user ? () => openEdit('achievements', { item: achievement, index }) : undefined} onDelete={user ? () => deleteItem('achievements', index) : undefined} canEdit={canEdit} />
                   ))}
                 </div>
               ) : (
@@ -346,7 +348,7 @@ export default function PlayerProfile({ profile, openEdit, deleteItem, user, hid
                   </div>
                   <h2 className="text-2xl font-bold text-primary-bright">Teams</h2>
                 </div>
-                {user && (
+                {canEdit && (
                   <button onClick={() => openEdit('teams', { item: {} })} className="p-2 hover:bg-primary-soft dark:hover:bg-popover rounded-xl transition-colors">
                     <Plus className="w-5 h-5 text-muted-foreground" />
                   </button>
@@ -355,7 +357,7 @@ export default function PlayerProfile({ profile, openEdit, deleteItem, user, hid
               {profile?.teams && profile.teams.length > 0 ? (
                 <div className="grid md:grid-cols-2 gap-4">
                   {profile.teams.map((team, index) => (
-                    <TeamCard key={index} team={team} onEdit={user ? () => openEdit('teams', { item: team, index }) : undefined} onDelete={user ? () => deleteItem('teams', index) : undefined} />
+                    <TeamCard key={index} team={team} onEdit={canEdit ? () => openEdit('teams', { item: team, index }) : undefined} onDelete={canEdit ? () => deleteItem('teams', index) : undefined} showControls={canEdit} />
                   ))}
                 </div>
               ) : (

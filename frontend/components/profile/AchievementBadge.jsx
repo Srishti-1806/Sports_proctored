@@ -3,7 +3,7 @@
 import { Trophy, X, Image as ImageIcon } from 'lucide-react'
 import { useState } from 'react'
 
-export default function AchievementBadge({ data, onDelete }) {
+export default function AchievementBadge({ data, onEdit, onDelete, canEdit = true }) {
   const [showImage, setShowImage] = useState(false)
 
   if (!data) return null
@@ -11,12 +11,21 @@ export default function AchievementBadge({ data, onDelete }) {
   return (
     <>
       <div className="relative bg-card rounded-xl p-4 shadow-md border border-border hover:shadow-lg transition-all group">
-        <button 
-          onClick={onDelete} 
-          className="absolute top-3 right-3 p-1.5 opacity-0 group-hover:opacity-100 hover:bg-red-50 rounded-lg transition-all z-10"
-        >
-          <X className="w-3.5 h-3.5 text-red-500" />
-        </button>
+        {canEdit && (onEdit || onDelete) && (
+          <div className="absolute bottom-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 z-10">
+            {onEdit && (
+              <button onClick={(e) => { e.stopPropagation(); onEdit && onEdit(); }} className="p-1.5 hover:bg-popover rounded-lg transition-colors">
+                <svg className="w-3.5 h-3.5 text-muted-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 113 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>
+              </button>
+            )}
+            <button 
+              onClick={(e) => { e.stopPropagation(); onDelete && onDelete(); }} 
+              className="p-1.5 hover:bg-red-50 rounded-lg"
+            >
+              <X className="w-3.5 h-3.5 text-red-500" />
+            </button>
+          </div>
+        )}
 
         <div className="flex gap-4">
           {/* Left: Details (70%) */}

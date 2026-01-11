@@ -9,6 +9,8 @@ export default function ProfileEditModals({
   user, 
   profile, 
   setProfile,
+  supabase,
+  toast,
 }) {
     return (
       <>
@@ -452,10 +454,10 @@ export default function ProfileEditModals({
               <input
                 type="text"
                 placeholder="Start Year"
-                value={sectionData.item?.startYear || ''}
+                value={sectionData.item?.startYear ?? sectionData.item?.start_year ?? ''}
                 onChange={(e) => {
                   const value = e.target.value.replace(/\D/g, '')
-                  setSectionData({ ...sectionData, item: { ...sectionData.item, startYear: value } })
+                  setSectionData({ ...sectionData, item: { ...sectionData.item, startYear: value, start_year: value } })
                 }}
                 maxLength="4"
                 className="w-full px-4 py-2 rounded-xl border border-border focus:border-primary-bright outline-none"
@@ -463,10 +465,10 @@ export default function ProfileEditModals({
               <input
                 type="text"
                 placeholder="End Year (Present)"
-                value={sectionData.item?.endYear || ''}
+                value={sectionData.item?.endYear ?? sectionData.item?.end_year ?? ''}
                 onChange={(e) => {
                   const value = e.target.value.replace(/\D/g, '')
-                  setSectionData({ ...sectionData, item: { ...sectionData.item, endYear: value } })
+                  setSectionData({ ...sectionData, item: { ...sectionData.item, endYear: value, end_year: value } })
                 }}
                 maxLength="4"
                 className="w-full px-4 py-2 rounded-xl border border-border focus:border-primary-bright outline-none"

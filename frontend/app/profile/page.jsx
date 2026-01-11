@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { Camera, Trophy, Award, Target, Zap, User as UserIcon, Pencil, MapPin, Mail, TrendingUp, Dumbbell, Calendar } from 'lucide-react'
+import DeleteAccountModal from '../../components/profile/DeleteAccountModal'
 import { useAuth } from '../../lib/context/AuthContext'
 import { useToast } from '../../components/ToastProvider'
 import StatCard from '../../components/profile/StatCard'
@@ -18,6 +19,7 @@ export default function ProfilePage() {
   const [sectionData, setSectionData] = useState({})
   const [uploadingCover, setUploadingCover] = useState(false)
   const [uploadingProfile, setUploadingProfile] = useState(false)
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
 
   useEffect(() => {
     if (!user) return
@@ -371,9 +373,12 @@ export default function ProfilePage() {
                       </div>
                     </div>
                   </div>
-                  <button onClick={() => openEdit('header', { position: profile?.position, location: profile?.location })} className="p-3 rounded-xl hover:bg-primary-soft transition-colors">
-                    <Pencil className="w-5 h-5 text-primary-muted" />
-                  </button>
+                  <div className="flex items-center gap-3">
+                    <button onClick={() => openEdit('header', { position: profile?.position, location: profile?.location })} className="p-3 rounded-xl hover:bg-primary-soft transition-colors">
+                      <Pencil className="w-5 h-5 text-primary-muted" />
+                    </button>
+                    <button onClick={() => setShowDeleteModal(true)} className="p-3 rounded-xl hover:bg-red-100 transition-colors text-destructive">Delete Account</button>
+                  </div>
                 </div>
 
                 {profile?.athleticStats && (
@@ -385,7 +390,7 @@ export default function ProfilePage() {
                         </div>
                         <div>
                           <div className="text-xs text-[#8697C4]">{isPlayer ? 'Height' : 'Experience'}</div>
-                          <div className="font-bold text-[#1a1a2e]">{profile.athleticStats.height}</div>
+                          <div className="font-bold text-[#1a1a2e] dark:text-primary-soft">{profile.athleticStats.height}</div>
                         </div>
                       </div>
                     )}
@@ -396,7 +401,7 @@ export default function ProfilePage() {
                         </div>
                         <div>
                           <div className="text-xs text-[#8697C4]">{isPlayer ? 'Weight' : 'Level'}</div>
-                          <div className="font-bold text-[#1a1a2e]">{profile.athleticStats.weight}</div>
+                          <div className="font-bold text-[#1a1a2e] dark:text-primary-soft">{profile.athleticStats.weight}</div>
                         </div>
                       </div>
                     )}
@@ -407,7 +412,7 @@ export default function ProfilePage() {
                         </div>
                         <div>
                           <div className="text-xs text-[#8697C4]">Age</div>
-                          <div className="font-bold text-[#1a1a2e]">{profile.athleticStats.age}</div>
+                          <div className="font-bold text-[#1a1a2e] dark:text-primary-soft">{profile.athleticStats.age}</div>
                         </div>
                       </div>
                     )}
@@ -418,7 +423,7 @@ export default function ProfilePage() {
                         </div>
                         <div>
                           <div className="text-xs text-[#8697C4]">Sport</div>
-                          <div className="font-bold text-[#1a1a2e]">{profile.athleticStats.primarySport}</div>
+                          <div className="font-bold text-[#1a1a2e] dark:text-primary-soft">{profile.athleticStats.primarySport}</div>
                         </div>
                       </div>
                     )}
@@ -436,6 +441,8 @@ export default function ProfilePage() {
       ) : (
         <CoachProfile profile={profile} openEdit={openEdit} deleteItem={deleteItem} user={user} />
       )}
+
+      <DeleteAccountModal isOpen={showDeleteModal} onClose={() => setShowDeleteModal(false)} />
 
       {/* Edit Modals */}
       <ProfileEditModals

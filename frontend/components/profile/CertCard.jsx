@@ -3,7 +3,7 @@
 import { Shield, X, Image as ImageIcon } from 'lucide-react'
 import { useState } from 'react'
 
-export default function CertCard({ data, onDelete }) {
+export default function CertCard({ data, onDelete, canEdit = true }) {
   const [showImage, setShowImage] = useState(false)
 
   if (!data) return null
@@ -11,12 +11,14 @@ export default function CertCard({ data, onDelete }) {
   return (
     <>
       <div className="relative bg-card rounded-xl p-4 shadow-md border border-border hover:shadow-lg transition-all group">
-        <button 
-          onClick={onDelete} 
-          className="absolute top-3 right-3 p-1.5 opacity-0 group-hover:opacity-100 hover:bg-red-50 rounded-lg transition-all z-10"
-        >
-          <X className="w-3.5 h-3.5 text-red-500" />
-        </button>
+        {canEdit && onDelete && (
+          <button 
+            onClick={(e) => { e.stopPropagation(); onDelete && onDelete(); }} 
+            className="absolute bottom-3 right-3 p-1.5 opacity-0 group-hover:opacity-100 hover:bg-red-50 rounded-lg transition-all z-10"
+          >
+            <X className="w-3.5 h-3.5 text-red-500" />
+          </button>
+        )}
 
         <div className="flex gap-4">
           {/* Left: Details (70%) */}
