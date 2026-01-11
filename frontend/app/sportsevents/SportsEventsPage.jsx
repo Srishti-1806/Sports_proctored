@@ -19,13 +19,12 @@ export default function SportsEventsPage() {
   const [activeFilter, setActiveFilter] = useState('all')
   const [activeSport, setActiveSport] = useState('all')
   const [searchQuery, setSearchQuery] = useState('')
+  const [showMobileFilters, setShowMobileFilters] = useState(false)
   const [selectedEvent, setSelectedEvent] = useState(null)
   const [events, setEvents] = useState([])
   const [sportCategories, setSportCategories] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
-
-  // removed unused initialMatches effect
 
   const filters = [
     { id: 'all', label: 'All Events', icon: Bell },
@@ -71,19 +70,24 @@ export default function SportsEventsPage() {
           console.error('Failed to load saved events from profile', e)
         }
 
-        const transformedEvents = source.map((match) => ({
-          id: match.id ?? match.event_id ?? `${match.event_name || match.title}`,
-          title: match.title || match.event_name || match.eventName || 'Event',
-          sport: match.sport || match.sport_name || 'Various',
-          date: match.start_date ? new Date(match.start_date).toLocaleDateString() : (match.date ? new Date(match.date).toLocaleDateString() : dateStr),
-          time: match.time ? new Date(match.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'TBD',
-          location: match.venue || match.location || 'Venue TBD',
-          description: match.details || match.description || '',
-          image: '/api/placeholder/400/320',
-          organizer: '',
-          raw: match,
-          isSaved: savedIds.includes(match.id ?? match.event_id ?? `${match.event_name || match.title}`)
-        }))
+        const transformedEvents = source.map((match) => {
+          const startRaw = match.start_date || match.date_start || match.date || null
+          const startTs = startRaw ? Date.parse(startRaw) : null
+          return {
+            id: match.id ?? match.event_id ?? `${match.event_name || match.title}`,
+            title: match.title || match.event_name || match.eventName || 'Event',
+            sport: match.sport || match.sport_name || 'Various',
+            date: startRaw ? new Date(startRaw).toLocaleDateString() : dateStr,
+            start_ts: startTs,
+            time: match.time ? new Date(match.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'TBD',
+            location: match.venue || match.location || 'Venue TBD',
+            description: match.details || match.description || '',
+            image: '/api/placeholder/400/320',
+            organizer: '',
+            raw: match,
+            isSaved: savedIds.includes(match.id ?? match.event_id ?? `${match.event_name || match.title}`)
+          }
+        })
 
         // compute sport categories from returned or fallback events
         const sportsSet = new Map()
@@ -113,19 +117,24 @@ export default function SportsEventsPage() {
           console.error('Failed to load saved events from profile', e)
         }
 
-        const transformedFallback = sportsEvents.map((match) => ({
-          id: match.id ?? `${match.event_name}`,
-          title: match.event_name,
-          sport: match.sport || 'Various',
-          date: match.start_date ? new Date(match.start_date).toLocaleDateString() : dateStr,
-          time: 'TBD',
-          location: match.venue || 'Venue TBD',
-          description: match.details || '',
-          image: '/api/placeholder/400/320',
-          organizer: '',
-          raw: match,
-          isSaved: savedIds.includes(match.id ?? `${match.event_name}`)
-        }))
+        const transformedFallback = sportsEvents.map((match) => {
+          const startRaw = match.start_date || match.date_start || match.date || null
+          const startTs = startRaw ? Date.parse(startRaw) : null
+          return ({
+            id: match.id ?? `${match.event_name}`,
+            title: match.event_name,
+            sport: match.sport || 'Various',
+            date: startRaw ? new Date(startRaw).toLocaleDateString() : dateStr,
+            start_ts: startTs,
+            time: 'TBD',
+            location: match.venue || 'Venue TBD',
+            description: match.details || '',
+            image: '/api/placeholder/400/320',
+            organizer: '',
+            raw: match,
+            isSaved: savedIds.includes(match.id ?? `${match.event_name}`)
+          })
+        })
 
         const sportsSet = new Map()
         transformedFallback.forEach((ev) => {
@@ -187,7 +196,16 @@ export default function SportsEventsPage() {
     // Filter by status (registered, saved, etc.)
     if (activeFilter === 'registered') return event.isRegistered
     if (activeFilter === 'saved') return event.isSaved
-    if (activeFilter === 'upcoming') return true
+    if (activeFilter === 'upcoming') {
+      // Use numeric timestamp when available to compare reliably
+      const startTs = event.start_ts ?? (event.raw?.start_date ? Date.parse(event.raw.start_date) : null)
+      if (!startTs || isNaN(startTs)) return false
+      const today = new Date()
+      today.setHours(0,0,0,0)
+      const startDate = new Date(startTs)
+      startDate.setHours(0,0,0,0)
+      return startDate >= today
+    }
     return true
   }).filter(event => {
     // Filter by selected sport
@@ -202,14 +220,15 @@ export default function SportsEventsPage() {
 
   return (
     <ProtectedRoute>
-    <div className="min-h-screen pb-10 bg-background">
+    <div className="min-h-screen pb-10 bg-background overflow-x-hidden">
       {/* Header */}
-      <EventHeader searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+      <EventHeader searchQuery={searchQuery} setSearchQuery={setSearchQuery} onOpenFilters={() => setShowMobileFilters(true)} />
 
-      <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 -mt-12 sm:-mt-14 md:-mt-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-12">
         <div className="grid lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
+
           {/* Sidebar */}
-          <div className="lg:col-span-1">
+          <div className="hidden lg:block lg:col-span-1">
             <EventSidebar
               filters={filters}
               activeFilter={activeFilter}
@@ -226,7 +245,7 @@ export default function SportsEventsPage() {
             {/* Events List */}
             <div className="space-y-3 sm:space-y-4">
               <div className="flex items-center justify-between px-1">
-                <h2 className="font-display text-lg sm:text-xl font-bold text-black md:text-white">
+                <h2 className="font-display text-lg sm:text-xl font-bold text-white">
                   {activeFilter === 'all' ? 'All Events' : 
                    activeFilter === 'upcoming' ? 'Upcoming Events' :
                    activeFilter === 'registered' ? 'Your Registered Events' : 
@@ -255,7 +274,7 @@ export default function SportsEventsPage() {
                   <p className="text-[#8697C4]">No events found</p>
                 </div>
               ) : (
-                <div className="grid gap-3 sm:gap-4">
+                <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2">
                   {filteredEvents.map((event, idx) => (
                     <EventCard
                       key={event.id ?? event.raw?.event_id ?? `${event.title || 'event'}-${idx}`}
@@ -277,6 +296,29 @@ export default function SportsEventsPage() {
         onClose={() => setSelectedEvent(null)}
         onToggleSave={toggleSave}
       />
+
+      {/* Mobile slide-over filters */}
+      {showMobileFilters && (
+        <div className="fixed inset-0 z-1000">
+          <div className="absolute inset-0 bg-black/40" onClick={() => setShowMobileFilters(false)} />
+          <aside className="absolute right-0 top-0 bottom-0 w-full max-w-xs sm:max-w-sm p-4">
+            <div className="h-full overflow-auto p-2 bg-card rounded-lg shadow-lg">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="font-display font-bold">Filters</h3>
+                <button onClick={() => setShowMobileFilters(false)} className="text-primary-muted">Close</button>
+              </div>
+              <EventSidebar
+                filters={filters}
+                activeFilter={activeFilter}
+                setActiveFilter={(id) => { setActiveFilter(id); setShowMobileFilters(false) }}
+                sportCategories={sportCategories}
+                activeSport={activeSport}
+                setActiveSport={(s) => { setActiveSport(s); setShowMobileFilters(false) }}
+              />
+            </div>
+          </aside>
+        </div>
+      )}
     </div>
     </ProtectedRoute>
   )

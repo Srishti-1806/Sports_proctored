@@ -159,8 +159,8 @@ export default function Navbar() {
 
         </div>
 
-        {/* Mobile Header: logo left, controls right */}
-        <div className="flex md:hidden items-center justify-between w-full py-2">
+        {/* Mobile Header: logo left, controls right (visible on <lg) */}
+        <div className="flex lg:hidden items-center justify-between w-full py-2">
           <Link href="/" className="flex items-center gap-2 group">
             <div
               className="w-10 h-10 rounded-xl bg-linear-to-br from-primary-deep to-primary-bright flex items-center justify-center"
@@ -176,7 +176,7 @@ export default function Navbar() {
             <ThemeToggle />
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="md:hidden p-2 rounded-xl bg-primary-soft text-primary dark:bg-popover dark:text-foreground hover:bg-primary-soft dark:hover:bg-popover transition-colors"
+              className="lg:hidden p-2 rounded-xl bg-primary-soft text-primary dark:bg-popover dark:text-foreground hover:bg-primary-soft dark:hover:bg-popover transition-colors"
             >
               {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
@@ -184,14 +184,14 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu (<lg) */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: '100dvh' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden overflow-hidden bg-popover/10 border-t border-sidebar-border"
+            className="lg:hidden overflow-hidden bg-popover/10 border-t border-sidebar-border"
           >
               <div className="px-4 py-4 space-y-2">
               {navLinks.map((link) => {

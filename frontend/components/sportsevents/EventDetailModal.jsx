@@ -68,21 +68,24 @@ export default function EventDetailModal({ event, onClose, onToggleSave }) {
         className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/50 backdrop-blur-sm"
         onClick={onClose}
       >
-        <motion.div
+          <motion.div
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.9, opacity: 0 }}
           onClick={(e) => e.stopPropagation()}
-          className="relative w-full max-w-2xl bg-card rounded-2xl sm:rounded-3xl shadow-2xl max-h-[90vh] overflow-hidden flex flex-col"
+          className="relative w-full max-w-full sm:max-w-2xl h-full sm:h-auto bg-card rounded-2xl shadow-2xl sm:max-h-[90vh] overflow-hidden flex flex-col"
         >
           {/* Header */}
-          <div className="shrink-0 p-4 sm:p-6 bg-linear-to-r from-primary-deep to-primary-bright rounded-t-2xl sm:rounded-t-3xl">
+          <div className="shrink-0 p-4 sm:p-6 bg-linear-to-r from-primary-deep to-primary-bright relative rounded-t-2xl">
             <button
               onClick={onClose}
-              className="absolute top-3 right-3 sm:top-4 sm:right-4 p-1.5 sm:p-2 rounded-xl bg-popover/10 hover:bg-popover/20 transition-colors text-popover-foreground z-10"
+              className="absolute top-3 right-3 sm:top-4 sm:right-4 p-1.5 sm:p-2 rounded-xl bg-popover/10 hover:bg-popover/20 transition-colors text-popover-foreground z-30"
             >
               <X className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
+
+            {/* Desktop header actions removed — actions shown in sticky footer for consistency */}
+
             <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
               <span className={`px-2.5 sm:px-3 py-1 rounded-full ${sportColor} text-white text-xs sm:text-sm font-medium`}>
                 {event.sport || 'Sport'}
@@ -93,7 +96,7 @@ export default function EventDetailModal({ event, onClose, onToggleSave }) {
           </div>
 
           {/* Content */}
-          <div className="p-4 sm:p-6 space-y-4 sm:space-y-6 overflow-y-auto scrollbar-thin scrollbar-thumb-primary-light scrollbar-track-transparent hover:scrollbar-thumb-primary-bright scrollbar-thumb-rounded-full">
+          <div className="p-4 sm:p-6 space-y-4 sm:space-y-6 overflow-y-auto scrollbar-thin scrollbar-thumb-primary-light scrollbar-track-transparent hover:scrollbar-thumb-primary-bright scrollbar-thumb-rounded-full" style={{ paddingBottom: 112 }}>
             {/* Quick Info */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               <div className="p-3 sm:p-4 rounded-xl bg-primary-soft dark:bg-popover/10">
@@ -165,23 +168,26 @@ export default function EventDetailModal({ event, onClose, onToggleSave }) {
               </div>
             </div>
             
-            {/* Bottom actions */}
-            <div className="grid grid-cols-2 gap-2 sm:gap-3">
+          </div>
+
+          {/* Bottom actions - sticky on small screens */}
+          <div className="sticky bottom-0 left-0 right-0 z-20 p-3 bg-card border-t border-border">
+            <div className="grid grid-cols-2 gap-2">
               <button
                 type="button"
                 onClick={() => onToggleSave && onToggleSave(event.id)}
-                className="flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 sm:py-3 rounded-xl border border-border text-primary font-medium hover:bg-primary-soft dark:hover:bg-popover transition-colors text-xs sm:text-sm"
+                className="flex items-center justify-center gap-2 px-3 py-3 rounded-xl border border-border text-primary font-medium hover:bg-primary-soft dark:hover:bg-popover transition-colors text-sm"
               >
-                <Bookmark className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${event.isSaved ? 'fill-primary' : ''}`} />
-                <span className="hidden sm:inline">{event.isSaved ? 'Saved' : 'Save'}</span>
+                <Bookmark className={`w-4 h-4 ${event.isSaved ? 'fill-primary' : ''}`} />
+                <span>{event.isSaved ? 'Saved' : 'Save'}</span>
               </button>
               <button
                 type="button"
                 onClick={handleShare}
-                className="flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 sm:py-3 rounded-xl border border-border text-primary font-medium hover:bg-primary-soft dark:hover:bg-popover transition-colors text-xs sm:text-sm"
+                className="flex items-center justify-center gap-2 px-3 py-3 rounded-xl border border-border text-primary font-medium hover:bg-primary-soft dark:hover:bg-popover transition-colors text-sm"
               >
-                <Share2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                <span className="hidden sm:inline">Share</span>
+                <Share2 className="w-4 h-4" />
+                <span>Share</span>
               </button>
             </div>
           </div>

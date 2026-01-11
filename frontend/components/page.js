@@ -1,5 +1,5 @@
 "use client"
-import React, { useRef, useState, useEffect, useCallback } from 'react'
+import { useRef, useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import mapboxgl from 'mapbox-gl'
 
@@ -377,7 +377,7 @@ const RouteFinder = () => {
   }
 
   return (
-    <main className="h-[100dvh] w-[100dvw] flex">
+    <main className="h-dvh w-dvw flex">
       <div
         id="map-container"
         ref={mapContainerRef}
