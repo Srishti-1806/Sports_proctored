@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from 'react'
-import { Camera, Trophy, Award, Target, Zap, User as UserIcon, Pencil, MapPin, Mail, TrendingUp, Dumbbell, Calendar } from 'lucide-react'
+import { Camera, Trophy, Award, Target, Zap, User as UserIcon, Pencil, MapPin, Mail, TrendingUp, Dumbbell, Calendar, Users } from 'lucide-react'
 import DeleteAccountModal from '../../components/profile/DeleteAccountModal'
 import { useAuth } from '../../lib/context/AuthContext'
 import { useToast } from '../../components/ToastProvider'
@@ -9,6 +9,7 @@ import StatCard from '../../components/profile/StatCard'
 import ProfileEditModals from '../../components/profile/ProfileEditModals'
 import PlayerProfile from '../../components/profile/PlayerProfile'
 import CoachProfile from '../../components/profile/CoachProfile'
+import FollowersModal from '../../components/FollowersModal'
 
 export default function ProfilePage() {
   const { user, supabase } = useAuth()
@@ -20,6 +21,11 @@ export default function ProfilePage() {
   const [uploadingCover, setUploadingCover] = useState(false)
   const [uploadingProfile, setUploadingProfile] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [showFollowersModal, setShowFollowersModal] = useState(false)
+  const [showFollowingModal, setShowFollowingModal] = useState(false)
+  const [followersData, setFollowersData] = useState([])
+  const [followingData, setFollowingData] = useState([])
+  const [loadingFollowers, setLoadingFollowers] = useState(false)
 
   useEffect(() => {
     if (!user) return
@@ -47,7 +53,9 @@ export default function ProfilePage() {
             physicalStats: profiles.physical_stats || { speed: 0, strength: 0, endurance: 0, agility: 0, flexibility: 0 },
             dietPlan: profiles.diet_plan || '',
             socialLinks: profiles.social_links || {},
-            assessments: profiles.assessments || []
+            assessments: profiles.assessments || [],
+            followers: profiles.followers || [],
+            following: profiles.following || []
           })
         } else {
           setProfile({
@@ -69,7 +77,9 @@ export default function ProfilePage() {
             physicalStats: { speed: 0, strength: 0, endurance: 0, agility: 0, flexibility: 0 },
             dietPlan: '',
             socialLinks: {},
-            assessments: []
+            assessments: [],
+            followers: [],
+            following: []
           })
         }
       } catch (e) {
@@ -80,6 +90,41 @@ export default function ProfilePage() {
     }
     fetchProfile()
   }, [user, supabase])
+
+  const fetchFollowData = async (userIds, type) => {
+    if (!userIds || userIds.length === 0) {
+      return []
+    }
+
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('id, full_name, profile_picture, position, athletic_stats, role')
+        .in('id', userIds)
+
+      if (error) throw error
+      return data || []
+    } catch (e) {
+      console.error(`Error fetching ${type}:`, e)
+      return []
+    }
+  }
+
+  const openFollowersModal = async () => {
+    setShowFollowersModal(true)
+    setLoadingFollowers(true)
+    const data = await fetchFollowData(profile?.followers || [], 'followers')
+    setFollowersData(data)
+    setLoadingFollowers(false)
+  }
+
+  const openFollowingModal = async () => {
+    setShowFollowingModal(true)
+    setLoadingFollowers(true)
+    const data = await fetchFollowData(profile?.following || [], 'following')
+    setFollowingData(data)
+    setLoadingFollowers(false)
+  }
 
   const openEdit = (section, data = {}) => {
     setEditingSection(section)
@@ -130,7 +175,7 @@ export default function ProfilePage() {
 
       const { error } = await supabase.from('profiles').upsert(dbProfile)
       if (error) throw error
-      
+
       setProfile(updatedProfile)
       closeEdit()
       toast?.show('Profile updated successfully')
@@ -145,7 +190,7 @@ export default function ProfilePage() {
     try {
       const updatedProfile = { ...profile }
       updatedProfile[section].splice(index, 1)
-      
+
       const dbProfile = {
         id: user.id,
         about: updatedProfile.about,
@@ -166,10 +211,10 @@ export default function ProfilePage() {
         social_links: updatedProfile.socialLinks,
         assessments: updatedProfile.assessments
       }
-      
+
       const { error } = await supabase.from('profiles').upsert(dbProfile)
       if (error) throw error
-      
+
       setProfile(updatedProfile)
       toast?.show('Item deleted')
     } catch (e) {
@@ -186,7 +231,7 @@ export default function ProfilePage() {
     try {
       const fileExt = file.name.split('.').pop()
       const fileName = `${user.id}/cover_photo.${fileExt}`
-      
+
       const { error: uploadError } = await supabase.storage
         .from('profile-images')
         .upload(fileName, file, { upsert: true })
@@ -240,7 +285,7 @@ export default function ProfilePage() {
     try {
       const fileExt = file.name.split('.').pop()
       const fileName = `${user.id}/profile_picture.${fileExt}`
-      
+
       const { error: uploadError } = await supabase.storage
         .from('profile-images')
         .upload(fileName, file, { upsert: true })
@@ -317,7 +362,7 @@ export default function ProfilePage() {
               <Camera className="w-5 h-5 text-white" />
             )}
           </label>
-          
+
           {isPlayer && (
             <div className="absolute bottom-6 left-6 right-6 flex gap-3 overflow-x-auto">
               <StatCard icon={Trophy} label="Achievements" value={profile?.achievements?.length || 0} color="from-amber-400 to-orange-500" />
@@ -372,8 +417,28 @@ export default function ProfilePage() {
                         {user.email}
                       </div>
                     </div>
+
+                    {/* Followers/Following Stats */}
+                    <div className="flex items-center gap-4 mt-3">
+                      <button
+                        onClick={openFollowersModal}
+                        className="flex items-center gap-2 hover:text-primary-bright transition-colors"
+                      >
+                        <Users className="w-4 h-4 text-primary-muted" />
+                        <span className="font-bold text-foreground">{profile?.followers?.length || 0}</span>
+                        <span className="text-sm text-muted-foreground">Followers</span>
+                      </button>
+                      <button
+                        onClick={openFollowingModal}
+                        className="flex items-center gap-2 hover:text-primary-bright transition-colors"
+                      >
+                        <Users className="w-4 h-4 text-primary-muted" />
+                        <span className="font-bold text-foreground">{profile?.following?.length || 0}</span>
+                        <span className="text-sm text-muted-foreground">Following</span>
+                      </button>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-3">
+                  <div className="hidden md:flex items-center gap-3">
                     <button onClick={() => openEdit('header', { position: profile?.position, location: profile?.location })} className="p-3 rounded-xl hover:bg-primary-soft transition-colors">
                       <Pencil className="w-5 h-5 text-primary-muted" />
                     </button>
@@ -382,81 +447,121 @@ export default function ProfilePage() {
                 </div>
 
                 {profile?.athleticStats && (
-                  <div className="mt-4 flex flex-wrap gap-4">
-                    {profile.athleticStats.height && (
-                      <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 rounded-lg bg-[#EDE8F5] flex items-center justify-center">
-                          <TrendingUp className="w-4 h-4 text-[#3D52A0]" />
+                  <div className="mt-4">
+                    <div className="flex flex-wrap gap-4">
+                      {profile.athleticStats.height && (
+                        <div className="flex items-center gap-2">
+                          <div className="w-8 h-8 rounded-lg bg-[#EDE8F5] flex items-center justify-center">
+                            <TrendingUp className="w-4 h-4 text-[#3D52A0]" />
+                          </div>
+                          <div>
+                            <p className="text-xs text-[#8697C4]">{isPlayer ? 'Height' : 'Experience'}</p>
+                            <p className="font-bold text-[#1a1a2e] dark:text-primary-soft">{profile.athleticStats.height}</p>
+                          </div>
                         </div>
-                        <div>
-                          <div className="text-xs text-[#8697C4]">{isPlayer ? 'Height' : 'Experience'}</div>
-                          <div className="font-bold text-[#1a1a2e] dark:text-primary-soft">{profile.athleticStats.height}</div>
+                      )}
+
+                      {profile.athleticStats.weight && (
+                        <div className="flex items-center gap-2">
+                          <div className="w-8 h-8 rounded-lg bg-[#EDE8F5] flex items-center justify-center">
+                            <Dumbbell className="w-4 h-4 text-[#3D52A0]" />
+                          </div>
+                          <div>
+                            <p className="text-xs text-[#8697C4]">{isPlayer ? 'Weight' : 'Level'}</p>
+                            <p className="font-bold text-[#1a1a2e] dark:text-primary-soft">{profile.athleticStats.weight}</p>
+                          </div>
                         </div>
+                      )}
+
+                      {profile.athleticStats.age && (
+                        <div className="flex items-center gap-2">
+                          <div className="w-8 h-8 rounded-lg bg-[#EDE8F5] flex items-center justify-center">
+                            <Calendar className="w-4 h-4 text-[#3D52A0]" />
+                          </div>
+                          <div>
+                            <p className="text-xs text-[#8697C4]">Age</p>
+                            <p className="font-bold text-[#1a1a2e] dark:text-primary-soft">{profile.athleticStats.age}</p>
+                          </div>
+                        </div>
+                      )}
+
+                      {profile.athleticStats.primarySport && (
+                        <div className="flex items-center gap-2">
+                          <div className="w-8 h-8 rounded-lg bg-[#EDE8F5] flex items-center justify-center">
+                            <Trophy className="w-4 h-4 text-[#3D52A0]" />
+                          </div>
+                          <div>
+                            <div className="text-xs text-[#8697C4]">Sport</div>
+                            <div className="font-bold text-[#1a1a2e] dark:text-primary-soft">{profile.athleticStats.primarySport}</div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Mobile action buttons (inside card) */}
+                    <div className="md:hidden mt-4">
+                      <div className="flex items-center gap-3">
+                        <button
+                          onClick={() => openEdit('header', { position: profile?.position, location: profile?.location })}
+                          className="flex-1 px-4 py-2 rounded-xl bg-card hover:bg-primary-soft transition-colors flex items-center justify-center gap-2"
+                        >
+                          <Pencil className="w-5 h-5 text-primary-muted" />
+                          <span className="font-medium">Edit</span>
+                        </button>
+                        <button
+                          onClick={() => setShowDeleteModal(true)}
+                          className="flex-1 px-4 py-2 rounded-xl bg-red-50 hover:bg-red-100 transition-colors text-destructive flex items-center justify-center"
+                        >
+                          <span className="font-medium">Delete Account</span>
+                        </button>
                       </div>
-                    )}
-                    {profile.athleticStats.weight && (
-                      <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 rounded-lg bg-[#EDE8F5] flex items-center justify-center">
-                          <Dumbbell className="w-4 h-4 text-[#3D52A0]" />
-                        </div>
-                        <div>
-                          <div className="text-xs text-[#8697C4]">{isPlayer ? 'Weight' : 'Level'}</div>
-                          <div className="font-bold text-[#1a1a2e] dark:text-primary-soft">{profile.athleticStats.weight}</div>
-                        </div>
-                      </div>
-                    )}
-                    {profile.athleticStats.age && (
-                      <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 rounded-lg bg-[#EDE8F5] flex items-center justify-center">
-                          <Calendar className="w-4 h-4 text-[#3D52A0]" />
-                        </div>
-                        <div>
-                          <div className="text-xs text-[#8697C4]">Age</div>
-                          <div className="font-bold text-[#1a1a2e] dark:text-primary-soft">{profile.athleticStats.age}</div>
-                        </div>
-                      </div>
-                    )}
-                    {profile.athleticStats.primarySport && (
-                      <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 rounded-lg bg-[#EDE8F5] flex items-center justify-center">
-                          <Trophy className="w-4 h-4 text-[#3D52A0]" />
-                        </div>
-                        <div>
-                          <div className="text-xs text-[#8697C4]">Sport</div>
-                          <div className="font-bold text-[#1a1a2e] dark:text-primary-soft">{profile.athleticStats.primarySport}</div>
-                        </div>
-                      </div>
-                    )}
+                    </div>
                   </div>
                 )}
               </div>
             </div>
           </div>
         </div>
+
+        {/* Role-based Profile Content */}
+        {isPlayer ? (
+          <PlayerProfile profile={profile} openEdit={openEdit} deleteItem={deleteItem} user={user} />
+        ) : (
+          <CoachProfile profile={profile} openEdit={openEdit} deleteItem={deleteItem} user={user} />
+        )}
+
+        <DeleteAccountModal isOpen={showDeleteModal} onClose={() => setShowDeleteModal(false)} />
+
+        {/* Followers/Following Modals */}
+        <FollowersModal
+          isOpen={showFollowersModal}
+          onClose={() => setShowFollowersModal(false)}
+          users={followersData}
+          type="followers"
+          loading={loadingFollowers}
+        />
+        <FollowersModal
+          isOpen={showFollowingModal}
+          onClose={() => setShowFollowingModal(false)}
+          users={followingData}
+          type="following"
+          loading={loadingFollowers}
+        />
+
+        {/* Edit Modals */}
+        <ProfileEditModals
+          editingSection={editingSection}
+          sectionData={sectionData}
+          setSectionData={setSectionData}
+          closeEdit={closeEdit}
+          saveSection={saveSection}
+          user={user}
+          profile={profile}
+          setProfile={setProfile}
+          supabase={supabase}
+          toast={toast}
+        />
       </div>
-
-      {/* Role-based Profile Content */}
-      {isPlayer ? (
-        <PlayerProfile profile={profile} openEdit={openEdit} deleteItem={deleteItem} user={user} />
-      ) : (
-        <CoachProfile profile={profile} openEdit={openEdit} deleteItem={deleteItem} user={user} />
-      )}
-
-      <DeleteAccountModal isOpen={showDeleteModal} onClose={() => setShowDeleteModal(false)} />
-
-      {/* Edit Modals */}
-      <ProfileEditModals
-        editingSection={editingSection}
-        sectionData={sectionData}
-        setSectionData={setSectionData}
-        closeEdit={closeEdit}
-        saveSection={saveSection}
-        user={user}
-        profile={profile}
-        setProfile={setProfile}
-        supabase={supabase}
-        toast={toast}
-      />
     </div>
   )
 }

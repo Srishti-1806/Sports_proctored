@@ -1,16 +1,27 @@
 'use client'
 
 import { useState, use, useEffect } from 'react'
-import { Loader2, Trophy, Target, Zap, Award, MapPin, Mail, TrendingUp, Dumbbell, Calendar, User as UserIcon, ArrowLeft } from 'lucide-react'
+import { Loader2, Trophy, Target, Zap, Award, MapPin, Mail, TrendingUp, Dumbbell, Calendar, User as UserIcon, ArrowLeft, Users } from 'lucide-react'
 import { createClient } from '../../../lib/supabase/client'
+import { useAuth } from '../../../lib/context/AuthContext'
 import PlayerProfile from '../../../components/profile/PlayerProfile'
 import StatCard from '../../../components/profile/StatCard'
+import FollowButton from '../../../components/FollowButton'
+import FollowersModal from '../../../components/FollowersModal'
 
 export default function PlayerProfilePage({ params }) {
   const unwrappedParams = use(params)
+  const { user } = useAuth()
   const [profile, setProfile] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [followersCount, setFollowersCount] = useState(0)
+  const [followingCount, setFollowingCount] = useState(0)
+  const [showFollowersModal, setShowFollowersModal] = useState(false)
+  const [showFollowingModal, setShowFollowingModal] = useState(false)
+  const [followersData, setFollowersData] = useState([])
+  const [followingData, setFollowingData] = useState([])
+  const [loadingFollowers, setLoadingFollowers] = useState(false)
 
   useEffect(() => {
     fetchPlayerProfile()
@@ -56,16 +67,59 @@ export default function PlayerProfilePage({ params }) {
         physicalStats: data.physical_stats || { speed: 0, strength: 0, endurance: 0, agility: 0, flexibility: 0 },
         dietPlan: data.diet_plan || '',
         socialLinks: data.social_links || {},
-        assessments: data.assessments || []
+        assessments: data.assessments || [],
+        followers: data.followers || [],
+        following: data.following || []
       }
 
       setProfile(transformedProfile)
+      setFollowersCount(data.followers?.length || 0)
+      setFollowingCount(data.following?.length || 0)
     } catch (err) {
       console.error('Error fetching player profile:', err)
       setError(err.message)
     } finally {
       setLoading(false)
     }
+  }
+
+  const supabase = createClient()
+
+  const fetchFollowData = async (userIds, type) => {
+    if (!userIds || userIds.length === 0) return []
+
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('id, full_name, profile_picture, position, athletic_stats, role')
+        .in('id', userIds)
+
+      if (error) throw error
+      return data || []
+    } catch (e) {
+      console.error(`Error fetching ${type}:`, e)
+      return []
+    }
+  }
+
+  const openFollowersModal = async () => {
+    setShowFollowersModal(true)
+    setLoadingFollowers(true)
+    const data = await fetchFollowData(profile?.followers || [], 'followers')
+    setFollowersData(data)
+    setLoadingFollowers(false)
+  }
+
+  const openFollowingModal = async () => {
+    setShowFollowingModal(true)
+    setLoadingFollowers(true)
+    const data = await fetchFollowData(profile?.following || [], 'following')
+    setFollowingData(data)
+    setLoadingFollowers(false)
+  }
+
+  const handleFollowChange = (isFollowing, newFollowersCount) => {
+    setFollowersCount(newFollowersCount)
   }
 
   if (loading) {
@@ -178,6 +232,35 @@ export default function PlayerProfilePage({ params }) {
                           </div>
                         )}
                       </div>
+
+                      {/* Followers/Following */}
+                      <div className="flex items-center gap-4 mt-3">
+                        <button
+                          onClick={openFollowersModal}
+                          className="flex items-center gap-2 hover:text-primary-bright transition-colors"
+                        >
+                          <Users className="w-4 h-4 text-primary-muted" />
+                          <span className="font-bold text-foreground">{followersCount}</span>
+                          <span className="text-sm text-muted-foreground">Followers</span>
+                        </button>
+                        <button
+                          onClick={openFollowingModal}
+                          className="flex items-center gap-2 hover:text-primary-bright transition-colors"
+                        >
+                          <Users className="w-4 h-4 text-primary-muted" />
+                          <span className="font-bold text-foreground">{followingCount}</span>
+                          <span className="text-sm text-muted-foreground">Following</span>
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Follow Button */}
+                    <div className="flex items-center gap-3">
+                      <FollowButton 
+                        targetUserId={profile.id} 
+                        targetUserName={profile.fullName}
+                        onFollowChange={handleFollowChange}
+                      />
                     </div>
                   </div>
 
@@ -242,6 +325,22 @@ export default function PlayerProfilePage({ params }) {
           deleteItem={deleteItem}
           user={null} // Read-only view, no editing
           hideProctorTest={true} // Hide the proctored test section
+        />
+
+        {/* Followers/Following Modals */}
+        <FollowersModal
+          isOpen={showFollowersModal}
+          onClose={() => setShowFollowersModal(false)}
+          users={followersData}
+          type="followers"
+          loading={loadingFollowers}
+        />
+        <FollowersModal
+          isOpen={showFollowingModal}
+          onClose={() => setShowFollowingModal(false)}
+          users={followingData}
+          type="following"
+          loading={loadingFollowers}
         />
       </div>
     </div>

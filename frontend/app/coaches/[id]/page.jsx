@@ -3,16 +3,27 @@
 import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
-import { ArrowLeft, MapPin, Calendar, Loader2, Camera } from 'lucide-react'
+import { ArrowLeft, MapPin, Calendar, Loader2, Camera, Users } from 'lucide-react'
 import { createClient } from '../../../lib/supabase/client'
+import { useAuth } from '../../../lib/context/AuthContext'
 import CoachProfile from '../../../components/profile/CoachProfile'
+import FollowButton from '../../../components/FollowButton'
+import FollowersModal from '../../../components/FollowersModal'
 
 export default function CoachProfilePage() {
   const params = useParams()
   const router = useRouter()
+  const { user } = useAuth()
   const [profile, setProfile] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [followersCount, setFollowersCount] = useState(0)
+  const [followingCount, setFollowingCount] = useState(0)
+  const [showFollowersModal, setShowFollowersModal] = useState(false)
+  const [showFollowingModal, setShowFollowingModal] = useState(false)
+  const [followersData, setFollowersData] = useState([])
+  const [followingData, setFollowingData] = useState([])
+  const [loadingFollowers, setLoadingFollowers] = useState(false)
 
   useEffect(() => {
     if (params.id) {
@@ -80,10 +91,14 @@ export default function CoachProfilePage() {
         
         dietPlan: data.diet_plan || '',
         socialLinks: data.social_links || {},
-        assessments: Array.isArray(data.assessments) ? data.assessments : []
+        assessments: Array.isArray(data.assessments) ? data.assessments : [],
+        followers: data.followers || [],
+        following: data.following || []
       }
 
       setProfile(transformedProfile)
+      setFollowersCount(data.followers?.length || 0)
+      setFollowingCount(data.following?.length || 0)
     } catch (err) {
       console.error('Error fetching coach profile:', err)
       setError(err.message)
@@ -95,6 +110,45 @@ export default function CoachProfilePage() {
   // Stub functions for read-only mode
   const openEdit = () => {}
   const deleteItem = () => {}
+
+  const supabase = createClient()
+
+  const fetchFollowData = async (userIds, type) => {
+    if (!userIds || userIds.length === 0) return []
+
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('id, full_name, profile_picture, position, athletic_stats, role')
+        .in('id', userIds)
+
+      if (error) throw error
+      return data || []
+    } catch (e) {
+      console.error(`Error fetching ${type}:`, e)
+      return []
+    }
+  }
+
+  const openFollowersModal = async () => {
+    setShowFollowersModal(true)
+    setLoadingFollowers(true)
+    const data = await fetchFollowData(profile?.followers || [], 'followers')
+    setFollowersData(data)
+    setLoadingFollowers(false)
+  }
+
+  const openFollowingModal = async () => {
+    setShowFollowingModal(true)
+    setLoadingFollowers(true)
+    const data = await fetchFollowData(profile?.following || [], 'following')
+    setFollowingData(data)
+    setLoadingFollowers(false)
+  }
+
+  const handleFollowChange = (isFollowing, newFollowersCount) => {
+    setFollowersCount(newFollowersCount)
+  }
 
   if (loading) {
     return (
@@ -177,7 +231,7 @@ export default function CoachProfilePage() {
           {/* Profile Info */}
           <div className="flex-1 bg-card rounded-3xl p-6 shadow-xl border border-border">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-              <div>
+              <div className="flex-1">
                 <h1 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-2">
                   {profile.name}
                 </h1>
@@ -193,6 +247,35 @@ export default function CoachProfilePage() {
                     coach
                   </div>
                 </div>
+
+                {/* Followers/Following */}
+                <div className="flex items-center gap-4 mt-3">
+                  <button
+                    onClick={openFollowersModal}
+                    className="flex items-center gap-2 hover:text-primary-bright transition-colors"
+                  >
+                    <Users className="w-4 h-4 text-primary-muted" />
+                    <span className="font-bold text-foreground">{followersCount}</span>
+                    <span className="text-sm text-muted-foreground">Followers</span>
+                  </button>
+                  <button
+                    onClick={openFollowingModal}
+                    className="flex items-center gap-2 hover:text-primary-bright transition-colors"
+                  >
+                    <Users className="w-4 h-4 text-primary-muted" />
+                    <span className="font-bold text-foreground">{followingCount}</span>
+                    <span className="text-sm text-muted-foreground">Following</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Follow Button */}
+              <div className="flex gap-3">
+                <FollowButton 
+                  targetUserId={profile.id} 
+                  targetUserName={profile.name}
+                  onFollowChange={handleFollowChange}
+                />
               </div>
             </div>
           </div>
@@ -212,6 +295,22 @@ export default function CoachProfilePage() {
             user={null}
           />
         </motion.div>
+
+        {/* Followers/Following Modals */}
+        <FollowersModal
+          isOpen={showFollowersModal}
+          onClose={() => setShowFollowersModal(false)}
+          users={followersData}
+          type="followers"
+          loading={loadingFollowers}
+        />
+        <FollowersModal
+          isOpen={showFollowingModal}
+          onClose={() => setShowFollowingModal(false)}
+          users={followingData}
+          type="following"
+          loading={loadingFollowers}
+        />
       </div>
     </div>
   )

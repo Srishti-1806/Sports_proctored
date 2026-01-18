@@ -62,7 +62,7 @@ export default function PlayerProfile({ profile, openEdit, deleteItem, user, hid
   }, [profile?.fullName])
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 mt-6">
       {/* Proctored Test Section - Full Width (only show if not hidden and user is viewing their own profile) */}
       {!hideProctorTest && user && (
         <>
