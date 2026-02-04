@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from 'react'
-import { Pencil, TrendingUp, Calendar, Video, Trophy, Ruler, Weight, Cake, Activity, ArrowRight, Eye, Plus } from 'lucide-react'
+import { Pencil, BarChart2, Calendar, Video, Trophy, Ruler, Weight, Cake, Activity, ArrowRight, Eye, Plus, User, BicepsFlexed, ListChecks, Users } from 'lucide-react'
 import PerformanceBar from './PerformanceBar'
 import StatItem from './StatItem'
 import MatchCard from './MatchCard'
@@ -162,7 +162,7 @@ export default function PlayerProfile({ profile, openEdit, deleteItem, user, hid
               <div className="flex justify-between items-center mb-6">
                 <div className="flex items-center gap-3">
                   <div className="p-3 bg-linear-to-br from-primary-light/20 to-primary-deep/10 rounded-xl">
-                    <Pencil className="w-5 h-5 text-primary-bright" />
+                    <User className="w-5 h-5 text-primary-bright" />
                   </div>
                   <h2 className="text-2xl font-bold text-primary-bright">{t('profile.about')}</h2>
                 </div>
@@ -180,7 +180,7 @@ export default function PlayerProfile({ profile, openEdit, deleteItem, user, hid
               <div className="flex justify-between items-center mb-6">
                 <div className="flex items-center gap-3">
                   <div className="p-3 bg-linear-to-br from-primary-light/20 to-primary-deep/10 rounded-xl">
-                    <TrendingUp className="w-5 h-5 text-primary-bright" />
+                    <BarChart2 className="w-5 h-5 text-primary-bright" />
                   </div>
                   <h2 className="text-2xl font-bold text-primary-bright">{t('profile.athleticProfile')}</h2>
                 </div>
@@ -206,7 +206,7 @@ export default function PlayerProfile({ profile, openEdit, deleteItem, user, hid
               <div className="flex justify-between items-center mb-6">
                 <div className="flex items-center gap-3">
                   <div className="p-3 bg-linear-to-br from-primary-bright/20 to-primary-bright/10 rounded-xl">
-                    <TrendingUp className="w-5 h-5 text-primary-bright" />
+                    <BicepsFlexed className="w-5 h-5 text-primary-bright" />
                   </div>
                   <h2 className="text-2xl font-bold text-primary-bright">{t('profile.physicalPerformance')}</h2>
                 </div>
@@ -230,7 +230,7 @@ export default function PlayerProfile({ profile, openEdit, deleteItem, user, hid
               <div className="flex justify-between items-center mb-6">
                 <div className="flex items-center gap-3">
                   <div className="p-3 bg-linear-to-br from-primary-light/20 to-primary-deep/10 rounded-xl">
-                    <Trophy className="w-5 h-5 text-primary-bright" />
+                    <ListChecks className="w-5 h-5 text-primary-bright" />
                   </div>
                   <h2 className="text-2xl font-bold text-primary-bright">{t('profile.matchHistory')}</h2>
                 </div>
@@ -320,7 +320,7 @@ export default function PlayerProfile({ profile, openEdit, deleteItem, user, hid
               <div className="flex justify-between items-center mb-6">
                 <div className="flex items-center gap-3">
                   <div className="p-3 bg-linear-to-br from-primary-bright/20 to-primary-bright/10 rounded-xl">
-                    <Trophy className="w-5 h-5 text-primary-bright" />
+                    <Users className="w-5 h-5 text-primary-bright" />
                   </div>
                   <h2 className="text-2xl font-bold text-primary-bright">{t('profile.achievements')}</h2>
                 </div>

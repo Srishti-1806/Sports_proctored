@@ -94,7 +94,7 @@ export default function BentoGrid({ onSignupClick, onLoginClick }) {
         transition={{ delay: 0.2 }}
           className="col-span-6 lg:col-span-3 row-span-2 rounded-[24px] bg-card border border-border p-4 relative overflow-hidden group hover:border-primary-bright transition-colors duration-300"
       >
-        <div className="flex flex-col h-full justify-between">
+        <div className="flex flex-col h-full justify-start">
           <div className="flex items-center justify-between mb-3">
             <div className="w-10 h-10 rounded-xl bg-primary-soft flex items-center justify-center">
               <TrendingUp className="w-5 h-5 text-primary-deep" />
@@ -102,16 +102,11 @@ export default function BentoGrid({ onSignupClick, onLoginClick }) {
             <div className="text-xs text-primary-muted font-medium">LIVE</div>
           </div>
           
-          <div>
+          <div className="mt-6">
             <div className="font-display text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-1">
               25K+
             </div>
             <div className="text-primary-muted text-xs sm:text-sm">{t('bento.playersConnected')}</div>
-          </div>
-
-          <div className="flex items-center gap-2 text-xs text-green-600 bg-green-50 px-2 py-1 rounded-lg w-fit">
-            <div className="w-1.5 h-1.5 bg-green-500 rounded-full" />
-            <span className="font-medium">+15%</span>
           </div>
         </div>
       </motion.div>

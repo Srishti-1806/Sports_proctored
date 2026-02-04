@@ -4,6 +4,7 @@ import Navbar from '../components/Navbar'
 import { AuthProvider } from '../lib/context/AuthContext'
 import { LanguageProvider } from '../lib/context/LanguageContext'
 import ToastProvider from '../components/ToastProvider'
+import Script from 'next/script'
 
 export const metadata = {
   title: 'Sportlin - Elevate Your Game',
@@ -32,6 +33,7 @@ export default function RootLayout({ children }) {
             </AuthProvider>
           </LanguageProvider>
         </ThemeProvider>
+        <Script src="https://cdn.lordicon.com/lordicon.js"></Script>
       </body>
     </html>
   )

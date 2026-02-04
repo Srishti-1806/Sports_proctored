@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect, Suspense } from 'react'
-import { useScroll, useTransform } from 'framer-motion'
+import { useScroll, useTransform, motion } from 'framer-motion'
 import { useSearchParams } from 'next/navigation'
 import { AlertCircle } from 'lucide-react'
 import { useAuth } from '@/lib/context/AuthContext'
@@ -10,6 +10,7 @@ import BentoGrid from '@/components/home/BentoGrid'
 import FeaturesSection from '@/components/home/FeaturesSection'
 import CTASection from '@/components/home/CTASection'
 import AuthModals from '@/components/home/AuthModals'
+import SportsLoader from '@/components/home/SportsLoader'
 
 function SearchParamsHandler({ setShowLogin, setShowSignup, setShowAuthAlert, user, loading }) {
   const searchParams = useSearchParams()
@@ -68,8 +69,26 @@ export default function HomePage() {
   const [showSignup, setShowSignup] = useState(false)
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
   const [showAuthAlert, setShowAuthAlert] = useState(false)
+  const [showLoader, setShowLoader] = useState(false)
+  const [loaderComplete, setLoaderComplete] = useState(false)
   const containerRef = useRef(null)
   const { user, loading } = useAuth()
+
+  // Check if this is the first visit
+  useEffect(() => {
+    const hasVisited = sessionStorage.getItem('hasVisitedHome')
+    
+    if (!hasVisited) {
+      setShowLoader(true)
+      sessionStorage.setItem('hasVisitedHome', 'true')
+    } else {
+      setLoaderComplete(true)
+    }
+  }, [])
+
+  const handleLoaderComplete = () => {
+    setLoaderComplete(true)
+  }
 
   useEffect(() => {
     const handleMouseMove = (e) => {
@@ -94,10 +113,20 @@ export default function HomePage() {
 
   return (
     <div className="overflow-hidden bg-background" ref={containerRef}>
-      
-      {/* Search Params Handler */}
-      <Suspense fallback={null}>
-        <SearchParamsHandler 
+      {/* Sports Loader - Only on first visit */}
+      {showLoader && <SportsLoader onComplete={handleLoaderComplete} />}
+
+      {/* Main content - Only show after loader completes */}
+      {loaderComplete && (
+        <motion.div
+          initial={{ opacity: 0, filter: 'blur(8px)', y: 8 }}
+          animate={{ opacity: 1, filter: 'blur(0px)', y: 0 }}
+          transition={{ duration: 0.8, ease: 'easeOut' }}
+          className="min-h-screen"
+        >
+          {/* Search Params Handler */}
+          <Suspense fallback={null}>
+            <SearchParamsHandler 
           setShowLogin={setShowLogin}
           setShowSignup={setShowSignup}
           setShowAuthAlert={setShowAuthAlert}
@@ -141,6 +170,8 @@ export default function HomePage() {
         showSignup={showSignup}
         onClose={handleModalClose}
       />
+        </motion.div>
+      )}
     </div>
   )
 }

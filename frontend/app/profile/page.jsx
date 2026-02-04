@@ -38,6 +38,7 @@ export default function ProfilePage() {
         if (profiles && !error) {
           setProfile({
             id: profiles.id,
+            publicId: profiles.public_id || user.user_metadata?.public_id || null,
             fullName: profiles.full_name || `${user.user_metadata?.first_name || ''} ${user.user_metadata?.last_name || ''}`,
             about: profiles.about || '',
             location: profiles.location || '',
@@ -62,6 +63,7 @@ export default function ProfilePage() {
         } else {
           setProfile({
             id: user.id,
+            publicId: user.user_metadata?.public_id || null,
             fullName: `${user.user_metadata?.first_name || ''} ${user.user_metadata?.last_name || ''}`,
             about: '',
             location: '',
@@ -418,6 +420,11 @@ export default function ProfilePage() {
                         <Mail className="w-4 h-4" />
                         {user.email}
                       </div>
+                      {profile?.publicId && (
+                        <div className="flex items-center gap-1 text-sm text-primary-muted">
+                          <div className="px-2 py-1 rounded bg-muted/20 text-muted-foreground">@{profile.publicId}</div>
+                        </div>
+                      )}
                     </div>
 
                     {/* Followers/Following Stats */}
