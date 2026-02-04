@@ -2,16 +2,18 @@
 
 import { useEffect, useState } from 'react'
 import { Camera, Trophy, Award, Target, Zap, User as UserIcon, Pencil, MapPin, Mail, TrendingUp, Dumbbell, Calendar, Users } from 'lucide-react'
-import DeleteAccountModal from '../../components/profile/DeleteAccountModal'
-import { useAuth } from '../../lib/context/AuthContext'
-import { useToast } from '../../components/ToastProvider'
-import StatCard from '../../components/profile/StatCard'
-import ProfileEditModals from '../../components/profile/ProfileEditModals'
-import PlayerProfile from '../../components/profile/PlayerProfile'
-import CoachProfile from '../../components/profile/CoachProfile'
-import FollowersModal from '../../components/FollowersModal'
+import DeleteAccountModal from '@/components/profile/DeleteAccountModal'
+import { useAuth } from '@/lib/context/AuthContext'
+import { useToast } from '@/components/ToastProvider'
+import StatCard from '@/components/profile/StatCard'
+import ProfileEditModals from '@/components/profile/ProfileEditModals'
+import PlayerProfile from '@/components/profile/PlayerProfile'
+import CoachProfile from '@/components/profile/CoachProfile'
+import FollowersModal from '@/components/FollowersModal'
+import { useLanguage } from '@/lib/context/LanguageContext'
 
 export default function ProfilePage() {
+  const { t } = useLanguage()
   const { user, supabase } = useAuth()
   const toast = useToast()
   const [loading, setLoading] = useState(true)
@@ -365,10 +367,10 @@ export default function ProfilePage() {
 
           {isPlayer && (
             <div className="absolute bottom-6 left-6 right-6 flex gap-3 overflow-x-auto">
-              <StatCard icon={Trophy} label="Achievements" value={profile?.achievements?.length || 0} color="from-amber-400 to-orange-500" />
-              <StatCard icon={Target} label="Matches" value={profile?.matchHistory?.length || 0} color="from-blue-400 to-cyan-500" />
-              <StatCard icon={Award} label="Score" value={profile?.assessments?.[0]?.score || '-'} color="from-purple-400 to-pink-500" />
-              <StatCard icon={Zap} label="Training" value={profile?.trainingSchedule?.length || 0} color="from-green-400 to-emerald-500" />
+              <StatCard icon={Trophy} label={t('profile.achievementsBanner')} value={profile?.achievements?.length || 0} color="from-amber-400 to-orange-500" />
+              <StatCard icon={Target} label={t('profile.matchesBanner')} value={profile?.matchHistory?.length || 0} color="from-blue-400 to-cyan-500" />
+              <StatCard icon={Award} label={t('profile.scoreBanner')} value={profile?.assessments?.[0]?.score || '-'} color="from-purple-400 to-pink-500" />
+              <StatCard icon={Zap} label={t('profile.trainingBanner')} value={profile?.trainingSchedule?.length || 0} color="from-green-400 to-emerald-500" />
             </div>
           )}
         </div>
@@ -410,7 +412,7 @@ export default function ProfilePage() {
                         </div>
                       )}
                       <div className="px-3 py-1 rounded-full bg-linear-to-r from-primary-deep to-primary-bright text-white text-xs font-bold uppercase tracking-wide">
-                        {user.user_metadata?.role || 'player'}
+                        {user.user_metadata?.role === 'player' ? t('auth.player') : t('auth.coach')}
                       </div>
                       <div className="flex items-center gap-1 text-sm text-primary-muted">
                         <Mail className="w-4 h-4" />
@@ -426,7 +428,7 @@ export default function ProfilePage() {
                       >
                         <Users className="w-4 h-4 text-primary-muted" />
                         <span className="font-bold text-foreground">{profile?.followers?.length || 0}</span>
-                        <span className="text-sm text-muted-foreground">Followers</span>
+                        <span className="text-sm text-muted-foreground">{t('profile.followers')}</span>
                       </button>
                       <button
                         onClick={openFollowingModal}
@@ -434,7 +436,7 @@ export default function ProfilePage() {
                       >
                         <Users className="w-4 h-4 text-primary-muted" />
                         <span className="font-bold text-foreground">{profile?.following?.length || 0}</span>
-                        <span className="text-sm text-muted-foreground">Following</span>
+                        <span className="text-sm text-muted-foreground">{t('profile.following')}</span>
                       </button>
                     </div>
                   </div>
@@ -442,7 +444,7 @@ export default function ProfilePage() {
                     <button onClick={() => openEdit('header', { position: profile?.position, location: profile?.location })} className="p-3 rounded-xl hover:bg-primary-soft transition-colors">
                       <Pencil className="w-5 h-5 text-primary-muted" />
                     </button>
-                    <button onClick={() => setShowDeleteModal(true)} className="p-3 rounded-xl hover:bg-red-100 transition-colors text-destructive">Delete Account</button>
+                    <button onClick={() => setShowDeleteModal(true)} className="p-3 rounded-xl hover:bg-red-100 transition-colors text-destructive">{t('profile.deleteAccount')}</button>
                   </div>
                 </div>
 
@@ -455,7 +457,7 @@ export default function ProfilePage() {
                             <TrendingUp className="w-4 h-4 text-[#3D52A0]" />
                           </div>
                           <div>
-                            <p className="text-xs text-[#8697C4]">{isPlayer ? 'Height' : 'Experience'}</p>
+                            <p className="text-xs text-[#8697C4]">{isPlayer ? t('profile.height') : t('coaches.experience')}</p>
                             <p className="font-bold text-[#1a1a2e] dark:text-primary-soft">{profile.athleticStats.height}</p>
                           </div>
                         </div>
@@ -467,7 +469,7 @@ export default function ProfilePage() {
                             <Dumbbell className="w-4 h-4 text-[#3D52A0]" />
                           </div>
                           <div>
-                            <p className="text-xs text-[#8697C4]">{isPlayer ? 'Weight' : 'Level'}</p>
+                            <p className="text-xs text-[#8697C4]">{isPlayer ? t('profile.weight') : t('profile.coachingLevel')}</p>
                             <p className="font-bold text-[#1a1a2e] dark:text-primary-soft">{profile.athleticStats.weight}</p>
                           </div>
                         </div>
@@ -479,7 +481,7 @@ export default function ProfilePage() {
                             <Calendar className="w-4 h-4 text-[#3D52A0]" />
                           </div>
                           <div>
-                            <p className="text-xs text-[#8697C4]">Age</p>
+                            <p className="text-xs text-[#8697C4]">{t('profile.age')}</p>
                             <p className="font-bold text-[#1a1a2e] dark:text-primary-soft">{profile.athleticStats.age}</p>
                           </div>
                         </div>
@@ -491,7 +493,7 @@ export default function ProfilePage() {
                             <Trophy className="w-4 h-4 text-[#3D52A0]" />
                           </div>
                           <div>
-                            <div className="text-xs text-[#8697C4]">Sport</div>
+                            <div className="text-xs text-[#8697C4]">{t('profile.sport')}</div>
                             <div className="font-bold text-[#1a1a2e] dark:text-primary-soft">{profile.athleticStats.primarySport}</div>
                           </div>
                         </div>
@@ -512,7 +514,7 @@ export default function ProfilePage() {
                           onClick={() => setShowDeleteModal(true)}
                           className="flex-1 px-4 py-2 rounded-xl bg-red-50 hover:bg-red-100 transition-colors text-destructive flex items-center justify-center"
                         >
-                          <span className="font-medium">Delete Account</span>
+                          <span className="font-medium">{t('profile.deleteAccount')}</span>
                         </button>
                       </div>
                     </div>

@@ -2,12 +2,12 @@
 
 import { useState, useEffect } from 'react'
 import { Loader2 } from 'lucide-react'
-import PlayersHeader from '../../components/players/PlayersHeader'
-import SearchAndFilters from '../../components/players/SearchAndFilters'
-import ResultsCount from '../../components/players/ResultsCount'
-import PlayersGrid from '../../components/players/PlayersGrid'
-import EmptyState from '../../components/players/EmptyState'
-import { createClient } from '../../lib/supabase/client'
+import PlayersHeader from '@/components/players/PlayersHeader'
+import SearchAndFilters from '@/components/players/SearchAndFilters'
+import ResultsCount from '@/components/players/ResultsCount'
+import PlayersGrid from '@/components/players/PlayersGrid'
+import EmptyState from '@/components/players/EmptyState'
+import { createClient } from '@/lib/supabase/client'
 
 export default function PlayersPage() {
   const [players, setPlayers] = useState([])

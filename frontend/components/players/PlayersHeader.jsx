@@ -1,6 +1,9 @@
 import { motion } from 'framer-motion'
+import { useLanguage } from '@/lib/context/LanguageContext'
 
 export default function PlayersHeader() {
+  const { t } = useLanguage()
+  
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -8,10 +11,10 @@ export default function PlayersHeader() {
       className="mb-8"
     >
       <h1 className="font-display text-5xl font-bold text-foreground mb-3">
-        Discover Players
+        {t('players.title')}
       </h1>
-          <p className="text-xl text-muted-foreground">
-        Connect with talented players across India
+      <p className="text-xl text-muted-foreground">
+        {t('players.subtitle')}
       </p>
     </motion.div>
   )

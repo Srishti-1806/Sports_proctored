@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { Filter, Tag } from 'lucide-react'
+import { useLanguage } from '@/lib/context/LanguageContext'
 
 export default function EventSidebar({ 
   filters, 
@@ -11,6 +12,13 @@ export default function EventSidebar({
   activeSport,
   setActiveSport
 }) {
+  const { t } = useLanguage()
+  
+  const getSportLabel = (sportLabel) => {
+    const sportKey = sportLabel.toLowerCase()
+    return t(`sports.${sportKey}`) || sportLabel
+  }
+  
   return (
     <div className="space-y-4 sm:space-y-6">
       {/* Filters */}
@@ -21,7 +29,7 @@ export default function EventSidebar({
       >
         <h3 className="font-display font-bold text-foreground mb-3 sm:mb-4 flex items-center gap-2 text-sm sm:text-base">
           <Filter className="w-4 h-4 text-primary-bright" />
-          Filter Events
+          {t('common.filter')} {t('events.title')}
         </h3>
         <div className="space-y-2">
               {filters.map((filter) => (
@@ -35,7 +43,7 @@ export default function EventSidebar({
                   }`}
                 >
                   <filter.icon className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 group-hover:text-foreground dark:group-hover:text-foreground" />
-                  <span className="font-medium truncate group-hover:text-foreground dark:group-hover:text-foreground">{filter.label}</span>
+                  <span className="font-medium truncate group-hover:text-foreground dark:group-hover:text-foreground">{t(filter.labelKey)}</span>
                 </button>
               ))}
         </div>
@@ -50,7 +58,7 @@ export default function EventSidebar({
       >
         <h3 className="font-display font-bold text-foreground mb-3 sm:mb-4 flex items-center gap-2 text-sm sm:text-base">
           <Tag className="w-4 h-4 text-primary-bright" />
-          Sports
+          {t('profile.sports')}
         </h3>
         <div className="flex flex-wrap gap-2">
               <button
@@ -61,7 +69,7 @@ export default function EventSidebar({
                     : 'bg-primary-soft text-primary border border-transparent hover:bg-primary-deep hover:text-primary-soft hover:border-primary-bright hover:shadow-md dark:bg-transparent dark:text-popover-foreground dark:hover:bg-primary-deep/60 dark:hover:text-foreground dark:hover:border-primary-bright'
                 }`}
               >
-                <span className="whitespace-nowrap">All Sports</span>
+                <span className="whitespace-nowrap">{t('events.allSports')}</span>
               </button>
           {sportCategories.map((sport) => (
             <button
@@ -73,7 +81,7 @@ export default function EventSidebar({
                       : 'bg-primary-soft text-primary border border-transparent hover:bg-primary-deep hover:text-primary-soft hover:border-primary-bright hover:shadow-md dark:bg-transparent dark:text-popover-foreground dark:hover:bg-primary-deep/60 dark:hover:text-foreground dark:hover:border-primary-bright'
                   }`}
             >
-              {sport.label}
+              {getSportLabel(sport.label)}
             </button>
           ))}
         </div>

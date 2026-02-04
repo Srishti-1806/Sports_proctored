@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { UserPlus, UserMinus, Loader2 } from 'lucide-react'
-import { useAuth } from '../lib/context/AuthContext'
+import { useAuth } from '@/lib/context/AuthContext'
 import { useToast } from './ToastProvider'
 
 export default function FollowButton({ targetUserId, targetUserName, initialFollowing = false, onFollowChange }) {

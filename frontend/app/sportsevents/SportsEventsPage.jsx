@@ -12,7 +12,10 @@ import { useToast } from '@/components/ToastProvider'
 
 // initial state values inlined; removed unused globals
 import sportsEvents from '@/components/sports_events.json'
+import { useLanguage } from '@/lib/context/LanguageContext'
+
 export default function SportsEventsPage() {
+  const { t } = useLanguage()
   const { user, supabase } = useAuth()
   const toast = useToast()
 
@@ -27,10 +30,10 @@ export default function SportsEventsPage() {
   const [error, setError] = useState(null)
 
   const filters = [
-    { id: 'all', label: 'All Events', icon: Bell },
-    { id: 'upcoming', label: 'Upcoming', icon: Calendar },
-    { id: 'registered', label: 'Registered', icon: CheckCircle },
-    { id: 'saved', label: 'Saved', icon: Bookmark }
+    { id: 'all', labelKey: 'events.allEvents', icon: Bell },
+    { id: 'upcoming', labelKey: 'events.upcomingFilter', icon: Calendar },
+    { id: 'registered', labelKey: 'events.registered', icon: CheckCircle },
+    { id: 'saved', labelKey: 'events.saved', icon: Bookmark }
   ]
   
 
@@ -246,10 +249,10 @@ export default function SportsEventsPage() {
             <div className="space-y-3 sm:space-y-4">
               <div className="flex items-center justify-between px-1">
                 <h2 className="font-display text-lg sm:text-xl font-bold text-white">
-                  {activeFilter === 'all' ? 'All Events' : 
-                   activeFilter === 'upcoming' ? 'Upcoming Events' :
-                   activeFilter === 'registered' ? 'Your Registered Events' : 
-                   'Saved Events'}
+                  {activeFilter === 'all' ? t('events.allEventsHeading') : 
+                   activeFilter === 'upcoming' ? t('events.upcomingEventsHeading') :
+                   activeFilter === 'registered' ? t('events.registeredEventsHeading') : 
+                   t('events.savedEventsHeading')}
                   <span className="ml-2 text-primary-light font-normal text-sm sm:text-base">({filteredEvents.length})</span>
                 </h2>
               </div>
@@ -257,7 +260,7 @@ export default function SportsEventsPage() {
               {loading ? (
                 <div className="text-center py-12">
                   <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-primary-deep border-r-transparent"></div>
-                  <p className="mt-4 text-primary-muted">Loading events...</p>
+                  <p className="mt-4 text-primary-muted">{t('common.loadingEvents')}</p>
                 </div>
               ) : error ? (
                 <div className="text-center py-12">

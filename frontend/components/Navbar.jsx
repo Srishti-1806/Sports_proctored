@@ -19,11 +19,14 @@ import {
   LogIn
 } from 'lucide-react'
 import ThemeToggle from './ThemeToggle'
+import LanguageSwitcher from './LanguageSwitcher'
 import { useAuth } from '../lib/context/AuthContext'
+import { useLanguage } from '../lib/context/LanguageContext'
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
   const { user, signOut } = useAuth()
+  const { t } = useLanguage()
   const [isSigningOut, setIsSigningOut] = useState(false)
   const pathname = usePathname()
   const router = useRouter()
@@ -42,19 +45,19 @@ export default function Navbar() {
   }
 
   const navLinks = [
-    { href: '/', label: 'Home', icon: Home },
-    { href: '/coaches', label: 'Coaches', icon: Users },
-    { href: '/players', label: 'Players', icon: User },
-    { href: '/sportsevents', label: 'Events', icon: Bell },
-    { href: '/stadiums', label: 'Venues', icon: MapPin },
-    { href: '/chat', label: 'AI Coach', icon: MessageCircle },
+    { href: '/', label: t('nav.home'), icon: Home },
+    { href: '/coaches', label: t('nav.coaches'), icon: Users },
+    { href: '/players', label: t('nav.players'), icon: User },
+    { href: '/sportsevents', label: t('nav.events'), icon: Bell },
+    { href: '/stadiums', label: t('nav.venues'), icon: MapPin },
+    { href: '/chat', label: t('nav.aiCoach'), icon: MessageCircle },
   ]
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 glass backdrop-blur-lg">
       <div className=" px-2 sm:px-4 lg:px-6">
         <div className="hidden lg:grid grid-cols-[30%_45%_25%] items-center h-16 relative w-full">
-          <div className="col-start-1 flex items-center">
+          <div className="col-start-1 flex items-center gap-3">
             {/* Logo */}
             <Link href="/" className="flex items-center gap-2 group">
               <div
@@ -66,6 +69,8 @@ export default function Navbar() {
                 Sportlin
               </span>
             </Link>
+            {/* Language Switcher */}
+            <LanguageSwitcher />
           </div>
 
           <div className="col-start-2 flex items-center justify-center gap-1">
@@ -121,12 +126,12 @@ export default function Navbar() {
                   {isSigningOut ? (
                     <>
                       <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                      <span>Signing out...</span>
+                      <span>{t('nav.signingOut')}</span>
                     </>
                   ) : (
                     <>
                       <LogOut className="w-4 h-4" />
-                      Sign Out
+                      {t('nav.signOut')}
                     </>
                   )}
                 </motion.button>
@@ -140,7 +145,7 @@ export default function Navbar() {
                     className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-card border-2 border-primary text-primary dark:text-foreground font-semibold text-sm hover:bg-primary-soft dark:hover:bg-popover transition-colors duration-300"
                   >
                     <LogIn className="w-4 h-4" />
-                    Sign In
+                    {t('nav.signIn')}
                   </motion.button>
                 </Link>
                 <Link href="/?signup=true">
@@ -150,7 +155,7 @@ export default function Navbar() {
                     className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-linear-to-r from-primary-deep to-primary-bright text-white font-semibold text-sm shadow-lg hover:shadow-xl transition-shadow duration-300"
                   >
                     <Zap className="w-4 h-4" />
-                    Get Started
+                    {t('nav.getStarted')}
                   </motion.button>
                 </Link>
               </>
@@ -161,18 +166,21 @@ export default function Navbar() {
 
         {/* Mobile Header: logo left, controls right (visible on <lg) */}
         <div className="flex lg:hidden items-center justify-between w-full py-2">
-          <Link href="/" className="flex items-center gap-2 group">
-            <div
-              className="w-10 h-10 rounded-xl bg-linear-to-br from-primary-deep to-primary-bright flex items-center justify-center"
-            >
-              <Trophy className="w-5 h-5 text-white" />
-            </div>
-            <span className="font-display font-bold text-xl gradient-text">
-              Sportlin
-            </span>
-          </Link>
+          <div className="flex items-center gap-2">
+            <Link href="/" className="flex items-center gap-2 group">
+              <div
+                className="w-10 h-10 rounded-xl bg-linear-to-br from-primary-deep to-primary-bright flex items-center justify-center"
+              >
+                <Trophy className="w-5 h-5 text-white" />
+              </div>
+              <span className="font-display font-bold text-xl gradient-text">
+                Sportlin
+              </span>
+            </Link>
+          </div>
 
           <div className="flex items-center gap-3">
+            <LanguageSwitcher />
             <ThemeToggle />
             <button
               onClick={() => setIsOpen(!isOpen)}
@@ -241,12 +249,12 @@ export default function Navbar() {
                     {isSigningOut ? (
                       <>
                         <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                        <span>Signing out...</span>
+                        <span>{t('nav.signingOut')}</span>
                       </>
                     ) : (
                       <>
                         <LogOut className="w-4 h-4" />
-                        Sign Out
+                        {t('nav.signOut')}
                       </>
                     )}
                   </motion.button>
@@ -259,7 +267,7 @@ export default function Navbar() {
                       className="w-full flex items-center justify-center gap-2 px-5 py-3 mt-4 rounded-xl bg-card border-2 border-primary text-primary dark:text-foreground font-semibold"
                     >
                       <LogIn className="w-4 h-4" />
-                      Sign In
+                      {t('nav.signIn')}
                     </motion.button>
                   </Link>
                   <Link href="/?signup=true">
@@ -268,7 +276,7 @@ export default function Navbar() {
                       className="w-full flex items-center justify-center gap-2 mt-2 px-5 py-3 rounded-xl bg-linear-to-r from-primary-deep to-primary-bright text-white font-semibold shadow-lg"
                     >
                       <Zap className="w-4 h-4" />
-                      Get Started
+                      {t('nav.getStarted')}
                     </motion.button>
                   </Link>
                 </>

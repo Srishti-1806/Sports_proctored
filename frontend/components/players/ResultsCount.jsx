@@ -1,6 +1,9 @@
 import { motion } from 'framer-motion'
+import { useLanguage } from '@/lib/context/LanguageContext'
 
 export default function ResultsCount({ count }) {
+  const { t } = useLanguage()
+  
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -8,7 +11,7 @@ export default function ResultsCount({ count }) {
       transition={{ delay: 0.2 }}
       className="mb-6 text-muted-foreground"
     >
-      Showing {count} player{count !== 1 ? 's' : ''}
+      {count} {t('players.results')}
     </motion.div>
   )
 }

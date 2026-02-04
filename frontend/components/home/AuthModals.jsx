@@ -13,12 +13,14 @@ import {
   Shield,
   AlertCircle
 } from 'lucide-react'
-import { useAuth } from '../../lib/context/AuthContext'
-import { createClient } from '../../lib/supabase/client'
-import { useToast } from '../../components/ToastProvider'
+import { useAuth } from '@/lib/context/AuthContext'
+import { createClient } from '@/lib/supabase/client'
+import { useToast } from '@/components/ToastProvider'
 import { useRouter } from 'next/navigation'
+import { useLanguage } from '@/lib/context/LanguageContext'
 
 export default function AuthModals({ showLogin, showSignup, onClose }) {
+  const { t } = useLanguage()
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -134,7 +136,7 @@ export default function AuthModals({ showLogin, showSignup, onClose }) {
                 <div className="w-16 h-16 rounded-2xl bg-linear-to-br from-primary-deep to-primary-bright flex items-center justify-center mx-auto mb-4">
                   <Trophy className="w-8 h-8 text-white" />
                 </div>
-                <h2 className="font-display text-2xl font-bold text-foreground">Welcome Back</h2>
+                <h2 className="font-display text-2xl font-bold text-foreground">{t('auth.welcomeBack')}</h2>
                 <p className="text-primary-muted mt-2">Continue your athletic journey</p>
               </div>
 
@@ -147,7 +149,7 @@ export default function AuthModals({ showLogin, showSignup, onClose }) {
 
               <form onSubmit={handleLogin} className="space-y-5">
                 <div>
-                  <label className="block text-sm font-medium text-foreground mb-2">Email</label>
+                  <label className="block text-sm font-medium text-foreground mb-2">{t('auth.email')}</label>
                   <div className="relative">
                     <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-primary-muted" />
                     <input
@@ -162,7 +164,7 @@ export default function AuthModals({ showLogin, showSignup, onClose }) {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-foreground mb-2">Password</label>
+                  <label className="block text-sm font-medium text-foreground mb-2">{t('auth.password')}</label>
                   <div className="relative">
                     <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-primary-muted" />
                     <input
@@ -171,7 +173,7 @@ export default function AuthModals({ showLogin, showSignup, onClose }) {
                       value={loginData.password}
                       onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
                       className="w-full pl-12 pr-12 py-3 rounded-xl border border-border focus:border-primary-bright focus:ring-2 focus:ring-primary-bright/20 outline-none transition-all"
-                      placeholder="Enter password"
+                      placeholder={t('auth.password')}
                     />
                     <button
                       type="button"
@@ -194,17 +196,17 @@ export default function AuthModals({ showLogin, showSignup, onClose }) {
                   disabled={loading}
                   className="w-full py-3 rounded-xl bg-linear-to-r from-primary-deep to-primary-bright text-white font-semibold shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {loading ? 'Signing In...' : 'Sign In'}
+                  {loading ? t('auth.signingIn') : t('nav.signIn')}
                 </motion.button>
               </form>
 
               <p className="text-center text-primary-muted mt-6 text-sm">
-                New to Sportlin?{' '}
+                {t('auth.dontHaveAccount')}{' '}
                 <button
                   onClick={() => onClose('switchToSignup')}
                   className="text-primary font-semibold hover:underline"
                 >
-                  Create account
+                  {t('auth.signUpHere')}
                 </button>
               </p>
             </motion.div>
@@ -241,7 +243,7 @@ export default function AuthModals({ showLogin, showSignup, onClose }) {
                   <div className="w-16 h-16 rounded-2xl bg-linear-to-br from-primary-deep to-primary-bright flex items-center justify-center mx-auto mb-4">
                     <Trophy className="w-8 h-8 text-white" />
                   </div>
-                  <h2 className="font-display text-2xl font-bold text-foreground">Join Sportlin</h2>
+                  <h2 className="font-display text-2xl font-bold text-foreground">{t('auth.joinSportlin')}</h2>
                   <p className="text-primary-muted mt-2">Start your journey to greatness</p>
                 </div>
 
@@ -255,7 +257,7 @@ export default function AuthModals({ showLogin, showSignup, onClose }) {
                 <form onSubmit={handleSignup} className="space-y-5">
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">First Name</label>
+                      <label className="block text-sm font-medium text-foreground mb-2">{t('auth.firstName')}</label>
                       <input
                         type="text"
                         required
@@ -266,7 +268,7 @@ export default function AuthModals({ showLogin, showSignup, onClose }) {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">Last Name</label>
+                      <label className="block text-sm font-medium text-foreground mb-2">{t('auth.lastName')}</label>
                       <input
                         type="text"
                         required
@@ -279,7 +281,7 @@ export default function AuthModals({ showLogin, showSignup, onClose }) {
                   </div>
 
                   <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">Email</label>
+                      <label className="block text-sm font-medium text-foreground mb-2">{t('auth.email')}</label>
                     <div className="relative">
                       <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-primary-muted" />
                       <input
@@ -294,7 +296,7 @@ export default function AuthModals({ showLogin, showSignup, onClose }) {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-foreground mb-2">I am a</label>
+                    <label className="block text-sm font-medium text-foreground mb-2">{t('auth.iAmA')}</label>
                     <div className="grid grid-cols-2 gap-4">
                       <label className={`flex items-center justify-center gap-2 p-4 rounded-xl border-2 cursor-pointer hover:border-primary-bright transition-colors ${
                         signupData.role === 'player' ? 'border-primary-bright bg-primary-soft' : 'border-border'
@@ -308,7 +310,7 @@ export default function AuthModals({ showLogin, showSignup, onClose }) {
                           className="hidden" 
                         />
                         <User className="w-5 h-5 text-primary-deep" />
-                        <span className={`font-medium ${signupData.role === 'player' ? 'text-primary-deep' : 'text-foreground'}`}>Player</span>
+                        <span className={`font-medium ${signupData.role === 'player' ? 'text-primary-deep' : 'text-foreground'}`}>{t('auth.player')}</span>
                       </label>
                       <label className={`flex items-center justify-center gap-2 p-4 rounded-xl border-2 cursor-pointer hover:border-primary-bright transition-colors ${
                         signupData.role === 'coach' ? 'border-primary-bright bg-primary-soft' : 'border-border'
@@ -322,13 +324,13 @@ export default function AuthModals({ showLogin, showSignup, onClose }) {
                           className="hidden" 
                         />
                         <Shield className="w-5 h-5 text-primary-deep" />
-                        <span className={`font-medium ${signupData.role === 'coach' ? 'text-primary-deep' : 'text-foreground'}`}>Coach</span>
+                        <span className={`font-medium ${signupData.role === 'coach' ? 'text-primary-deep' : 'text-foreground'}`}>{t('auth.coach')}</span>
                       </label>
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-foreground mb-2">Password</label>
+                    <label className="block text-sm font-medium text-foreground mb-2">{t('auth.password')}</label>
                     <div className="relative">
                       <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-primary-muted" />
                       <input
@@ -337,7 +339,7 @@ export default function AuthModals({ showLogin, showSignup, onClose }) {
                         value={signupData.password}
                         onChange={(e) => setSignupData({ ...signupData, password: e.target.value })}
                         className="w-full pl-12 pr-12 py-3 rounded-xl border border-border focus:border-primary-bright focus:ring-2 focus:ring-primary-bright/20 outline-none transition-all"
-                        placeholder="Create password"
+                        placeholder={t('auth.password')}
                       />
                       <button
                         type="button"
@@ -360,17 +362,17 @@ export default function AuthModals({ showLogin, showSignup, onClose }) {
                     disabled={loading}
                     className="w-full py-3 rounded-xl bg-linear-to-r from-primary-deep to-primary-bright text-white font-semibold shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    {loading ? 'Creating Account...' : 'Create Account'}
+                    {loading ? t('auth.creatingAccount') : t('auth.createAccount')}
                   </motion.button>
                 </form>
 
                 <p className="text-center text-primary-muted mt-6 text-sm">
-                  Already have an account?{' '}
+                  {t('auth.alreadyHaveAccount')}{' '}
                   <button
                     onClick={() => onClose('switchToLogin')}
                     className="text-primary font-semibold hover:underline"
                   >
-                    Sign in
+                    {t('auth.signInHere')}
                   </button>
                 </p>
               </div>

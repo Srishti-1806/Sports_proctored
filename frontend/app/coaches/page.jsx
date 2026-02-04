@@ -4,9 +4,11 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { Search, SlidersHorizontal, MapPin, Award, TrendingUp,ChevronRight, Trophy, Loader2 } from 'lucide-react'
-import { createClient } from '../../lib/supabase/client'
+import { createClient } from '@/lib/supabase/client'
+import { useLanguage } from '@/lib/context/LanguageContext'
 
 export default function CoachesPage() {
+  const { t } = useLanguage()
   const [coaches, setCoaches] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -15,6 +17,12 @@ export default function CoachesPage() {
   const [showFilters, setShowFilters] = useState(false)
 
   const sports = ['all', 'Cricket', 'Football', 'Badminton', 'Tennis', 'Athletics', 'Swimming', 'Basketball', 'Hockey']
+
+  const getSportLabel = (sport) => {
+    if (sport === 'all') return t('coaches.allSports')
+    const sportKey = sport.toLowerCase()
+    return t(`sports.${sportKey}`) || sport
+  }
 
   useEffect(() => {
     fetchCoaches()
@@ -78,10 +86,10 @@ export default function CoachesPage() {
           className="mb-12"
         >
           <h1 className="font-display text-6xl lg:text-7xl font-bold text-foreground mb-4">
-            Find Your Coach
+            {t('coaches.title')}
           </h1>
           <p className="text-xl text-muted-foreground max-w-2xl">
-            Connect with elite coaches across India. Get personalized training and take your game to the next level.
+            {t('coaches.subtitle')}
           </p>
         </motion.div>
 
@@ -98,7 +106,7 @@ export default function CoachesPage() {
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
               <input
                 type="text"
-                placeholder="Search by name, sport, or location..."
+                placeholder={t('coaches.searchPlaceholder')}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-12 pr-4 py-4 rounded-2xl border border-border focus:border-primary-bright focus:ring-2 focus:ring-primary-bright/20 outline-none transition-all text-foreground placeholder:text-muted-foreground"
@@ -119,7 +127,7 @@ export default function CoachesPage() {
                     : 'bg-card text-muted-foreground border border-border hover:border-primary-bright'
                 }`}
               >
-                {sport === 'all' ? 'All Sports' : sport}
+                {getSportLabel(sport)}
               </button>
             ))}
           </div>
@@ -133,7 +141,7 @@ export default function CoachesPage() {
             transition={{ delay: 0.2 }}
             className="text-muted-foreground mb-6"
           >
-            {filteredCoaches.length} coaches found
+            {filteredCoaches.length} {t('coaches.results')}
           </motion.p>
         )}
 
@@ -155,7 +163,7 @@ export default function CoachesPage() {
               <Trophy className="w-10 h-10 text-red-500" />
             </div>
             <h3 className="font-display text-2xl font-bold text-foreground mb-2">
-              Error loading coaches
+              {t('common.error')}
             </h3>
             <p className="text-muted-foreground mb-4">
               {error}
@@ -164,7 +172,7 @@ export default function CoachesPage() {
               onClick={fetchCoaches}
               className="px-6 py-3 bg-linear-to-r from-primary-deep to-primary-bright text-white rounded-xl hover:shadow-lg transition-all"
             >
-              Try Again
+              {t('common.retry')}
             </button>
           </motion.div>
         )}
@@ -234,21 +242,21 @@ export default function CoachesPage() {
                             <Award className="w-4 h-4 text-primary-bright" />
                             <span className="font-bold text-foreground">{coach.certificationsCount || 0}</span>
                           </div>
-                          <p className="text-xs text-muted-foreground">Certs</p>
+                          <p className="text-xs text-muted-foreground">{t('profile.certifications')}</p>
                         </div>
                         <div className="text-center border-x border-border">
                           <div className="flex items-center justify-center gap-1 mb-1">
                             <TrendingUp className="w-4 h-4 text-green-500" />
                             <span className="font-bold text-foreground">{coach.experience}</span>
                           </div>
-                          <p className="text-xs text-muted-foreground">Experience</p>
+                          <p className="text-xs text-muted-foreground">{t('coaches.experience')}</p>
                         </div>
                         <div className="text-center">
                           <div className="flex items-center justify-center gap-1 mb-1">
                             <Trophy className="w-4 h-4 text-yellow-400" />
                             <span className="font-bold text-foreground">{(coach.achievements || []).length}</span>
                           </div>
-                          <p className="text-xs text-muted-foreground">Awards</p>
+                          <p className="text-xs text-muted-foreground">{t('profile.achievements')}</p>
                         </div>
                       </div>
 
@@ -265,7 +273,7 @@ export default function CoachesPage() {
                           ))}
                             {coach.specialization.length > 2 && (
                               <span className="px-2 py-1 rounded-lg bg-popover text-muted-foreground text-xs font-medium">
-                                +{coach.specialization.length - 2} more
+                                +{coach.specialization.length - 2} {t('common.more')}
                               </span>
                             )}
                         </div>
@@ -274,7 +282,7 @@ export default function CoachesPage() {
                       {/* View Profile */}
                       <div className="flex items-center justify-center mt-auto pt-3 border-t border-border">
                         <div className="flex items-center gap-1 text-primary-bright text-sm font-medium group-hover:gap-2 transition-all">
-                          <span>View Profile</span>
+                          <span>{t('coaches.viewProfile')}</span>
                           <ChevronRight className="w-4 h-4" />
                         </div>
                       </div>
@@ -297,12 +305,12 @@ export default function CoachesPage() {
               <Search className="w-10 h-10 text-muted-foreground" />
             </div>
             <h3 className="font-display text-2xl font-bold text-foreground mb-2">
-              No coaches found
+              {t('coaches.noCoachesFound')}
             </h3>
             <p className="text-muted-foreground mb-4">
               {coaches.length === 0 
                 ? "No coaches have signed up yet. Be the first to join as a coach!"
-                : "Try adjusting your search or filters"
+                : t('coaches.tryAdjusting')
               }
             </p>
           </motion.div>

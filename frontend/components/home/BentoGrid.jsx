@@ -4,11 +4,13 @@ import { motion } from 'framer-motion'
 import { Trophy, MapPin, ArrowRight, TrendingUp,Activity,Award } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/lib/context/AuthContext'
+import { useLanguage } from '@/lib/context/LanguageContext'
 import AvatarCircles from './AvatarCircles'
 
 export default function BentoGrid({ onSignupClick, onLoginClick }) {
   const router = useRouter()
   const { user } = useAuth()
+  const { t } = useLanguage()
 
   const handleProfileClick = (e) => {
     e.preventDefault()
@@ -55,11 +57,11 @@ export default function BentoGrid({ onSignupClick, onLoginClick }) {
               FEATURED
             </div>
             <h2 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-3">
-              Find Your Coach
+              {t('coaches.title')}
               <br />Across India
             </h2>
             <p className="text-primary-light text-sm sm:text-base mb-4">
-              Browse coaches nationwide. Build your sports career.
+              {t('bento.browseCoaches')}
             </p>
           </div>
           
@@ -67,7 +69,7 @@ export default function BentoGrid({ onSignupClick, onLoginClick }) {
             className="flex items-center gap-2 text-white font-semibold"
             whileHover={{ x: 5 }}
           >
-            <span>Build your sports profile</span>
+            <span>{t('bento.browseCoaches')}</span>
             <ArrowRight className="w-5 h-5" />
           </motion.div>
         </div>
@@ -104,12 +106,12 @@ export default function BentoGrid({ onSignupClick, onLoginClick }) {
             <div className="font-display text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-1">
               25K+
             </div>
-            <div className="text-primary-muted text-xs sm:text-sm">Players Connected</div>
+            <div className="text-primary-muted text-xs sm:text-sm">{t('bento.playersConnected')}</div>
           </div>
 
           <div className="flex items-center gap-2 text-xs text-green-600 bg-green-50 px-2 py-1 rounded-lg w-fit">
             <div className="w-1.5 h-1.5 bg-green-500 rounded-full" />
-            <span className="font-medium">+15% this month</span>
+            <span className="font-medium">+15%</span>
           </div>
         </div>
       </motion.div>
@@ -125,8 +127,7 @@ export default function BentoGrid({ onSignupClick, onLoginClick }) {
           <div>
             <Activity className="w-7 h-7 text-primary-bright mb-3" />
             <h3 className="font-display text-lg sm:text-xl md:text-2xl font-bold text-foreground mb-2">
-              Standardized
-              <br />Assessment
+              {t('features.assessment')}
             </h3>
           </div>
           
@@ -159,7 +160,7 @@ export default function BentoGrid({ onSignupClick, onLoginClick }) {
         <div className="flex items-center justify-between h-full">
           <div>
             <div className="font-display text-lg sm:text-xl font-bold text-[#1a1a2e] mb-1">
-                Start for Free
+                {t('cta.getStartedFree')}
               </div>
               <div className="text-xs sm:text-sm text-[#8697C4]">No credit card required</div>
           </div>
@@ -181,10 +182,10 @@ export default function BentoGrid({ onSignupClick, onLoginClick }) {
       >
         <MapPin className="w-8 h-8 text-primary-bright mb-4" />
         <h3 className="font-display text-lg sm:text-xl md:text-2xl font-bold text-foreground mb-2">
-          Find Venues
+          {t('bento.findVenues')}
         </h3>
         <p className="text-primary-muted text-xs sm:text-sm mb-4">
-          450+ facilities across India
+          450+ {t('venues.allFacilities')} across India
         </p>
 
         <div className="space-y-2">
@@ -216,7 +217,7 @@ export default function BentoGrid({ onSignupClick, onLoginClick }) {
           <div>
             <Trophy className="w-8 h-8 text-white mb-3" />
             <h3 className="mt-5 font-display text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2">
-              1.2K Coaches
+              1.2K {t('bento.coaches')}
               <br />Across India
             </h3>
           </div>
@@ -247,7 +248,7 @@ export default function BentoGrid({ onSignupClick, onLoginClick }) {
             <div className="font-display text-2xl sm:text-3xl font-bold gradient-text mb-1">
               96%
             </div>
-            <div className="text-primary-muted text-xs">Success Rate</div>
+            <div className="text-primary-muted text-xs">{t('profile.stats')}</div>
           </div>
           <Award className="w-10 h-10 text-primary-bright" />
         </div>

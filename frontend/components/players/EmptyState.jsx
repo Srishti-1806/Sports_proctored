@@ -1,7 +1,10 @@
 import { motion } from 'framer-motion'
 import { Users } from 'lucide-react'
+import { useLanguage } from '@/lib/context/LanguageContext'
 
 export default function EmptyState() {
+  const { t } = useLanguage()
+  
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -10,10 +13,10 @@ export default function EmptyState() {
     >
       <Users className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
       <h3 className="font-display text-2xl font-bold text-foreground mb-2">
-        No players found
+        {t('players.noPlayersFound')}
       </h3>
       <p className="text-muted-foreground">
-        Try adjusting your search or filters
+        {t('players.tryAdjusting')}
       </p>
     </motion.div>
   )

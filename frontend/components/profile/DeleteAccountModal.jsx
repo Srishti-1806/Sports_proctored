@@ -2,10 +2,12 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { useAuth } from '../../lib/context/AuthContext'
-import { useToast } from '../../components/ToastProvider'
+import { useAuth } from '@/lib/context/AuthContext'
+import { useToast } from '@/components/ToastProvider'
+import { useLanguage } from '@/lib/context/LanguageContext'
 
 export default function DeleteAccountModal({ isOpen, onClose }) {
+  const { t } = useLanguage()
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const { user, supabase } = useAuth()
@@ -66,17 +68,17 @@ export default function DeleteAccountModal({ isOpen, onClose }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
       <div className="bg-card rounded-2xl p-6 w-full max-w-lg mx-4">
-        <h3 className="text-lg font-bold mb-2">Delete Account</h3>
-        <p className="text-sm text-muted-foreground mb-4">This action is irreversible. Type your password to confirm account deletion.</p>
+        <h3 className="text-lg font-bold mb-2">{t('profile.deleteAccount')}</h3>
+        <p className="text-sm text-muted-foreground mb-4">{t('profile.deleteAccountWarning')}</p>
 
         <div className="mb-4">
-          <label className="block text-sm text-primary-muted mb-2">Password</label>
+          <label className="block text-sm text-primary-muted mb-2">{t('profile.password')}</label>
           <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full p-3 rounded-xl border border-border" />
         </div>
 
         <div className="flex justify-end gap-3">
-          <button onClick={onClose} className="px-4 py-2 rounded-xl bg-muted">Cancel</button>
-          <button onClick={handleConfirm} disabled={loading} className="px-4 py-2 rounded-xl bg-destructive text-white">{loading ? 'Deleting...' : 'Delete Account'}</button>
+          <button onClick={onClose} className="px-4 py-2 rounded-xl bg-muted">{t('profile.cancel')}</button>
+          <button onClick={handleConfirm} disabled={loading} className="px-4 py-2 rounded-xl bg-destructive text-white">{loading ? t('profile.deleting') : t('profile.deleteAccount')}</button>
         </div>
       </div>
     </div>

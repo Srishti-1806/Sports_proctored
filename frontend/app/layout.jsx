@@ -2,6 +2,7 @@ import './globals.css'
 import { ThemeProvider } from 'next-themes'
 import Navbar from '../components/Navbar'
 import { AuthProvider } from '../lib/context/AuthContext'
+import { LanguageProvider } from '../lib/context/LanguageContext'
 import ToastProvider from '../components/ToastProvider'
 
 export const metadata = {
@@ -20,14 +21,16 @@ export default function RootLayout({ children }) {
           disableTransitionOnChange
           enableColorScheme={false}
         >
-          <AuthProvider>
-            <ToastProvider>
-              <Navbar />
-              <main className="pt-16">
-                {children}
-              </main>
-            </ToastProvider>
-          </AuthProvider>
+          <LanguageProvider>
+            <AuthProvider>
+              <ToastProvider>
+                <Navbar />
+                <main className="pt-16">
+                  {children}
+                </main>
+              </ToastProvider>
+            </AuthProvider>
+          </LanguageProvider>
         </ThemeProvider>
       </body>
     </html>

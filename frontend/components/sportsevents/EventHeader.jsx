@@ -2,8 +2,11 @@
 
 import { motion } from 'framer-motion'
 import { Search } from 'lucide-react'
+import { useLanguage } from '@/lib/context/LanguageContext'
 
 export default function EventHeader({ searchQuery, setSearchQuery, onOpenFilters }) {
+  const { t } = useLanguage()
+  
   return (
     <div className="bg-linear-to-r from-primary-deep to-primary-bright pt-6 sm:pt-8 pb-16 sm:pb-20 md:pb-24">
       <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
@@ -14,10 +17,10 @@ export default function EventHeader({ searchQuery, setSearchQuery, onOpenFilters
         >
           <div className="text-center md:text-left">
             <h1 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2">
-              Sports Events
+              {t('events.title')}
             </h1>
             <p className="text-sm sm:text-base text-primary-light">
-              Discover and register for upcoming sports events near you
+              {t('events.subtitle')}
             </p>
           </div>
 
@@ -27,7 +30,7 @@ export default function EventHeader({ searchQuery, setSearchQuery, onOpenFilters
               <Search className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-white z-10" />
               <input
                 type="text"
-                placeholder="Search events..."
+                placeholder={t('events.searchPlaceholder')}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-10 sm:pl-12 pr-12 py-2.5 sm:py-3 rounded-xl bg-popover/10 backdrop-blur-sm border border-border/20 text-popover-foreground placeholder-white/50 focus:bg-popover/20 focus:outline-none focus:ring-2 focus:ring-ring/30 transition-all text-sm sm:text-base"

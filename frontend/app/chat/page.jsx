@@ -2,9 +2,10 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useToast } from '../../components/ToastProvider'
-import { useAuth } from '../../lib/context/AuthContext'
-import chatService from '../../lib/services/chatService'
+import { useToast } from '@/components/ToastProvider'
+import { useAuth } from '@/lib/context/AuthContext'
+import { useLanguage } from '@/lib/context/LanguageContext'
+import chatService from '@/lib/services/chatService'
 import { 
   Send, 
   User, 
@@ -19,17 +20,18 @@ import {
   Plus,
   X
 } from 'lucide-react'
-import MarkdownOutput from '../../components/MarkdownOutput'
+import MarkdownOutput from '@/components/MarkdownOutput'
 
 export default function ChatPage() {
   const { user } = useAuth()
+  const { t } = useLanguage()
   const toast = useToast()
   
   const [messages, setMessages] = useState([
     {
       id: 1,
       role: 'assistant',
-      content: "Welcome to Sportlin AI Coach! I'm here to help you with training advice, nutrition tips, performance optimization, and answer any sports-related questions. How can I assist you today?",
+      content: t('chat.welcome'),
       timestamp: new Date()
     }
   ])
@@ -47,26 +49,26 @@ export default function ChatPage() {
   const handleCopy = async (text) => {
     try {
       await navigator.clipboard.writeText(text)
-      toast.show('Copied to clipboard')
+      toast.show(t('chat.copiedToClipboard'))
     } catch (err) {
       console.error('Copy failed', err)
-      toast.show('Copy failed', { duration: 4000 })
+      toast.show(t('chat.copyFailed'), { duration: 4000 })
     }
   }
 
   const quickActions = [
-    { icon: Dumbbell, label: 'Training Plan', prompt: 'Create a weekly training plan for me' },
-    { icon: Target, label: 'Set Goals', prompt: 'Help me set realistic fitness goals' },
-    { icon: Heart, label: 'Nutrition Tips', prompt: 'What should I eat before a workout?' },
-    { icon: Brain, label: 'Mental Coach', prompt: 'How can I improve my focus during games?' }
+    { icon: Dumbbell, label: t('chat.quickActions.trainingPlan'), prompt: t('chat.quickPrompts.trainingPlan') },
+    { icon: Target, label: t('chat.quickActions.setGoals'), prompt: t('chat.quickPrompts.setGoals') },
+    { icon: Heart, label: t('chat.quickActions.nutritionTips'), prompt: t('chat.quickPrompts.nutrition') },
+    { icon: Brain, label: t('chat.quickActions.mentalCoach'), prompt: t('chat.quickPrompts.mentalFocus') }
   ]
 
   const suggestedPrompts = [
-    "What's the best warm-up routine before basketball?",
-    "How do I prevent muscle injuries?",
-    "Can you analyze my training schedule?",
-    "Tips for improving my sprint speed",
-    "How to recover faster after intense training?"
+    t('chat.suggestedPrompts.warmup'),
+    t('chat.suggestedPrompts.preventInjury'),
+    t('chat.suggestedPrompts.analyzeSchedule'),
+    t('chat.suggestedPrompts.sprintSpeed'),
+    t('chat.suggestedPrompts.recovery')
   ]
 
   // Load conversations on mount
@@ -75,6 +77,20 @@ export default function ChatPage() {
       loadConversations()
     }
   }, [user])
+
+  // Update initial message when language changes (only if it's still the welcome message)
+  useEffect(() => {
+    setMessages(prev => {
+      // Only update if there's exactly one message and it's from the assistant (the welcome message)
+      if (prev.length === 1 && prev[0].role === 'assistant' && prev[0].id === 1) {
+        return [{
+          ...prev[0],
+          content: t('chat.welcome')
+        }]
+      }
+      return prev
+    })
+  }, [t])
 
   // Auto-scroll to bottom when messages change
   useEffect(() => {
@@ -91,7 +107,7 @@ export default function ChatPage() {
       setConversations(data)
     } catch (error) {
       console.error('Failed to load conversations:', error)
-      toast.show('Failed to load chat history', { duration: 3000 })
+      toast.show(t('chat.failedToLoad'), { duration: 3000 })
     } finally {
       setIsLoadingConversations(false)
     }
@@ -100,7 +116,7 @@ export default function ChatPage() {
   // Start a new conversation
   const startNewConversation = async () => {
     if (!user) {
-      toast.show('Please sign in to save chats', { duration: 3000 })
+      toast.show(t('chat.signInToSave'), { duration: 3000 })
       return
     }
 
@@ -108,7 +124,7 @@ export default function ChatPage() {
     setMessages([{
       id: Date.now(),
       role: 'assistant',
-      content: "Welcome to Sportlin AI Coach! How can I help you today?",
+      content: t('chat.welcome'),
       timestamp: new Date()
     }])
     // Close sidebar on small screens so the user sees the new chat
@@ -135,7 +151,7 @@ export default function ChatPage() {
       setIsSidebarOpen(false) // Close sidebar on mobile
     } catch (error) {
       console.error('Failed to load conversation:', error)
-      toast.show('Failed to load conversation', { duration: 3000 })
+      toast.show(t('chat.failedToLoadConversation'), { duration: 3000 })
     }
   }
 
@@ -143,7 +159,7 @@ export default function ChatPage() {
   const deleteConversation = async (conversationId, e) => {
     e?.stopPropagation()
     
-    if (!confirm('Delete this conversation?')) return
+    if (!confirm(t('chat.deleteConfirm'))) return
 
     try {
       await chatService.deleteConversation(conversationId)
@@ -156,10 +172,10 @@ export default function ChatPage() {
         startNewConversation()
       }
       
-      toast.show('Conversation deleted')
+      toast.show(t('chat.conversationDeleted'))
     } catch (error) {
       console.error('Failed to delete conversation:', error)
-      toast.show('Failed to delete conversation', { duration: 3000 })
+      toast.show(t('chat.failedToDelete'), { duration: 3000 })
     }
   }
 
@@ -263,7 +279,7 @@ export default function ChatPage() {
       const errorMessage = {
         id: Date.now() + 1,
         role: 'assistant',
-        content: "I apologize, but I'm having trouble connecting right now. Please check your internet connection and try again.",
+        content: t('chat.connectionError'),
         timestamp: new Date(),
         isError: true
       }
@@ -314,7 +330,7 @@ export default function ChatPage() {
         <div className="p-4 border-b border-border shrink-0">
           {/* Close button for mobile */}
           <div className="flex items-center justify-between mb-3 lg:hidden">
-            <h3 className="font-bold text-foreground">Chat History</h3>
+            <h3 className="font-bold text-foreground">{t('chat.chatHistory')}</h3>
             <button
               onClick={() => setIsSidebarOpen(false)}
               className="p-2 rounded-xl hover:bg-popover text-primary-deep transition-colors"
@@ -330,23 +346,23 @@ export default function ChatPage() {
             className="w-full flex items-center justify-center gap-2 px-4 py-3 mt-5 md:mt-0 rounded-xl bg-linear-to-r from-primary-deep to-primary-bright text-white font-semibold shadow-lg"
           >
             <Plus className="w-5 h-5" />
-            New Conversation
+            {t('chat.newConversation')}
           </motion.button>
         </div>
 
         {/* Conversation History */}
         <div className="flex-1 overflow-y-auto p-4">
           <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">
-            Recent Chats
+            {t('chat.recentChats')}
           </h3>
           
           {isLoadingConversations ? (
             <div className="text-center text-muted-foreground py-8">
-              Loading chats...
+              {t('chat.loadingChats')}
             </div>
           ) : conversations.length === 0 ? (
             <div className="text-center text-muted-foreground py-8 text-sm">
-              No conversations yet.<br />Start chatting to save your history!
+              {t('chat.noConversations')}<br />{t('chat.startChatting')}
             </div>
           ) : (
             <div className="space-y-2">
@@ -403,11 +419,11 @@ export default function ChatPage() {
                   </div>
                 </div>
                 <div className="min-w-0">
-                  <h2 className="font-display font-bold text-foreground text-sm sm:text-base truncate">Sportlin AI Coach</h2>
+                  <h2 className="font-display font-bold text-foreground text-sm sm:text-base truncate">{t('chat.title')}</h2>
                   <p className="text-xs sm:text-sm text-green-500 flex items-center gap-1">
                     <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                    <span className="hidden sm:inline">Online & Ready to Help</span>
-                    <span className="sm:hidden">Online</span>
+                    <span className="hidden sm:inline">{t('chat.online')}</span>
+                    <span className="sm:hidden">{t('chat.onlineShort')}</span>
                   </p>
                 </div>
               </div>
@@ -430,10 +446,10 @@ export default function ChatPage() {
             >
                 <div className="text-center mb-6 sm:mb-8 px-4">
                 <h1 className="font-display text-xl sm:text-2xl font-bold text-foreground mb-2">
-                  {user?.user_metadata?.first_name ? `Hey, ${user.user_metadata.first_name} — ready to train? I’m here to help you improve.` : 'Hey — ready to train? I’m here to help you improve.'}
+                  {user?.user_metadata?.first_name ? t('chat.welcomeUser').replace('{name}', user.user_metadata.first_name) : t('chat.welcomeGuest')}
                 </h1>
                 <p className="text-sm sm:text-base text-muted-foreground">
-                  Get personalized training advice, nutrition tips, and performance insights
+                  {t('chat.subtitle')}
                 </p>
               </div>
 
@@ -460,7 +476,7 @@ export default function ChatPage() {
               <div className="p-4 sm:p-5 rounded-2xl bg-card border border-border mx-2 sm:mx-0">
                 <h3 className="font-medium text-foreground mb-3 flex items-center gap-2 text-sm sm:text-base">
                   <Lightbulb className="w-4 h-4 text-primary-bright" />
-                  Try asking...
+                  {t('chat.tryAsking')}
                 </h3>
                 <div className="flex flex-wrap gap-2">
                   {suggestedPrompts.map((prompt, index) => (
@@ -586,7 +602,7 @@ export default function ChatPage() {
                   type="text"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  placeholder="Ask about sports, training..."
+                  placeholder={t('chat.inputPlaceholder')}
                   className="flex-1 bg-transparent outline-none text-foreground placeholder-muted-foreground text-sm sm:text-base px-2"
                 />
 
@@ -607,7 +623,7 @@ export default function ChatPage() {
             </form>
 
             <p className="text-center text-xs text-muted-foreground mt-2 sm:mt-3 px-2">
-              AI can make mistakes. Consider checking important information.
+              {t('chat.disclaimer')}
             </p>
           </div>
         </div>

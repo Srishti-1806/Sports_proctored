@@ -2,8 +2,10 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { MapPin,Trophy,TrendingUp,Target,Flame,Medal } from 'lucide-react'
+import { useLanguage } from '@/lib/context/LanguageContext'
 
 export default function PlayerCard({ player, index }) {
+  const { t } = useLanguage()
   const [proctorScore, setProctorScore] = useState(null)
   const [proctorLoading, setProctorLoading] = useState(false)
 
@@ -56,7 +58,7 @@ export default function PlayerCard({ player, index }) {
                 ? 'bg-linear-to-r from-primary-deep to-primary-bright text-white'
                 : 'bg-popover text-green-600'
             }`}>
-              <Flame className="w-3 h-3" /> {player.status}
+              <Flame className="w-3 h-3" /> {player.status === 'Elite Performer' ? t('players.elitePerformer') : t('players.active')}
             </span>
           </div>
 
@@ -85,7 +87,7 @@ export default function PlayerCard({ player, index }) {
             <div>
               {proctorScore !== null && (
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-card border border-border text-sm font-semibold">
-                  <span className="text-xs text-primary-muted">Proctor Test Score</span>
+                  <span className="text-xs text-primary-muted">{t('players.proctorScore')}</span>
                   <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-linear-to-r from-primary-deep to-primary-bright text-white text-sm font-bold">
                     {proctorScore}
                   </span>
@@ -102,7 +104,7 @@ export default function PlayerCard({ player, index }) {
           {/* Overall Score */}
           <div className="mb-4">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm text-muted-foreground">Overall Score</span>
+              <span className="text-sm text-muted-foreground">{t('players.overallScore')}</span>
               <span className="font-bold text-primary-deep">{player.overallScore}</span>
             </div>
             <div className="h-2 bg-popover rounded-full overflow-hidden">
@@ -120,17 +122,17 @@ export default function PlayerCard({ player, index }) {
             <div className="text-center">
               <Trophy className="w-5 h-5 text-primary mx-auto mb-1" />
               <div className="font-bold text-foreground text-sm">{player.achievements}</div>
-              <div className="text-xs text-muted-foreground">Achievements</div>
+              <div className="text-xs text-muted-foreground">{t('players.achievements')}</div>
             </div>
             <div className="text-center">
               <Target className="w-5 h-5 text-[#7091E6] mx-auto mb-1" />
               <div className="font-bold text-foreground text-sm">{player.matchCount}</div>
-              <div className="text-xs text-muted-foreground">Matches</div>
+              <div className="text-xs text-muted-foreground">{t('players.matches')}</div>
             </div>
             <div className="text-center">
               <Medal className="w-5 h-5 text-[#7091E6] mx-auto mb-1" />
               <div className="font-bold text-foreground text-sm">{player.trainingHours}</div>
-              <div className="text-xs text-muted-foreground">Training</div>
+              <div className="text-xs text-muted-foreground">{t('players.training')}</div>
             </div>
           </div>
         </div>

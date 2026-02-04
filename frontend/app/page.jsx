@@ -4,12 +4,12 @@ import { useState, useRef, useEffect, Suspense } from 'react'
 import { useScroll, useTransform } from 'framer-motion'
 import { useSearchParams } from 'next/navigation'
 import { AlertCircle } from 'lucide-react'
-import { useAuth } from '../lib/context/AuthContext'
-import HeroSection from '../components/home/HeroSection'
-import BentoGrid from '../components/home/BentoGrid'
-import FeaturesSection from '../components/home/FeaturesSection'
-import CTASection from '../components/home/CTASection'
-import AuthModals from '../components/home/AuthModals'
+import { useAuth } from '@/lib/context/AuthContext'
+import HeroSection from '@/components/home/HeroSection'
+import BentoGrid from '@/components/home/BentoGrid'
+import FeaturesSection from '@/components/home/FeaturesSection'
+import CTASection from '@/components/home/CTASection'
+import AuthModals from '@/components/home/AuthModals'
 
 function SearchParamsHandler({ setShowLogin, setShowSignup, setShowAuthAlert, user, loading }) {
   const searchParams = useSearchParams()

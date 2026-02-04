@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import { Search, Filter } from 'lucide-react'
+import { useLanguage } from '@/lib/context/LanguageContext'
 
 export default function SearchAndFilters({ 
   searchQuery, 
@@ -7,7 +8,14 @@ export default function SearchAndFilters({
   selectedSport, 
   setSelectedSport 
 }) {
+  const { t } = useLanguage()
   const sports = ['All Sports', 'Basketball', 'Badminton', 'Football', 'Athletics', 'Tennis', 'Swimming']
+  
+  const getSportLabel = (sport) => {
+    if (sport === 'All Sports') return t('players.allSports')
+    const sportKey = sport.toLowerCase()
+    return t(`sports.${sportKey}`) || sport
+  }
 
   return (
     <motion.div
@@ -21,7 +29,7 @@ export default function SearchAndFilters({
         <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
         <input
           type="text"
-          placeholder="Search by name, sport, or location..."
+          placeholder={t('players.searchPlaceholder')}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="w-full pl-12 pr-4 py-4 rounded-2xl border border-border focus:border-primary-bright focus:outline-none focus:ring-2 focus:ring-primary-bright/20 transition-all"
@@ -41,7 +49,7 @@ export default function SearchAndFilters({
                 : 'bg-card text-muted-foreground border border-border hover:border-primary-bright'
             }`}
           >
-            {sport}
+            {getSportLabel(sport)}
           </button>
         ))}
       </div>

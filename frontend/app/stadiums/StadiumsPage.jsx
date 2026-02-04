@@ -3,8 +3,10 @@ import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { MapPin, Search, Star, Clock, Phone, Globe, Navigation, ChevronRight, X, Heart, Share2, Dumbbell, Waves, Target, Footprints, Trophy, CheckCircle, Compass, Layers, ZoomIn, ZoomOut, Home, Activity, MapPinned } from 'lucide-react'
 import StadiumMap from '@/components/stadiums/StadiumMap'
+import { useLanguage } from '@/lib/context/LanguageContext'
 
 export default function StadiumsPage() {
+  const { t } = useLanguage()
   const accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedVenue, setSelectedVenue] = useState(null)
@@ -402,7 +404,7 @@ export default function StadiumsPage() {
             animate={{ opacity: 1, y: 0 }}
           >
             <h1 className="font-display text-xl sm:text-2xl lg:text-3xl font-bold text-white mb-3 sm:mb-4">
-              Discover Sports Facilities
+              {t('venues.title')}
             </h1>
 
             {/* Search Bar */}
@@ -411,7 +413,7 @@ export default function StadiumsPage() {
                 <Search className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-primary-muted" />
                 <input
                   type="text"
-                  placeholder="Search venues..."
+                  placeholder={t('venues.searchPlaceholder')}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-2.5 sm:py-3 rounded-lg sm:rounded-xl bg-card focus:outline-none focus:ring-2 focus:ring-primary-bright text-sm sm:text-base text-foreground"
@@ -446,9 +448,6 @@ export default function StadiumsPage() {
                   <div className="w-full h-full bg-linear-to-br from-primary-soft to-primary-light flex items-center justify-center">
                     <div className="text-center p-4 sm:p-8">
                       <MapPin className="w-12 h-12 sm:w-16 sm:h-16 text-primary-bright mx-auto mb-3 sm:mb-4" />
-                      <h3 className="text-lg sm:text-xl font-bold text-primary mb-2">
-                        Map Loading...
-                      </h3>
                       <p className="text-xs sm:text-sm text-primary-muted">
                         Please ensure Mapbox token is configured
                       </p>
@@ -461,7 +460,7 @@ export default function StadiumsPage() {
                   <div className="flex items-center gap-1.5 sm:gap-2">
                     <MapPin className="w-3 h-3 sm:w-4 sm:h-4 text-primary-bright" />
                     <span className="text-xs sm:text-sm font-medium text-foreground">
-                      {filteredVenues.length} venues
+                      {filteredVenues.length} {t('venues.results')}
                     </span>
                   </div>
                 </div>
@@ -493,10 +492,10 @@ export default function StadiumsPage() {
             <div className="mb-3 sm:mb-4">
               <p className="text-xs sm:text-sm text-primary-muted">
                 {loading ? (
-                  <span>Loading venues...</span>
+                  <></>
                 ) : (
                   <>
-                    <span className="font-semibold text-foreground">{filteredVenues.length}</span> found nearby
+                    <span className="font-semibold text-foreground">{filteredVenues.length}</span> {t('venues.results')}
                   </>
                 )}
               </p>
@@ -508,7 +507,7 @@ export default function StadiumsPage() {
                 <div className="flex items-center justify-center py-12">
                   <div className="text-center">
                     <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-deep mx-auto mb-4"></div>
-                    <p className="text-primary-muted">Finding venues near you...</p>
+                    <p className="text-primary-muted">{t('common.loadingVenues')}</p>
                   </div>
                 </div>
               ) : filteredVenues.length === 0 ? (

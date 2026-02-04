@@ -2,8 +2,11 @@
 
 import { motion, AnimatePresence } from 'framer-motion'
 import { X } from 'lucide-react'
+import { useLanguage } from '@/lib/context/LanguageContext'
 
 export default function EditModal({ isOpen, onClose, title, children, onSave, sectionData }) {
+  const { t } = useLanguage()
+  
   return (
     <AnimatePresence>
       {isOpen && (
@@ -39,13 +42,13 @@ export default function EditModal({ isOpen, onClose, title, children, onSave, se
                 onClick={() => onSave(sectionData)}
                 className="flex-1 py-3 rounded-xl bg-linear-to-r from-primary-deep to-primary-bright text-white font-semibold shadow-lg"
               >
-                Save
+                {t('profile.save')}
               </motion.button>
               <button
                 onClick={onClose}
                 className="px-6 py-3 rounded-xl border border-border text-muted-foreground font-medium hover:bg-popover transition-colors"
               >
-                Cancel
+                {t('profile.cancel')}
               </button>
             </div>
           </motion.div>

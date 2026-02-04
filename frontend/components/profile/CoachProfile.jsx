@@ -9,8 +9,10 @@ import AchievementBadge from './AchievementBadge'
 import TeamCard from './TeamCard'
 import CertCard from './CertCard'
 import EmptyState from './EmptyState'
+import { useLanguage } from '@/lib/context/LanguageContext'
 
 export default function CoachProfile({ profile, openEdit, deleteItem, user }) {
+  const { t } = useLanguage()
   return (
     <>
       {/* About Section */}
@@ -20,7 +22,7 @@ export default function CoachProfile({ profile, openEdit, deleteItem, user }) {
             <div className="p-3 bg-linear-to-br from-primary-bright/20 to-primary-deep/10 rounded-xl">
               <Pencil className="w-5 h-5 text-primary-bright" />
             </div>
-            <h2 className="text-2xl font-bold text-primary-bright">About</h2>
+            <h2 className="text-2xl font-bold text-primary-bright">{t('profile.about')}</h2>
           </div>
           {user && (
             <button onClick={() => openEdit('about', { value: profile?.about || '' })} className="p-2 hover:bg-popover rounded-xl transition-colors">
@@ -28,7 +30,7 @@ export default function CoachProfile({ profile, openEdit, deleteItem, user }) {
             </button>
           )}
         </div>
-        <p className="text-muted-foreground leading-relaxed">{profile?.about || (user ? 'No bio yet. Add one to tell your story!' : "This coach hasn't added a bio yet.")}</p>
+        <p className="text-muted-foreground leading-relaxed">{profile?.about || (user ? t('profile.noBioYet') : t('profile.noCoachBio'))}</p>
       </div>
 
       {/* Athletic Stats */}
@@ -38,7 +40,7 @@ export default function CoachProfile({ profile, openEdit, deleteItem, user }) {
             <div className="p-3 bg-linear-to-br from-primary-bright/20 to-primary-deep/10 rounded-xl">
               <TrendingUp className="w-5 h-5 text-primary-bright" />
             </div>
-            <h2 className="text-2xl font-bold text-primary-bright">Coaching Profile</h2>
+            <h2 className="text-2xl font-bold text-primary-bright">{t('profile.coachingProfile')}</h2>
           </div>
           {user && (
             <button onClick={() => openEdit('athleticStats', { value: profile?.athleticStats || {} })} className="p-2 hover:bg-popover rounded-xl transition-colors">
@@ -47,10 +49,10 @@ export default function CoachProfile({ profile, openEdit, deleteItem, user }) {
           )}
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-          <StatItem icon={Activity} label="Primary Sport" value={profile?.athleticStats?.primarySport || 'N/A'} />
-          <StatItem icon={CalendarDays} label="Experience" value={profile?.athleticStats?.age || 'N/A'} />
-          <StatItem icon={Target} label="Specialty" value={profile?.athleticStats?.height || 'N/A'} />
-          <StatItem icon={Users2} label="Coaching Level" value={profile?.athleticStats?.weight || 'N/A'} />
+          <StatItem icon={Activity} label={t('profile.primarySport')} value={profile?.athleticStats?.primarySport || 'N/A'} />
+          <StatItem icon={CalendarDays} label={t('coaches.experience')} value={profile?.athleticStats?.age || 'N/A'} />
+          <StatItem icon={Target} label={t('profile.specialty')} value={profile?.athleticStats?.height || 'N/A'} />
+          <StatItem icon={Users2} label={t('profile.coachingLevel')} value={profile?.athleticStats?.weight || 'N/A'} />
         </div>
       </div>
 
@@ -61,7 +63,7 @@ export default function CoachProfile({ profile, openEdit, deleteItem, user }) {
             <div className="p-3 bg-linear-to-br from-primary-bright/20 to-primary-deep/10 rounded-xl">
               <TrendingUp className="w-5 h-5 text-primary-bright" />
             </div>
-            <h2 className="text-2xl font-bold text-primary-bright">Coaching Effectiveness</h2>
+            <h2 className="text-2xl font-bold text-primary-bright">{t('profile.coachingEffectiveness')}</h2>
           </div>
           {user && (
               <button onClick={() => openEdit('physicalStats', { value: profile?.physicalStats || {} })} className="p-2 hover:bg-popover rounded-xl transition-colors">
@@ -70,11 +72,11 @@ export default function CoachProfile({ profile, openEdit, deleteItem, user }) {
           )}
         </div>
         <div className="space-y-4">
-          <PerformanceBar label="Leadership" value={profile?.physicalStats?.speed || 0} color="from-blue-400 to-cyan-500" />
-          <PerformanceBar label="Communication" value={profile?.physicalStats?.strength || 0} color="from-red-400 to-orange-500" />
-          <PerformanceBar label="Strategy" value={profile?.physicalStats?.endurance || 0} color="from-green-400 to-emerald-500" />
-          <PerformanceBar label="Motivation" value={profile?.physicalStats?.agility || 0} color="from-purple-400 to-pink-500" />
-          <PerformanceBar label="Technical Knowledge" value={profile?.physicalStats?.flexibility || 0} color="from-amber-400 to-yellow-500" />
+          <PerformanceBar label={t('profile.leadership')} value={profile?.physicalStats?.speed || 0} color="from-blue-400 to-cyan-500" />
+          <PerformanceBar label={t('profile.communication')} value={profile?.physicalStats?.strength || 0} color="from-red-400 to-orange-500" />
+          <PerformanceBar label={t('profile.strategy')} value={profile?.physicalStats?.endurance || 0} color="from-green-400 to-emerald-500" />
+          <PerformanceBar label={t('profile.motivation')} value={profile?.physicalStats?.agility || 0} color="from-purple-400 to-pink-500" />
+          <PerformanceBar label={t('profile.technicalKnowledge')} value={profile?.physicalStats?.flexibility || 0} color="from-amber-400 to-yellow-500" />
         </div>
       </div>
 
@@ -85,13 +87,13 @@ export default function CoachProfile({ profile, openEdit, deleteItem, user }) {
             <div className="p-3 bg-linear-to-br from-primary-bright/20 to-primary-deep/10 rounded-xl">
               <Award className="w-5 h-5 text-primary-bright" />
             </div>
-            <h2 className="text-2xl font-bold text-primary-bright">Certifications</h2>
+            <h2 className="text-2xl font-bold text-primary-bright">{t('profile.certifications')}</h2>
           </div>
           {user && (
             <div className="flex items-center gap-2">
               <button onClick={() => openEdit('certifications', { item: { name: '', issuer: '', year: '' } })} className="hidden md:flex items-center gap-2 px-4 py-2 bg-linear-to-br from-primary-deep to-primary-bright text-white rounded-xl hover:opacity-90 transition-opacity">
                 <Plus className="w-4 h-4" />
-                <span>Add Certification</span>
+                <span>{t('profile.addCertification')}</span>
               </button>
               <button onClick={() => openEdit('certifications', { item: { name: '', issuer: '', year: '' } })} className="md:hidden p-2 bg-linear-to-br from-primary-deep to-primary-bright text-white rounded-lg shadow-md">
                 <Plus className="w-4 h-4" />
@@ -106,7 +108,7 @@ export default function CoachProfile({ profile, openEdit, deleteItem, user }) {
             ))}
           </div>
         ) : (
-          <EmptyState message={user ? "No certifications added yet" : "This coach hasn't added any certifications yet."} />
+          <EmptyState message={user ? t('profile.noCertifications') : t('profile.noCoachCertifications')} />
         )}
       </div>
 
@@ -117,13 +119,13 @@ export default function CoachProfile({ profile, openEdit, deleteItem, user }) {
             <div className="p-3 bg-linear-to-br from-primary-bright/20 to-primary-deep/10 rounded-xl">
               <Calendar className="w-5 h-5 text-primary-bright" />
             </div>
-            <h2 className="text-2xl font-bold text-primary-bright">Training Programs</h2>
+            <h2 className="text-2xl font-bold text-primary-bright">{t('profile.trainingPrograms')}</h2>
           </div>
           {user && (
             <div className="flex items-center gap-2">
               <button onClick={() => openEdit('trainingSchedule', { item: { name: '', duration: '', intensity: 'medium', frequency: '' } })} className="hidden md:flex items-center gap-2 px-4 py-2 bg-linear-to-br from-primary-deep to-primary-bright text-white rounded-xl hover:opacity-90 transition-opacity">
                 <Plus className="w-4 h-4" />
-                <span>Add Program</span>
+                <span>{t('profile.addProgram')}</span>
               </button>
               <button onClick={() => openEdit('trainingSchedule', { item: { name: '', duration: '', intensity: 'medium', frequency: '' } })} className="md:hidden p-2 bg-linear-to-br from-primary-deep to-primary-bright text-white rounded-lg shadow-md">
                 <Plus className="w-4 h-4" />
@@ -138,7 +140,7 @@ export default function CoachProfile({ profile, openEdit, deleteItem, user }) {
             ))}
           </div>
         ) : (
-          <EmptyState message={user ? "No training programs set" : "This coach hasn't added any training programs yet."} />
+          <EmptyState message={user ? t('profile.noTrainingPrograms') : t('profile.noCoachTrainingPrograms')} />
         )}
       </div>
 
@@ -149,13 +151,13 @@ export default function CoachProfile({ profile, openEdit, deleteItem, user }) {
             <div className="p-3 bg-linear-to-br from-primary-bright/20 to-primary-deep/10 rounded-xl">
               <Video className="w-5 h-5 text-primary-bright" />
             </div>
-            <h2 className="text-2xl font-bold text-primary-bright">Coaching Highlights</h2>
+            <h2 className="text-2xl font-bold text-primary-bright">{t('profile.coachingHighlights')}</h2>
           </div>
           {user && (
             <div className="flex items-center gap-2">
               <button onClick={() => openEdit('videoHighlights', { item: { title: '', url: '', description: '' } })} className="hidden md:flex items-center gap-2 px-4 py-2 bg-linear-to-br from-primary-deep to-primary-bright text-white rounded-xl hover:opacity-90 transition-opacity">
                 <Plus className="w-4 h-4" />
-                <span>Add Video</span>
+                <span>{t('profile.addVideo')}</span>
               </button>
               <button onClick={() => openEdit('videoHighlights', { item: { title: '', url: '', description: '' } })} className="md:hidden p-2 bg-linear-to-br from-primary-deep to-primary-bright text-white rounded-lg shadow-md">
                 <Plus className="w-4 h-4" />
@@ -170,7 +172,7 @@ export default function CoachProfile({ profile, openEdit, deleteItem, user }) {
             ))}
           </div>
         ) : (
-          <EmptyState message={user ? "No video highlights yet" : "This coach hasn't added any video highlights yet."} />
+          <EmptyState message={user ? t('profile.noVideoHighlights') : t('profile.noCoachVideoHighlights')} />
         )}
       </div>
 
@@ -181,13 +183,13 @@ export default function CoachProfile({ profile, openEdit, deleteItem, user }) {
             <div className="p-3 bg-linear-to-br from-primary-bright/20 to-primary-deep/10 rounded-xl">
               <Trophy className="w-5 h-5 text-primary-bright" />
             </div>
-            <h2 className="text-2xl font-bold text-primary-bright">Coaching Achievements</h2>
+            <h2 className="text-2xl font-bold text-primary-bright">{t('profile.coachingAchievements')}</h2>
           </div>
           {user && (
             <div className="flex items-center gap-2">
               <button onClick={() => openEdit('achievements', { item: { title: '', year: '' } })} className="hidden md:flex items-center gap-2 px-4 py-2 bg-linear-to-br from-primary-deep to-primary-bright text-white rounded-xl hover:opacity-90 transition-opacity">
                 <Plus className="w-4 h-4" />
-                <span>Add Achievement</span>
+                <span>{t('profile.addAchievement')}</span>
               </button>
               <button onClick={() => openEdit('achievements', { item: { title: '', year: '' } })} className="md:hidden p-2 bg-linear-to-br from-primary-deep to-primary-bright text-white rounded-lg shadow-md">
                 <Plus className="w-4 h-4" />
@@ -202,7 +204,7 @@ export default function CoachProfile({ profile, openEdit, deleteItem, user }) {
             ))}
           </div>
         ) : (
-          <EmptyState message={user ? "No achievements yet" : "This coach hasn't added any achievements yet."} />
+          <EmptyState message={user ? t('profile.noAchievements') : t('profile.noCoachAchievements')} />
         )}
       </div>
 
@@ -213,13 +215,13 @@ export default function CoachProfile({ profile, openEdit, deleteItem, user }) {
             <div className="p-3 bg-linear-to-br from-primary-bright/20 to-primary-deep/10 rounded-xl">
               <Trophy className="w-5 h-5 text-primary-bright" />
             </div>
-            <h2 className="text-2xl font-bold text-primary-bright">Coaching History</h2>
+            <h2 className="text-2xl font-bold text-primary-bright">{t('profile.coachingHistory')}</h2>
           </div>
           {user && (
             <div className="flex items-center gap-2">
               <button onClick={() => openEdit('teams', { item: { name: '', startYear: '', endYear: '' } })} className="hidden md:flex items-center gap-2 px-4 py-2 bg-linear-to-br from-primary-deep to-primary-bright text-white rounded-xl hover:opacity-90 transition-opacity">
                 <Plus className="w-4 h-4" />
-                <span>Add Team</span>
+                <span>{t('profile.addTeam')}</span>
               </button>
               <button onClick={() => openEdit('teams', { item: { name: '', startYear: '', endYear: '' } })} className="md:hidden p-2 bg-linear-to-br from-primary-deep to-primary-bright text-white rounded-lg shadow-md">
                 <Plus className="w-4 h-4" />
@@ -234,7 +236,7 @@ export default function CoachProfile({ profile, openEdit, deleteItem, user }) {
             ))}
           </div>
         ) : (
-          <EmptyState message={user ? "No coaching history added yet" : "This coach hasn't added any coaching history yet."} />
+          <EmptyState message={user ? t('profile.noCoachingHistory') : t('profile.noCoachCoachingHistory')} />
         )}
       </div>
     </>

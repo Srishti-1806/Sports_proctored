@@ -3,7 +3,7 @@
 import { useRef, useEffect, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import { getThemeColors } from '../../lib/mapbox-utils';
+import { getThemeColors } from '@/lib/mapbox-utils';
 
 const StadiumMap = ({ accessToken, venues, selectedVenue, onVenueSelect }) => {
   const mapContainerRef = useRef(null);

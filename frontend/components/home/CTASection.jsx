@@ -2,11 +2,13 @@
 
 import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
-import { useAuth } from '../../lib/context/AuthContext'
+import { useAuth } from '@/lib/context/AuthContext'
+import { useLanguage } from '@/lib/context/LanguageContext'
 
 export default function CTASection({ onSignupClick, onLoginClick }) {
   const router = useRouter()
   const { user } = useAuth()
+  const { t } = useLanguage()
 
   const handleSignup = () => {
     if (user) {
@@ -35,10 +37,10 @@ export default function CTASection({ onSignupClick, onLoginClick }) {
         className="relative max-w-350 mx-auto text-center"
       >
         <h2 className="font-display text-6xl lg:text-8xl font-bold text-white mb-8">
-          Build your network
+          {t('cta.title')}
         </h2>
         <p className="text-xl text-primary-light mb-12 max-w-2xl mx-auto">
-          Join 25,000+ players and 1,200+ coaches connecting across India - every sport, every skill level.
+          {t('cta.subtitle')}
         </p>
         
         <div className="flex flex-wrap justify-center gap-4">
@@ -48,7 +50,7 @@ export default function CTASection({ onSignupClick, onLoginClick }) {
             onClick={handleSignup}
             className="px-10 py-5 rounded-2xl bg-card text-primary font-bold text-lg shadow-2xl hover:shadow-3xl transition-shadow"
           >
-            Get Started Free
+            {t('cta.getStartedFree')}
           </motion.button>
           <motion.button
             whileHover={{ scale: 1.05 }}
@@ -56,7 +58,7 @@ export default function CTASection({ onSignupClick, onLoginClick }) {
             onClick={handleLogin}
             className="px-10 py-5 rounded-2xl border-2 border-border text-white font-bold text-lg hover:bg-popover/10 transition-colors"
           >
-            Sign In
+            {t('cta.signIn')}
           </motion.button>
         </div>
       </motion.div>
