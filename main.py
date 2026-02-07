@@ -1,6 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+from motor.motor_asyncio import AsyncIOMotorClient
 import uvicorn
 from datetime import datetime
 
@@ -13,12 +14,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# ------------------ Database (In-Memory List) ------------------
-# Ab ye ek list hai jo saare users ka data save karegi
-db_scores = []
+# --- MongoDB Atlas Connection ---
+MONGO_URI = "mongodb+srv://srishtiMis:srishtiatnsut@cluster0.rxik0m0.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+client = AsyncIOMotorClient(MONGO_URI)
+db = client["sports_proctor"]
+scores_collection = db["scores"]
 
-# ------------------ Request Models ------------------
-
+# --- Schema ---
 class ScoreEntry(BaseModel):
     name: str
     sport: str
@@ -26,19 +28,11 @@ class ScoreEntry(BaseModel):
     score: int
     calories: float = 0.0
 
-# ------------------ Routes ------------------
-
-@app.get("/")
-def home():
-    return {"status": "Sports Proctor Server Online 🚀", "total_records": len(db_scores)}
-
-# ---------- Submit Score Based on Name & Sport ----------
 @app.post("/score")
-def save_score(data: ScoreEntry):
+async def save_score(data: ScoreEntry):
     if not data.name:
         raise HTTPException(status_code=400, detail="Name is required")
     
-    # Naya record create ho raha hai
     new_record = {
         "name": data.name,
         "sport": data.sport,
@@ -48,23 +42,14 @@ def save_score(data: ScoreEntry):
         "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     }
     
-    db_scores.append(new_record)
-    print(f"🔥 New Record Added: {new_record}")
-    
-    return {"message": "Score saved successfully!", "entry": new_record}
+    await scores_collection.insert_one(new_record)
+    return {"message": "Cloud par score save ho gaya! ✅", "name": data.name}
 
-# ---------- Get All Scores (Leaderboard) ----------
 @app.get("/leaderboard")
-def get_scores():
-    # Score ke basis par sort karke top records dikhayega
-    sorted_scores = sorted(db_scores, key=lambda x: x['score'], reverse=True)
-    return sorted_scores
-
-# ---------- Get Specific User History ----------
-@app.get("/history/{name}")
-def user_history(name: str):
-    user_data = [s for s in db_scores if s['name'].lower() == name.lower()]
-    return {"user": name, "history": user_data}
+async def get_leaderboard():
+    # Top scores fetch karega descending order mein
+    cursor = scores_collection.find({}, {"_id": 0}).sort("score", -1).limit(10)
+    return await cursor.to_list(length=10)
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
