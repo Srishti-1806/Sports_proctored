@@ -380,6 +380,21 @@
     "nameInstruction": "ᱱᱚᱶᱟ ᱡᱟᱸᱪ ᱞᱟᱹᱜᱤᱫ ᱫᱚᱭᱟ ᱠᱟᱛᱮ ᱟᱢᱟᱜ ᱥᱟᱹᱨᱤ ᱧᱩᱛᱩᱢ ᱵᱮᱣᱦᱟᱨ ᱢᱮ",
     "downloadApp": "ᱰᱮᱥᱠᱴᱚᱯ ᱮᱯ ᱰᱟᱣᱩᱱᱞᱳᱰ ᱢᱮ",
     "disclaimer": "ᱡᱟᱸᱪ ᱪᱟᱹᱞᱩ ᱞᱟᱹᱜᱤᱫ, ᱟᱢ ᱰᱮᱥᱠᱴᱚᱯ ᱮᱯ ᱰᱟᱣᱩᱱᱞᱳᱰ ᱞᱟᱹᱠᱛᱤᱜᱼᱟ᱾ ᱮᱯ ᱡᱷᱤᱡ ᱠᱟᱛᱮ ᱡᱟᱸᱪ ᱪᱟᱹᱞᱩ ᱞᱟᱹᱜᱤᱫ ᱱᱚᱰᱮ ᱨᱩᱣᱟᱹᱲ ᱦᱤᱡᱩᱜᱼᱢᱮ᱾"
+  },
+  "messages": {
+    "title": "Messages",
+    "subtitle": "Chat with your connections",
+    "searchPlaceholder": "Search contacts...",
+    "checkingAuth": "Checking authentication...",
+    "loadingChat": "Loading chat...",
+    "unavailableTitle": "Chat Unavailable",
+    "unavailableBody": "Unable to connect to chat service. Please try again later.",
+    "noContactsTitle": "No Contacts Yet",
+    "noUsersAvailable": "No users available to chat with.",
+    "noContactsMatch": "No contacts match your search.",
+    "findPlayers": "Find Players",
+    "anonymousUser": "Anonymous User",
+    "startChatFailed": "Failed to start chat. Please try again."
   }
 }
 

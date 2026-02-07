@@ -16,7 +16,8 @@ import {
   Trophy,
   Zap,
   LogOut,
-  LogIn
+  LogIn,
+  MessageSquare
 } from 'lucide-react'
 import ThemeToggle from './ThemeToggle'
 import LanguageSwitcher from './LanguageSwitcher'
@@ -53,6 +54,10 @@ export default function Navbar() {
     { href: '/chat', label: t('nav.aiCoach'), icon: MessageCircle },
   ]
 
+  // Add Messages link only for authenticated users
+  const messagesLink = { href: '/messages', label: t('messages.title'), icon: MessageSquare }
+  const allNavLinks = user ? [...navLinks, messagesLink] : navLinks
+
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 glass backdrop-blur-lg">
       <div className=" px-2 sm:px-4 lg:px-6">
@@ -75,7 +80,7 @@ export default function Navbar() {
 
           <div className="col-start-2 flex items-center justify-center gap-1">
             {/* Desktop Navigation (centered) */}
-            {navLinks.map((link) => {
+            {allNavLinks.map((link) => {
               const isActive = pathname === link.href
               return (
                 <Link key={link.href} href={link.href}>
@@ -202,7 +207,7 @@ export default function Navbar() {
             className="lg:hidden overflow-hidden bg-popover/10 border-t border-sidebar-border"
           >
               <div className="px-4 py-4 space-y-2">
-              {navLinks.map((link) => {
+              {allNavLinks.map((link) => {
                 const isActive = pathname === link.href
                 return (
                   <Link key={link.href} href={link.href} onClick={() => setIsOpen(false)}>

@@ -6,6 +6,7 @@
     "events": "Events",
     "venues": "Venues",
     "aiCoach": "AI Coach",
+    "messages": "Messages",
     "signIn": "Sign In",
     "signOut": "Sign Out",
     "getStarted": "Get Started",
@@ -370,5 +371,21 @@
     "nameInstruction": "Please enter your full name exactly as it appears in your profile when starting the proctor test.",
     "downloadApp": "Download Test App",
     "disclaimer": "By downloading, you agree to our testing terms and conditions"
+  }
+  ,
+  "messages": {
+    "title": "Messages",
+    "subtitle": "Chat with your connections",
+    "searchPlaceholder": "Search contacts...",
+    "checkingAuth": "Checking authentication...",
+    "loadingChat": "Loading chat...",
+    "unavailableTitle": "Chat Unavailable",
+    "unavailableBody": "Unable to connect to chat service. Please try again later.",
+    "noContactsTitle": "No Contacts Yet",
+    "noUsersAvailable": "No users available to chat with.",
+    "noContactsMatch": "No contacts match your search.",
+    "findPlayers": "Find Players",
+    "anonymousUser": "Anonymous User",
+    "startChatFailed": "Failed to start chat. Please try again."
   }
 }

@@ -78,19 +78,35 @@ export function LanguageProvider({ children }) {
 
   const t = (key) => {
     try {
-      const languageData = translations[currentLanguage] || translations.en
       const keys = key.split('.')
+
+      // Try current language first
+      const languageData = translations[currentLanguage] || translations.en
       let value = languageData
-      
       for (const k of keys) {
-        if (value && typeof value === 'object') {
+        if (value && typeof value === 'object' && k in value) {
           value = value[k]
         } else {
-          return key // Return key if translation not found
+          value = undefined
+          break
         }
       }
-      
-      return value || key
+
+      // If found in current language, return it
+      if (value !== undefined && value !== null) return value
+
+      // Fallback: try English translations for missing keys
+      let fallback = translations.en
+      for (const k of keys) {
+        if (fallback && typeof fallback === 'object' && k in fallback) {
+          fallback = fallback[k]
+        } else {
+          fallback = undefined
+          break
+        }
+      }
+
+      return fallback || key
     } catch (error) {
       console.error('Translation error:', error)
       return key

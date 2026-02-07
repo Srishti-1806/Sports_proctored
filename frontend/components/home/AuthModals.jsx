@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { 
   Trophy, 
@@ -27,6 +27,27 @@ export default function AuthModals({ showLogin, showSignup, onClose }) {
   const { signIn, signUp } = useAuth()
   const router = useRouter()
   const toast = useToast()
+
+  useEffect(() => {
+    const html = document.documentElement
+    const prevOverflow = html.style.overflow
+    const prevPadding = html.style.paddingRight
+    const lock = showLogin || showSignup
+
+    if (lock) {
+      const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth
+      if (scrollbarWidth > 0) html.style.paddingRight = `${scrollbarWidth}px`
+      html.style.overflow = 'hidden'
+    } else {
+      html.style.overflow = prevOverflow
+      html.style.paddingRight = prevPadding
+    }
+
+    return () => {
+      html.style.overflow = prevOverflow
+      html.style.paddingRight = prevPadding
+    }
+  }, [showLogin, showSignup])
 
   // Login form state
   const [loginData, setLoginData] = useState({
@@ -115,7 +136,7 @@ export default function AuthModals({ showLogin, showSignup, onClose }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+            className="fixed inset-0 z-50 h-dvh flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm overflow-y-auto"
             onClick={() => onClose()}
           >
             <motion.div
@@ -221,7 +242,7 @@ export default function AuthModals({ showLogin, showSignup, onClose }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+            className="fixed inset-0 z-50 h-dvh flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm overflow-y-auto"
             onClick={() => onClose()}
           >
             <motion.div
@@ -229,7 +250,7 @@ export default function AuthModals({ showLogin, showSignup, onClose }) {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
-              className="relative w-full max-w-md rounded-3xl bg-card shadow-2xl max-h-[90vh] overflow-hidden"
+              className="relative w-full max-w-md rounded-3xl bg-card shadow-2xl max-h-[90vh] overflow-hidden my-8"
             >
               <button
                 onClick={() => onClose()}
@@ -238,7 +259,7 @@ export default function AuthModals({ showLogin, showSignup, onClose }) {
                 <X className="w-5 h-5 text-primary-muted" />
               </button>
 
-              <div className="p-8 overflow-y-auto max-h-[90vh]">
+              <div className="p-8 overflow-y-auto" style={{ maxHeight: 'calc(90vh - 4rem)' }}>
                 <div className="text-center mb-8">
                   <div className="w-16 h-16 rounded-2xl bg-linear-to-br from-primary-deep to-primary-bright flex items-center justify-center mx-auto mb-4">
                     <Trophy className="w-8 h-8 text-white" />

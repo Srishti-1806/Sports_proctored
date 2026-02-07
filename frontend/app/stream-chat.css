@@ -1,0 +1,49 @@
+/* Custom Stream Chat Styling (color overrides only) */
+:root {
+  --stream-primary: #667eea;
+  --stream-accent: #764ba2;
+}
+
+.str-chat {
+  --str-chat__primary-color: var(--stream-primary);
+  --str-chat__active-primary-color: var(--stream-accent);
+  --str-chat__surface-color: hsl(var(--card));
+  --str-chat__secondary-surface-color: hsl(var(--muted));
+  --str-chat__primary-surface-color: hsl(var(--primary) / 0.1);
+  --str-chat__primary-surface-color-low-emphasis: hsl(var(--primary) / 0.05);
+}
+
+/* Message bubble appearance: give sender/receiver distinct backgrounds so bubbles
+   stand out from the page background. Keep sizing minimal so Tailwind controls layout. */
+.str-chat__message-simple-text-inner {
+  background: color-mix(in srgb, var(--str-chat__surface-color, #ffffff) 90%, black 0%);
+  color: inherit;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 0 rgba(16,24,40,0.02), 0 2px 6px rgba(2,6,23,0.04);
+  display: inline-block;
+}
+
+/* Sender (current user) bubble */
+.str-chat__message-simple--me .str-chat__message-simple-text-inner {
+  background: linear-gradient(135deg, var(--stream-primary, #667eea) 0%, var(--stream-accent, #764ba2) 100%);
+  color: #fff;
+}
+
+/* Received bubble - ensure contrast against page background */
+.str-chat__message-simple:not(.str-chat__message-simple--me) .str-chat__message-simple-text-inner {
+  background: linear-gradient(135deg, #bfcafb 0%, #d5adfd 100%);
+  color: hsl(var(--foreground) / 1);
+}
+
+/* Dark mode adjustments */
+.dark .str-chat__message-simple-text-inner {
+  background: hsl(var(--card));
+  color: hsl(var(--foreground));
+  box-shadow: none;
+}
+
+.dark .str-chat__message-simple--me .str-chat__message-simple-text-inner {
+  background: linear-gradient(135deg, var(--stream-primary, #667eea) 0%, var(--stream-accent, #764ba2) 100%);
+  color: #fff;
+}

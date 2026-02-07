@@ -2,6 +2,7 @@ import './globals.css'
 import { ThemeProvider } from 'next-themes'
 import Navbar from '../components/Navbar'
 import { AuthProvider } from '../lib/context/AuthContext'
+import { ChatProvider } from '../lib/context/ChatContext'
 import { LanguageProvider } from '../lib/context/LanguageContext'
 import ToastProvider from '../components/ToastProvider'
 import Script from 'next/script'
@@ -24,12 +25,14 @@ export default function RootLayout({ children }) {
         >
           <LanguageProvider>
             <AuthProvider>
-              <ToastProvider>
-                <Navbar />
-                <main className="pt-16">
-                  {children}
-                </main>
-              </ToastProvider>
+              <ChatProvider>
+                <ToastProvider>
+                  <Navbar />
+                  <main className="pt-16">
+                    {children}
+                  </main>
+                </ToastProvider>
+              </ChatProvider>
             </AuthProvider>
           </LanguageProvider>
         </ThemeProvider>
